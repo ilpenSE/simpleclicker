@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>628</width>
+    <height>529</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Simple Clicker</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QSplitter" name="mainPanel">
+      <property name="orientation">
+       <enum>Qt::Orientation::Horizontal</enum>
+      </property>
+      <property name="childrenCollapsible">
+       <bool>false</bool>
+      </property>
+      <widget class="QWidget" name="leftPanelWidget" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>160</width>
+         <height>0</height>
+        </size>
+       </property>
+       <layout class="QVBoxLayout" name="leftPanel" stretch="0,0,0">
+        <property name="sizeConstraint">
+         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+        </property>
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="font">
+           <font>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>SimpleClicker</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="presetsLabel">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+            <bold>false</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>PRESETS</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QListWidget" name="listWidget">
+          <property name="frameShape">
+           <enum>QFrame::Shape::NoFrame</enum>
+          </property>
+          <property name="spacing">
+           <number>2</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="rightPanelWidget" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>320</width>
+         <height>0</height>
+        </size>
+       </property>
+       <layout class="QVBoxLayout" name="rightPanel">
+        <property name="spacing">
+         <number>10</number>
+        </property>
+        <item>
+         <widget class="QGroupBox" name="clickIntervalBox">
+          <property name="title">
+           <string>Click Interval</string>
+          </property>
+          <layout class="QHBoxLayout" name="clickIntervalHLayout">
+           <item>
+            <layout class="QVBoxLayout" name="hoursPanel">
+             <item>
+              <widget class="QLabel" name="hoursLabel">
+               <property name="text">
+                <string>Hours</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="hoursEdit"/>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="minutesPanel">
+             <item>
+              <widget class="QLabel" name="minutesLabel">
+               <property name="text">
+                <string>Minutes</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="minutesEdit"/>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="secondsPanel">
+             <item>
+              <widget class="QLabel" name="secondsLabel">
+               <property name="text">
+                <string>Seconds</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="secondsEdit"/>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="millisPanel">
+             <item>
+              <widget class="QLabel" name="millisLabel">
+               <property name="text">
+                <string>Milliseconds</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="millisEdit"/>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="clickOptionsBox">
+          <property name="title">
+           <string>Click Options</string>
+          </property>
+          <layout class="QHBoxLayout" name="clickOptionsHLayout">
+           <item>
+            <layout class="QVBoxLayout" name="mouseBtnPanel">
+             <item>
+              <widget class="QLabel" name="mouseBtnLabel">
+               <property name="text">
+                <string>Mouse Button</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="comboBox">
+               <item>
+                <property name="text">
+                 <string>Left</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Right</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Middle</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="repeatBox">
+          <property name="title">
+           <string>Repeat</string>
+          </property>
+          <layout class="QVBoxLayout" name="repeatPanel">
+           <item>
+            <layout class="QHBoxLayout" name="repeatCountLayout">
+             <item>
+              <widget class="QRadioButton" name="repeatCountRadio">
+               <property name="text">
+                <string>Repeat</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="repeatEdit"/>
+             </item>
+             <item>
+              <widget class="QLabel" name="repeatTimesLabel">
+               <property name="text">
+                <string>times</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="repeatCountSpacer">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="repeatUntilStoppedRadio">
+             <property name="text">
+              <string>repeat until stopped</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="positionBox">
+          <property name="title">
+           <string>Position</string>
+          </property>
+          <layout class="QHBoxLayout" name="positionHLayout">
+           <item>
+            <widget class="QRadioButton" name="currentLocationRadio">
+             <property name="text">
+              <string>Current location</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="pickLocationRadio">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pickLocationButton">
+             <property name="text">
+              <string>Pick location</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="positionSpacer">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="xLabel">
+             <property name="text">
+              <string>X</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="xEdit"/>
+           </item>
+           <item>
+            <widget class="QLabel" name="yLabel">
+             <property name="text">
+              <string>Y</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="yEdit"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="controlPanel">
+          <item>
+           <layout class="QHBoxLayout" name="startStopLayout">
+            <item>
+             <widget class="QPushButton" name="startButton">
+              <property name="text">
+               <string>START</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="stopButton">
+              <property name="text">
+               <string>STOP</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="settingsHelpLayout">
+            <item>
+             <widget class="QPushButton" name="settingsBtn">
+              <property name="text">
+               <string>SETTINGS</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="helpBtn">
+              <property name="text">
+               <string>HELP</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
