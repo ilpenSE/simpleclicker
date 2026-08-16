@@ -15,8 +15,8 @@ QPushButton *makeIconButton(const QString& symbol, const QString& tooltip, QWidg
 }
 } // namespace
 
-PresetItemWidget::PresetItemWidget(const QString& presetName, QWidget *parent)
-  : QWidget(parent), m_presetName(presetName)
+PresetItemWidget::PresetItemWidget(const QString& presetName, const PresetConfig& config, QWidget *parent)
+  : config(config), QWidget(parent), m_presetName(presetName)
 {
   auto *layout = new QHBoxLayout(this);
   layout->setContentsMargins(8, 4, 8, 4);

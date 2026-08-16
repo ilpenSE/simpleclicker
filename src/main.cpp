@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 
   // Preset initialization
   presets = &PresetManager::instance(appdata_dir.filePath("presets.json"));
-  if (!presets->deserialize()) return 1;
+  if (!presets->load()) return 1;
   lg->info("Preset manager initialized");
 
   MainWindow w;

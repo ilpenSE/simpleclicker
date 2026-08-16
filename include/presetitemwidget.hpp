@@ -7,6 +7,7 @@
 #include <QEvent>
 #include <QLineEdit>
 #include <cstdint>
+#include "presets.hpp"
 
 enum class PresetItemState : uint8_t {
   None = 0,
@@ -51,7 +52,7 @@ inline constexpr bool is_set(PresetItemState states, PresetItemState value) {
 class PresetItemWidget : public QWidget {
   Q_OBJECT
 public:
-  PresetItemWidget(const QString& presetName, QWidget *parent = nullptr);
+  PresetItemWidget(const QString& presetName, const PresetConfig& config, QWidget *parent = nullptr);
 
   const QString& presetName() const { return m_presetName; }
   void setPresetName(const QString& newName);
@@ -61,6 +62,7 @@ public:
   bool isRenaming() const { return any(m_state & PresetItemState::Renaming); }
   void markSaved();
   void markUnsaved();
+  struct PresetConfig config;
 
 signals:
   void renameRequested(const QString &newName);

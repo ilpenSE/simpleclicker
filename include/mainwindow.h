@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QListWidget>
+#include "presets.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,7 +20,13 @@ public:
   ~MainWindow() override;
 
 private:
-  void addPresetItem(QListWidget& list, const QString& presetName);
+  int getRepeat() const;
+  Location getLocation() const;
+  MouseButton getMouseButton() const;
+  size_t getIntervalMs() const;
+
+  void applyPreset(const PresetConfig& config);
+  void addPresetItem(QListWidget& list, const QString& presetName, const PresetConfig& config);
   Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

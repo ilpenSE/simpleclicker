@@ -86,7 +86,11 @@
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="hoursEdit"/>
+              <widget class="QSpinBox" name="hoursEdit">
+               <property name="maximum">
+                <number>60</number>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -100,7 +104,11 @@
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="minutesEdit"/>
+              <widget class="QSpinBox" name="minutesEdit">
+               <property name="maximum">
+                <number>59</number>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -114,7 +122,11 @@
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="secondsEdit"/>
+              <widget class="QSpinBox" name="secondsEdit">
+               <property name="maximum">
+                <number>59</number>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -128,7 +140,11 @@
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="millisEdit"/>
+              <widget class="QSpinBox" name="millisEdit">
+               <property name="maximum">
+                <number>999</number>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
