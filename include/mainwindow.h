@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QListWidget>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -18,6 +19,7 @@ public:
   ~MainWindow() override;
 
 private:
+  void addPresetItem(QListWidget& list, const QString& presetName);
   Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

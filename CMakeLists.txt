@@ -18,9 +18,9 @@ qt_add_executable(SimpleClicker
   src/main.cpp
   src/logger.cpp
   src/mainwindow.cpp
-  src/io.cpp
-  src/os.cpp
   src/presets.cpp
+  src/presetitemwidget.cpp
+  include/presetitemwidget.hpp
   include/mainwindow.h
   mainwindow.ui
 )

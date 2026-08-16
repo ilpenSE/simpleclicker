@@ -1,29 +1,29 @@
 #include "logger.hpp"
 #include <QDateTime>
-#include <cstdio>
+#include <QIODeviceBase>
 
-bool Logger::init(const char *file_path) {
-  if (!file_path) return false;
-  m_file_path = file_path;
-  m_file = fopen(file_path, "w");
-  if (!m_file) return false;
-  return true;
-}
+Logger::Logger(const QDir& logs_dir) : m_file(logs_dir.filePath("latest.log")), m_stream(&m_file), m_creationTime(QDateTime::currentDateTime())
+{}
 
 Logger::~Logger() {
-  fclose(m_file);
+  m_file.rename(m_creationTime.toString("dd-MM-yyyy hh:mm:ss"));
+  m_file.close();
 }
 
 void Logger::log_internal(LogLevel level, std::string_view sv) {
-  if (!m_file) return;
+  if (!m_file.isOpen()) {
+    if (!m_file.open(QIODeviceBase::WriteOnly | QIODevice::Text)) {
+#ifndef NDEBUG
+      fprintf(stderr, "ERROR: Couldn't open log file\n");
+#endif
+      return;
+    }
+  }
+
   QString time_qstr = QDateTime::currentDateTime().toString("dd-MM-yyyy hh:mm:ss");
-  const char *time_str = time_qstr.toUtf8().constData();
+  QString final_message = QString("%1 [%2] %3")
+    .arg(time_qstr, to_cstr(level), QString::fromUtf8(sv.data(), sv.size()));
 
-  char buffer[2048];
-  int n = snprintf(buffer, sizeof(buffer), "%s [%s] %.*s\n",
-                   time_str, to_cstr(level), (int)sv.size(), sv.data());
-  if (n < 0) return;
-
-  fprintf(m_file, "%.*s", n, buffer);
-  printf("%.*s", n, buffer);
+  m_stream << final_message;
+  qDebug().noquote() << final_message;
 }

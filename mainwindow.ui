@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>628</width>
+    <width>638</width>
     <height>529</height>
    </rect>
   </property>
@@ -30,12 +30,12 @@
          <height>0</height>
         </size>
        </property>
-       <layout class="QVBoxLayout" name="leftPanel" stretch="0,0,0">
+       <layout class="QVBoxLayout" name="leftPanel" stretch="0,0">
         <property name="sizeConstraint">
          <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
         </property>
         <item>
-         <widget class="QLabel" name="label">
+         <widget class="QLabel" name="presetsLabel">
           <property name="font">
            <font>
             <pointsize>16</pointsize>
@@ -43,28 +43,12 @@
            </font>
           </property>
           <property name="text">
-           <string>SimpleClicker</string>
+           <string>Presets</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="presetsLabel">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-            <bold>false</bold>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="text">
-           <string>PRESETS</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QListWidget" name="listWidget">
+         <widget class="QListWidget" name="presetsList">
           <property name="frameShape">
            <enum>QFrame::Shape::NoFrame</enum>
           </property>
@@ -167,7 +151,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="comboBox">
+              <widget class="QComboBox" name="mouseBtnCombo">
                <item>
                 <property name="text">
                  <string>Left</string>
@@ -252,7 +236,7 @@
            <item>
             <widget class="QRadioButton" name="currentLocationRadio">
              <property name="text">
-              <string>Current location</string>
+              <string>Current</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -269,7 +253,7 @@
            <item>
             <widget class="QPushButton" name="pickLocationButton">
              <property name="text">
-              <string>Pick location</string>
+              <string>Pick</string>
              </property>
             </widget>
            </item>

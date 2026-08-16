@@ -1,11 +1,15 @@
 #pragma once
 
+#include <QFile>
 #include <format>
+#include <QDir>
+#include <QTextStream>
 
 #define LOG_LEVELS \
   X(INFO, info) \
   X(ERROR, error) \
-  X(WARNING, warning)
+  X(WARNING, warning) \
+  X(FATAL, fatal)
 
 enum class LogLevel {
 #define X(name, _) name,
@@ -25,12 +29,10 @@ inline const char *to_cstr(LogLevel level) {
 
 class Logger {
 public:
-  static Logger& instance() {
-    static Logger inst;
+  static Logger& instance(const QDir& logs_dir) {
+    static Logger inst(logs_dir);
     return inst;
   }
-
-  bool init(const char *file_path);
 
   template <typename... Args>
   void log(LogLevel level, std::format_string<Args...> fmt, Args&&... args) {
@@ -52,10 +54,11 @@ public:
   Logger(Logger&&) = delete;
   Logger& operator =(Logger&&) = delete;
 private:
-  Logger() {}
+  Logger(const QDir& logs_dir);
   ~Logger();
 
   void log_internal(LogLevel level, std::string_view sv);
-  const char *m_file_path = nullptr;
-  FILE *m_file = nullptr;
+  QFile m_file{};
+  QTextStream m_stream{};
+  QDateTime m_creationTime{};
 };
