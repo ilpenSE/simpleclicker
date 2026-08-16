@@ -20,8 +20,6 @@ public:
   ~MainWindow() override;
 
 private:
-  int getRepeat() const;
-  Location getLocation() const;
   MouseButton getMouseButton() const;
   size_t getIntervalMs() const;
 

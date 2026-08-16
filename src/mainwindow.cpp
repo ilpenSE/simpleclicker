@@ -87,9 +87,9 @@ void MainWindow::addPresetItem(QListWidget& list, const QString& presetName, con
     lg->info("saving preset: '{}'", itemWidget->presetName());
     struct PresetConfig cfg{
       .interval=getIntervalMs(),
-      .loc=getLocation(),
+      .loc={ui->xEdit->value(), ui->yEdit->value()},
       .mouse=getMouseButton(),
-      .repeat=getRepeat(),
+      .repeat=ui->repeatEdit->value(),
       .current_loc=ui->currentLocationRadio->isChecked(),
       .repeat_forever=ui->repeatUntilStoppedRadio->isChecked(),
     };
@@ -115,16 +115,6 @@ void MainWindow::applyPreset(const PresetConfig& config) {
   ui->pickLocationRadio->setChecked(!config.current_loc);
   ui->xEdit->setValue(config.loc.x);
   ui->yEdit->setValue(config.loc.y);
-}
-
-int MainWindow::getRepeat() const {
-  if (ui->repeatUntilStoppedRadio->isChecked()) return default_repeat;
-  return ui->repeatEdit->value();
-}
-
-Location MainWindow::getLocation() const {
-  if (ui->currentLocationRadio->isChecked()) return default_loc;
-  return {ui->xEdit->value(), ui->yEdit->value()};
 }
 
 MouseButton MainWindow::getMouseButton() const {
