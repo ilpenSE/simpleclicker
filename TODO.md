@@ -2,5 +2,6 @@
 
 - [ ] Add settings.json parsing and validating logic
 - [ ] Add feature for adding new preset using UI
-- [ ] Add writeback on exit for presets.json
-- [ ] Add validating and fallbacks to presets.json
+- [x] Add writeback on exit for presets.json
+- [x] Add validating and fallbacks to presets.json
+- [ ] Add help message for creating a new preset

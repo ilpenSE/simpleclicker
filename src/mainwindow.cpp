@@ -3,11 +3,14 @@
 #include "common.hpp"
 #include "logger.hpp"
 #include "presetitemwidget.hpp"
+#include <QShortcut>
 
 extern Logger *lg;
 extern PresetManager *presets;
 
 static PresetItemWidget *currentPresetWidget;
+constexpr auto SAVE_CHANGES_KEYBIND = "Ctrl+S";
+constexpr auto ABORT_CHANGES_KEYBIND = "Ctrl+K";
 
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent) , ui(new Ui::MainWindow)
@@ -27,6 +30,18 @@ MainWindow::MainWindow(QWidget *parent)
     currentPresetWidget = qobject_cast<PresetItemWidget*>(ui->presetsList->itemWidget(currentItem));
     applyPreset(currentPresetWidget->config);
   } else currentPresetWidget = nullptr;
+
+  // Bind Save keybind
+  auto *saveShortcut = new QShortcut(QKeySequence(SAVE_CHANGES_KEYBIND), this);
+  connect(saveShortcut, &QShortcut::activated, this, [this]() {
+    if (currentPresetWidget) emit currentPresetWidget->saveRequested();
+  });
+
+  // Bind Cancel keybind
+  auto *cancelShortcut = new QShortcut(QKeySequence(ABORT_CHANGES_KEYBIND), this);
+  connect(cancelShortcut, &QShortcut::activated, this, [this]() {
+    if (currentPresetWidget) emit currentPresetWidget->cancelRequested();
+  });
 
   // Connect to preset config changes on UI
   auto markUnsaved = [](){ if (currentPresetWidget) currentPresetWidget->markUnsaved(); };
@@ -59,6 +74,12 @@ void MainWindow::addPresetItem(QListWidget& list, const QString& presetName, con
     lg->info("renaming preset: '{}' -> '{}'", itemWidget->presetName(), newName);
     auto cfg = presets->take(itemWidget->presetName());
     presets->insert(newName, cfg);
+  });
+
+  // Abort changes, cancel requested
+  connect(itemWidget, &PresetItemWidget::cancelRequested, this, [this, itemWidget]() {
+    if (currentPresetWidget) applyPreset(currentPresetWidget->config);
+    itemWidget->markSaved();
   });
 
   // Save preset
