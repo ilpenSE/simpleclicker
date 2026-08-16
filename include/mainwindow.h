@@ -23,6 +23,7 @@ private:
   MouseButton getMouseButton() const;
   size_t getIntervalMs() const;
 
+  void applySettings();
   void applyPreset(const PresetConfig& config);
   void addPresetItem(QListWidget& list, const QString& presetName, const PresetConfig& config);
   Ui::MainWindow *ui;

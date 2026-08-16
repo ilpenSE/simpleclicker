@@ -54,6 +54,9 @@ class PresetItemWidget : public QWidget {
 public:
   PresetItemWidget(const QString& presetName, const PresetConfig& config, QWidget *parent = nullptr);
 
+  struct PresetConfig config{};
+  bool is_active = false;
+
   const QString& presetName() const { return m_presetName; }
   void setPresetName(const QString& newName);
 
@@ -62,7 +65,6 @@ public:
   bool isRenaming() const { return any(m_state & PresetItemState::Renaming); }
   void markSaved();
   void markUnsaved();
-  struct PresetConfig config;
 
 signals:
   void renameRequested(const QString &newName);

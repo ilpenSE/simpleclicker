@@ -2,13 +2,15 @@
 #include "ui_mainwindow.h"
 #include "common.hpp"
 #include "logger.hpp"
+#include "settings.hpp"
 #include "presetitemwidget.hpp"
 #include <QShortcut>
 
 extern Logger *lg;
 extern PresetManager *presets;
+extern SettingsManager *settings;
 
-static PresetItemWidget *currentPresetWidget;
+static PresetItemWidget *currentPresetWidget = nullptr;
 constexpr auto SAVE_CHANGES_KEYBIND = "Ctrl+S";
 constexpr auto ABORT_CHANGES_KEYBIND = "Ctrl+K";
 
@@ -23,13 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     addPresetItem(*ui->presetsList, name, cfg);
   }
 
-  // set current (active) preset head item in the list for now
-  // because we dont have any settings right now
-  auto *currentItem = ui->presetsList->item(0);
-  if (currentItem) {
-    currentPresetWidget = qobject_cast<PresetItemWidget*>(ui->presetsList->itemWidget(currentItem));
-    applyPreset(currentPresetWidget->config);
-  } else currentPresetWidget = nullptr;
+  applySettings();
 
   // Bind Save keybind
   auto *saveShortcut = new QShortcut(QKeySequence(SAVE_CHANGES_KEYBIND), this);
@@ -61,6 +57,16 @@ void MainWindow::addPresetItem(QListWidget& list, const QString& presetName, con
   item->setSizeHint(itemWidget->sizeHint());
   list.addItem(item);
   list.setItemWidget(item, itemWidget);
+
+  static auto cur_preset = settings->get<QString>("currentPreset");
+  if (!currentPresetWidget && presetName == cur_preset) {
+    lg->info("Found current preset = '{}'", cur_preset);
+    applyPreset(config);
+    // TODO: introduce better visuals for active elements, for now we have focus
+    ui->presetsList->setCurrentItem(item);
+    itemWidget->is_active = true;
+    currentPresetWidget = itemWidget;
+  }
 
   // Delete an item from preset
   connect(itemWidget, &PresetItemWidget::deleteRequested, this, [&list, item, itemWidget]() {
@@ -100,6 +106,12 @@ void MainWindow::addPresetItem(QListWidget& list, const QString& presetName, con
   });
 }
 
+void MainWindow::applySettings() {
+  auto kbd = settings->get<QString>("keybind");
+  ui->startButton->setText(QString("START (%1)").arg(kbd));
+  ui->stopButton->setText(QString("STOP (%1)").arg(kbd));
+}
+
 void MainWindow::applyPreset(const PresetConfig& config) {
   size_t interval = config.interval;
   ui->hoursEdit->setValue(interval / 60 / 60 / 1000);
@@ -134,6 +146,7 @@ size_t MainWindow::getIntervalMs() const {
 
 MainWindow::~MainWindow()
 {
+  settings->save();
   presets->save();
   delete ui;
 }

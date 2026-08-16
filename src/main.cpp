@@ -6,9 +6,11 @@
 #include "mainwindow.h"
 #include "logger.hpp"
 #include "presets.hpp"
+#include "settings.hpp"
 
 Logger *lg;
 PresetManager *presets;
+SettingsManager *settings;
 
 int main(int argc, char *argv[])
 {
@@ -36,6 +38,10 @@ int main(int argc, char *argv[])
   // Logger initialization
   lg = &Logger::instance(logs_dir);
   lg->info("Logger initialized");
+
+  settings = &SettingsManager::instance(appdata_dir.filePath("settings.json"));
+  if (!settings->load()) return 1;
+  lg->info("Settings manager initialized!");
 
   // Preset initialization
   presets = &PresetManager::instance(appdata_dir.filePath("presets.json"));

@@ -9,7 +9,8 @@
 #include "logger.hpp"
 extern Logger *lg;
 
-PresetManager::PresetManager(const QString& file_path) : m_file(file_path)
+PresetManager::PresetManager(const QString& file_path)
+  : m_file(file_path)
 {
   if (!m_file.open(QIODeviceBase::ReadWrite)) {
     lg->fatal("Failed to open {}", file_path);
@@ -22,11 +23,11 @@ bool PresetManager::load() {
   QJsonParseError err;
   auto doc = QJsonDocument::fromJson(data, &err);
   if (err.error != QJsonParseError::ParseError::NoError) {
-    lg->error("JSON Parsing failed: '{}', fallback to empty presets", err.errorString());
+    lg->error("Presets JSON Parsing failed: '{}', falling back to defaults", err.errorString());
   }
 
   if (!doc.isObject()) {
-    lg->error("JSON is invalid: must be object, fallback to empty presets");
+    lg->error("Presets JSON is invalid: must be object, falling back to defaults");
     return true;
   }
   QJsonObject root_obj = doc.object();
