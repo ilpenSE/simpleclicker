@@ -21,7 +21,7 @@ public:
 
 private:
   MouseButton getMouseButton() const;
-  size_t getIntervalMs() const;
+  int getIntervalMs() const;
 
   void applySettings();
   void applyPreset(const PresetConfig& config);

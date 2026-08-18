@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.19)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+option(ENABLE_SANITIZERS "Enable ASan and UBSan" ON)
 
 project(SimpleClicker LANGUAGES CXX)
 
@@ -29,6 +30,17 @@ qt_add_executable(SimpleClicker
 set_target_properties(SimpleClicker PROPERTIES
   AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}
 )
+
+if(ENABLE_SANITIZERS AND (CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU"))
+  target_compile_options(SimpleClicker PRIVATE
+    -fsanitize=address,undefined
+    -fno-omit-frame-pointer
+    -g
+  )
+  target_link_options(SimpleClicker PRIVATE
+    -fsanitize=address,undefined
+  )
+endif()
 
 target_include_directories(SimpleClicker PUBLIC include)
 

@@ -7,8 +7,8 @@
 #include <QShortcut>
 
 extern Logger *lg;
-extern PresetManager *presets;
-extern SettingsManager *settings;
+extern PresetManager *presetsman;
+extern SettingsManager *settingsman;
 
 static PresetItemWidget *currentPresetWidget = nullptr;
 constexpr auto SAVE_CHANGES_KEYBIND = "Ctrl+S";
@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
   lg->info("Hello from MainWindow!");
 
   // Add presets to the list
-  for (const auto& [name, cfg] : presets->keyValueRange()) {
+  for (const auto& [name, cfg] : presetsman->presets.asKeyValueRange()) {
     addPresetItem(*ui->presetsList, name, cfg);
   }
 
@@ -58,7 +58,7 @@ void MainWindow::addPresetItem(QListWidget& list, const QString& presetName, con
   list.addItem(item);
   list.setItemWidget(item, itemWidget);
 
-  static auto cur_preset = settings->get<QString>("currentPreset");
+  static auto cur_preset = settingsman->get<QString>("currentPreset");
   if (!currentPresetWidget && presetName == cur_preset) {
     lg->info("Found current preset = '{}'", cur_preset);
     applyPreset(config);
@@ -71,15 +71,15 @@ void MainWindow::addPresetItem(QListWidget& list, const QString& presetName, con
   // Delete an item from preset
   connect(itemWidget, &PresetItemWidget::deleteRequested, this, [&list, item, itemWidget]() {
     lg->info("removing preset: '{}'", itemWidget->presetName());
-    presets->take(itemWidget->presetName());
+    presetsman->presets.remove(itemWidget->presetName());
     delete list.takeItem(list.row(item));
   });
 
   // Rename the preset name
   connect(itemWidget, &PresetItemWidget::renameRequested, this, [itemWidget](const QString &newName) {
     lg->info("renaming preset: '{}' -> '{}'", itemWidget->presetName(), newName);
-    auto cfg = presets->take(itemWidget->presetName());
-    presets->insert(newName, cfg);
+    auto cfg = presetsman->presets.take(itemWidget->presetName());
+    presetsman->presets.insert(newName, cfg);
   });
 
   // Abort changes, cancel requested
@@ -90,24 +90,22 @@ void MainWindow::addPresetItem(QListWidget& list, const QString& presetName, con
 
   // Save preset
   connect(itemWidget, &PresetItemWidget::saveRequested, this, [this, itemWidget]() {
-    lg->info("saving preset: '{}'", itemWidget->presetName());
-    struct PresetConfig cfg{
-      .interval=getIntervalMs(),
-      .loc={ui->xEdit->value(), ui->yEdit->value()},
-      .mouse=getMouseButton(),
-      .repeat=ui->repeatEdit->value(),
-      .current_loc=ui->currentLocationRadio->isChecked(),
-      .repeat_forever=ui->repeatUntilStoppedRadio->isChecked(),
+    auto pname = itemWidget->presetName();
+    lg->info("saving preset: '{}'", pname);
+    presetsman->presets[pname] = PresetConfig{
+      .location = Location{ui->xEdit->value(), ui->yEdit->value()},
+      .interval = getIntervalMs(),
+      .repeat = ui->repeatEdit->value(),
+      .mouseButton = getMouseButton(),
+      .repeatUntilStopped = ui->repeatUntilStoppedRadio->isChecked(),
+      .currentLocation = ui->currentLocationRadio->isChecked(),
     };
-
-    presets->set(itemWidget->presetName(), cfg);
-    itemWidget->config = cfg;
     itemWidget->markSaved();
   });
 }
 
 void MainWindow::applySettings() {
-  auto kbd = settings->get<QString>("keybind");
+  auto kbd = settingsman->get<QString>("keybind");
   ui->startButton->setText(QString("START (%1)").arg(kbd));
   ui->stopButton->setText(QString("STOP (%1)").arg(kbd));
 }
@@ -119,24 +117,24 @@ void MainWindow::applyPreset(const PresetConfig& config) {
   ui->secondsEdit->setValue(interval / 1000);
   ui->millisEdit->setValue(interval % 1000);
 
-  ui->mouseBtnCombo->setCurrentIndex(static_cast<int>(config.mouse));
+  ui->mouseBtnCombo->setCurrentIndex(static_cast<int>(config.mouseButton));
   ui->repeatEdit->setValue(config.repeat);
-  ui->repeatUntilStoppedRadio->setChecked(config.repeat_forever);
-  ui->repeatCountRadio->setChecked(!config.repeat_forever);
-  ui->currentLocationRadio->setChecked(config.current_loc);
-  ui->pickLocationRadio->setChecked(!config.current_loc);
-  ui->xEdit->setValue(config.loc.x);
-  ui->yEdit->setValue(config.loc.y);
+  ui->repeatUntilStoppedRadio->setChecked(config.repeatUntilStopped);
+  ui->repeatCountRadio->setChecked(!config.repeatUntilStopped);
+  ui->currentLocationRadio->setChecked(config.currentLocation);
+  ui->pickLocationRadio->setChecked(!config.currentLocation);
+  ui->xEdit->setValue(config.location.x);
+  ui->yEdit->setValue(config.location.y);
 }
 
 MouseButton MainWindow::getMouseButton() const {
   int idx = ui->mouseBtnCombo->currentIndex();
-  if (idx == -1) return default_mouse_button;
+  if (idx == -1) return {};
   return static_cast<MouseButton>(idx);
 }
 
-size_t MainWindow::getIntervalMs() const {
-  size_t res = 0;
+int MainWindow::getIntervalMs() const {
+  int res = 0;
   res += ui->hoursEdit->value() * 60 * 60 * 1000;
   res += ui->minutesEdit->value() * 60 * 1000;
   res += ui->secondsEdit->value() * 1000;
@@ -146,7 +144,7 @@ size_t MainWindow::getIntervalMs() const {
 
 MainWindow::~MainWindow()
 {
-  settings->save();
-  presets->save();
+  settingsman->save();
+  presetsman->save();
   delete ui;
 }

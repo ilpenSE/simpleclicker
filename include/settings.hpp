@@ -8,23 +8,26 @@ public:
     static SettingsManager inst(file_path);
     return inst;
   }
+  bool needsUpdate = false;
 
   bool load();
   void save();
 
   template <typename T>
-  T get(const QString& name) const {
-    if constexpr (std::is_same_v<T, QString>) {
-      return m_settings.value(name).toString();
-    } else {
-      return T{};
-    }
+  T get(const QString& fieldName) {
+    return fromJsonValue<T>(settings.value(fieldName));
   }
 
   template <typename T>
-  void set(const QString& name, const T& val) {
-    m_settings[name] = val;
+  void set(const QString& fieldName, const T& val) {
+    settings[fieldName] = toJsonValue(val);
   }
+
+  QJsonObject settings = {
+    {"currentPreset", ""},
+    {"version", "1.0.0"},
+    {"keybind", "F6"},
+  };
 
   SettingsManager(const SettingsManager&) = delete;
   SettingsManager& operator =(const SettingsManager&) = delete;
@@ -37,9 +40,4 @@ private:
   }
 
   QFile m_file{};
-  QJsonObject m_settings = {
-    {"currentPreset", ""},
-    {"version", "1.0.0"},
-    {"keybind", "F6"},
-  };
 };

@@ -37,9 +37,9 @@ bool SettingsManager::load() {
     QString name = it.key();
     QJsonValue jvalue = it.value();
 
-    if (!m_settings.contains(name)) continue;
-    QJsonValue defaultValue = m_settings.value(name);
-    if (defaultValue.type() == jvalue.type()) m_settings[name] = jvalue;
+    if (!settings.contains(name)) continue;
+    QJsonValue defaultValue = settings.value(name);
+    if (defaultValue.type() == jvalue.type()) settings[name] = jvalue;
   }
   return true;
 }
@@ -47,5 +47,5 @@ bool SettingsManager::load() {
 void SettingsManager::save() {
   m_file.resize(0);
   m_file.seek(0);
-  m_file.write(QJsonDocument(m_settings).toJson());
+  m_file.write(QJsonDocument(settings).toJson());
 }

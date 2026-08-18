@@ -9,8 +9,10 @@
 #include "settings.hpp"
 
 Logger *lg;
-PresetManager *presets;
-SettingsManager *settings;
+PresetManager *presetsman;
+SettingsManager *settingsman;
+
+#include <limits.h>
 
 int main(int argc, char *argv[])
 {
@@ -39,13 +41,13 @@ int main(int argc, char *argv[])
   lg = &Logger::instance(logs_dir);
   lg->info("Logger initialized");
 
-  settings = &SettingsManager::instance(appdata_dir.filePath("settings.json"));
-  if (!settings->load()) return 1;
+  settingsman = &SettingsManager::instance(appdata_dir.filePath("settings.json"));
+  if (!settingsman->load()) return 1;
   lg->info("Settings manager initialized!");
 
   // Preset initialization
-  presets = &PresetManager::instance(appdata_dir.filePath("presets.json"));
-  if (!presets->load()) return 1;
+  presetsman = &PresetManager::instance(appdata_dir.filePath("presets.json"));
+  if (!presetsman->load()) return 1;
   lg->info("Preset manager initialized");
 
   MainWindow w;
