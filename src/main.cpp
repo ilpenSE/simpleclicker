@@ -54,3 +54,16 @@ int main(int argc, char *argv[])
   w.show();
   return QApplication::exec();
 }
+
+// On Wayland, Qt's internal allocations are considered as memory leaks by LeakSanitizer (from AddressSanitizer)
+// This is a false-positive and it's considered as a bug so we suppress them in this function:
+#ifdef __SANITIZE_ADDRESS__
+extern "C" const char* __lsan_default_suppressions() {
+  return "leak:libwayland-client.so\n" "leak:libQt6WaylandClient\n";
+}
+#endif
+// Similar issues on GitHub:
+// https://github.com/libsdl-org/SDL/issues/8056
+// https://github.com/lvgl/lvgl/issues/7623
+// Set QT_QPA_PLATFORM=xcb environment variable while running executable
+// on Wayland to get X11 version because there's no such bug as this there.
