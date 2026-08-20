@@ -6,7 +6,8 @@ extern Logger *lg;
 
 namespace {
 QPushButton *makeIconButton(const QString& symbol, const QString& tooltip, QWidget *parent) {
-  auto *btn = new QPushButton(symbol, parent);
+  auto *btn = new QPushButton(parent);
+  btn->setIcon(loadIconFromSVG(symbol));
   btn->setFlat(true);
   btn->setCursor(Qt::PointingHandCursor);
   btn->setFixedSize(22, 22);
@@ -28,10 +29,10 @@ PresetItemWidget::PresetItemWidget(const QString& presetName, const PresetConfig
   layout->addWidget(m_nameLabel, 1);
   layout->addWidget(m_nameEdit, 1);
 
-  m_saveButton = makeIconButton(emoji::floppy_disk, "Save", this);
-  m_cancelButton = makeIconButton(emoji::mult_x, "Cancel", this);
-  m_editButton = makeIconButton(emoji::pencil, "Edit", this);
-  m_deleteButton = makeIconButton(emoji::trash, "Delete", this);
+  m_saveButton = makeIconButton(":/icons/save.svg", "Save", this);
+  m_cancelButton = makeIconButton(":/icons/cancel.svg", "Cancel", this);
+  m_editButton = makeIconButton(":/icons/edit.svg", "Edit", this);
+  m_deleteButton = makeIconButton(":/icons/trash.svg", "Delete", this);
 
   layout->addWidget(m_saveButton);
   layout->addWidget(m_cancelButton);

@@ -3,11 +3,11 @@ cmake_minimum_required(VERSION 3.19)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-option(ENABLE_SANITIZERS "Enable ASan and UBSan" ON)
+option(ENABLE_SANITIZERS "Enable ASan and UBSan" OFF)
 
 project(SimpleClicker LANGUAGES CXX)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets Svg)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -16,6 +16,7 @@ qt_standard_project_setup()
 
 qt_add_executable(SimpleClicker
   WIN32 MACOSX_BUNDLE
+  src/common.cpp
   src/main.cpp
   src/logger.cpp
   src/mainwindow.cpp
@@ -26,6 +27,9 @@ qt_add_executable(SimpleClicker
   include/mainwindow.h
   mainwindow.ui
 )
+
+qt_add_resources(APP_RESOURCES resources.qrc)
+target_sources(SimpleClicker PRIVATE ${APP_RESOURCES})
 
 set_target_properties(SimpleClicker PROPERTIES
   AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}
@@ -47,6 +51,7 @@ target_include_directories(SimpleClicker PUBLIC include)
 target_link_libraries(SimpleClicker PRIVATE
   Qt::Core
   Qt::Widgets
+  Qt::Svg
 )
 
 install(TARGETS SimpleClicker

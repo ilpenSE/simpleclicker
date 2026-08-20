@@ -6,13 +6,18 @@
 #include <QString>
 #include <format>
 #include <type_traits>
+#include <QSvgRenderer>
+#include <QPainter>
+#include <QColor>
+#include <QPixmap>
+#include <QGuiApplication>
+#include <QStyleHints>
+#include <QIcon>
 
-namespace emoji {
-  const auto floppy_disk = QStringLiteral("\U0001F4BE");
-  const auto mult_x = QStringLiteral("\u2715");
-  const auto pencil = QStringLiteral("\u270E");
-  const auto trash = QStringLiteral("\U0001F5D1");
-}
+inline bool isDarkTheme() { return QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark; }
+
+// Loads icon from SVG respecting the theme
+QIcon loadIconFromSVG(const QString& path);
 
 enum class MouseButton : int {
   Left = 0, Right, Middle, Count,

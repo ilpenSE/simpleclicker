@@ -2,11 +2,16 @@
 #include <QDateTime>
 #include <QIODeviceBase>
 
-Logger::Logger(const QDir& logs_dir) : m_file(logs_dir.filePath("latest.log")), m_stream(&m_file), m_creationTime(QDateTime::currentDateTime())
+Logger::Logger(const QDir& logs_dir)
+  : m_file(logs_dir.filePath("latest.log")),
+    m_stream(&m_file),
+    m_creationTime(QDateTime::currentDateTime())
 {}
 
 Logger::~Logger() {
-  m_file.rename(m_creationTime.toString("dd-MM-yyyy hh:mm:ss"));
+  const QString archived = m_file.fileName().section('/', 0, -2) + "/" +
+                           m_creationTime.toString("dd-MM-yyyy-hh-mm-ss") + ".log";
+  m_file.copy(m_file.fileName(), archived);
   m_file.close();
 }
 
@@ -24,6 +29,6 @@ void Logger::log_internal(LogLevel level, std::string_view sv) {
   QString final_message = QString("%1 [%2] %3")
     .arg(time_qstr, to_cstr(level), QString::fromUtf8(sv.data(), sv.size()));
 
-  m_stream << final_message;
+  m_stream << final_message << Qt::endl;
   qDebug().noquote() << final_message;
 }

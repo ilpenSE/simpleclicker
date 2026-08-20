@@ -12,8 +12,6 @@ Logger *lg;
 PresetManager *presetsman;
 SettingsManager *settingsman;
 
-#include <limits.h>
-
 int main(int argc, char *argv[])
 {
   QApplication app(argc, argv);
