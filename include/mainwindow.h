@@ -27,6 +27,10 @@ private:
   void applyPreset(const PresetConfig& config);
   QListWidgetItem* addPresetItem(QListWidget& list, const QString& presetName, const PresetConfig& config);
   void setActivePreset(QListWidgetItem *item);
+
+  void blockPresetConfigUi() { _changePresetConfigUi(true); }
+  void unblockPresetConfigUi() { _changePresetConfigUi(false); }
+  void _changePresetConfigUi(bool is_locked);
   Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

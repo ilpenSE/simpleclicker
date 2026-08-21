@@ -8,6 +8,7 @@
 #include <QLineEdit>
 #include <cstdint>
 #include "presets.hpp"
+#include <QMouseEvent>
 
 enum class PresetItemState : uint8_t {
   None = 0,
@@ -73,6 +74,7 @@ signals:
   void deleteRequested();
   void saveRequested();
   void cancelRequested();
+  void doubleClicked();
 
 private slots:
   void onEditClicked();
@@ -84,6 +86,7 @@ protected:
   void enterEvent(QEnterEvent *event) override;
   void leaveEvent(QEvent *event) override;
   bool eventFilter(QObject *watched, QEvent *event) override;
+  void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 private:
   void commitRename();

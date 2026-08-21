@@ -4,7 +4,7 @@
 #include "logger.hpp"
 extern Logger *lg;
 
-constexpr auto itemSize = 26; 
+constexpr auto itemSize = 26;
 
 namespace {
 QPushButton *makeIconButton(const QString& symbol, const QString& tooltip, QWidget *parent) {
@@ -33,6 +33,7 @@ PresetItemWidget::PresetItemWidget(const QString& presetName, const PresetConfig
 
   m_nameLabel->setFixedHeight(itemSize);
   m_nameEdit->setFixedHeight(itemSize);
+  m_nameLabel->installEventFilter(this); // for double click events
 
   m_saveButton = makeIconButton(":/icons/save.svg", "Save", this);
   m_cancelButton = makeIconButton(":/icons/cancel.svg", "Cancel", this);
@@ -167,7 +168,18 @@ bool PresetItemWidget::eventFilter(QObject *watched, QEvent *event) {
       return true;
     }
   }
+
+  if (watched == m_nameLabel && event->type() == QEvent::MouseButtonDblClick) {
+    emit doubleClicked();
+    return true;
+  }
+
   return QWidget::eventFilter(watched, event);
+}
+
+void PresetItemWidget::mouseDoubleClickEvent(QMouseEvent *event) {
+  emit doubleClicked();
+  QWidget::mouseDoubleClickEvent(event);
 }
 
 void PresetItemWidget::updateButtonVisibility() {

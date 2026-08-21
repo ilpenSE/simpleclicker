@@ -13,12 +13,14 @@ extern SettingsManager *settingsman;
 static PresetItemWidget *currentPresetWidget = nullptr;
 constexpr auto SAVE_CHANGES_KEYBIND = "Ctrl+S";
 constexpr auto ABORT_CHANGES_KEYBIND = "Ctrl+K";
+static bool presetChangeEventLock = false;
 
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent) , ui(new Ui::MainWindow)
 {
   ui->setupUi(this);
   lg->info("Hello from MainWindow!");
+  ui->helpLabel->setVisible(false);
 
   // Add presets to the list
   for (const auto& [name, cfg] : presetsman->presets.asKeyValueRange()) {
@@ -40,7 +42,7 @@ MainWindow::MainWindow(QWidget *parent)
   });
 
   // Connect to preset config changes on UI
-  auto markUnsaved = [](){ if (currentPresetWidget) currentPresetWidget->markUnsaved(); };
+  auto markUnsaved = [](){ if (currentPresetWidget && !presetChangeEventLock) currentPresetWidget->markUnsaved(); };
   for (auto it : { ui->hoursEdit, ui->minutesEdit, ui->secondsEdit, ui->millisEdit,
                    ui->repeatEdit, ui->xEdit, ui->yEdit }) {
     connect(it, &QSpinBox::valueChanged, this, markUnsaved);
@@ -61,15 +63,31 @@ MainWindow::MainWindow(QWidget *parent)
       newItemWidget->enterEditMode();
       presetsman->presets[newPresetName] = {};
   });
+
+  // If there's no current preset, block the preset config UI
+  if (!currentPresetWidget) {
+    blockPresetConfigUi();
+  }
 }
 
 void MainWindow::setActivePreset(QListWidgetItem *item) {
   // TODO: introduce better visuals for active elements, for now we have focus
+  if (!item) {
+    applyPreset({});
+    currentPresetWidget = nullptr;
+    lg->info("Setting active preset to null");
+    blockPresetConfigUi();
+    return;
+  }
+
+  unblockPresetConfigUi();
+
   auto itemWidget = qobject_cast<PresetItemWidget*>(ui->presetsList->itemWidget(item));
   applyPreset(itemWidget->config);
   ui->presetsList->setCurrentItem(item);
   itemWidget->setActive(true);
   currentPresetWidget = itemWidget;
+  lg->info("Setting active preset to '{}'", itemWidget->presetName());
 }
 
 QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& presetName, const PresetConfig& config) {
@@ -81,20 +99,27 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
 
   static auto cur_preset = settingsman->get<QString>("currentPreset");
   if (!currentPresetWidget && presetName == cur_preset) {
-    lg->info("Found current preset = '{}'", cur_preset);
+    lg->info("Found current preset: '{}'", cur_preset);
     setActivePreset(item);
   }
 
   // Delete an item from preset
-  connect(itemWidget, &PresetItemWidget::deleteRequested, this, [&list, item, itemWidget]() {
-    lg->info("removing preset: '{}'", itemWidget->presetName());
+  connect(itemWidget, &PresetItemWidget::deleteRequested, this, [this, &list, item, itemWidget]() {
+    lg->info("Removing preset: '{}'", itemWidget->presetName());
     presetsman->presets.remove(itemWidget->presetName());
-    delete list.takeItem(list.row(item));
+    int idx = list.row(item);
+    if (currentPresetWidget == itemWidget) {
+      // if current's gonna be deleted, set active preset to something else
+      setActivePreset(idx <= 0 ? nullptr : list.item(idx - 1));
+    }
+
+    list.removeItemWidget(item);
+    delete list.takeItem(idx);
   });
 
   // Rename the preset name
   connect(itemWidget, &PresetItemWidget::renameRequested, this, [itemWidget](const QString &newName) {
-    lg->info("renaming preset: '{}' -> '{}'", itemWidget->presetName(), newName);
+    lg->info("Renaming preset: '{}' -> '{}'", itemWidget->presetName(), newName);
     auto cfg = presetsman->presets.take(itemWidget->presetName());
     presetsman->presets.insert(newName, cfg);
   });
@@ -108,8 +133,8 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
   // Save preset
   connect(itemWidget, &PresetItemWidget::saveRequested, this, [this, itemWidget]() {
     auto pname = itemWidget->presetName();
-    lg->info("saving preset: '{}'", pname);
-    presetsman->presets[pname] = PresetConfig{
+    lg->info("Saving preset: '{}'", pname);
+     PresetConfig newConfig = {
       .location = Location{ui->xEdit->value(), ui->yEdit->value()},
       .interval = getIntervalMs(),
       .repeat = ui->repeatEdit->value(),
@@ -117,10 +142,28 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
       .repeatUntilStopped = ui->repeatUntilStoppedRadio->isChecked(),
       .currentLocation = ui->currentLocationRadio->isChecked(),
     };
+    presetsman->presets[pname] = newConfig;
+    itemWidget->config = newConfig;
     itemWidget->markSaved();
   });
 
+  // Double clicked, set current preset to this
+  connect(itemWidget, &PresetItemWidget::doubleClicked, this, [this, item](){
+    setActivePreset(item);
+  });
+
   return item;
+}
+
+void MainWindow::_changePresetConfigUi(bool is_locked) {
+  for (auto it : {ui->clickOptionsBox, ui->clickIntervalBox, ui->repeatBox, ui->positionBox}) {
+    it->setEnabled(!is_locked);
+  }
+
+  ui->startButton->setEnabled(!is_locked);
+  ui->stopButton->setEnabled(!is_locked);
+
+  ui->helpLabel->setVisible(is_locked);
 }
 
 void MainWindow::applySettings() {
@@ -130,6 +173,7 @@ void MainWindow::applySettings() {
 }
 
 void MainWindow::applyPreset(const PresetConfig& config) {
+  presetChangeEventLock = true;
   size_t interval = config.interval;
   ui->hoursEdit->setValue(interval / 60 / 60 / 1000);
   ui->minutesEdit->setValue(interval / 60 / 1000);
@@ -144,6 +188,7 @@ void MainWindow::applyPreset(const PresetConfig& config) {
   ui->pickLocationRadio->setChecked(!config.currentLocation);
   ui->xEdit->setValue(config.location.x);
   ui->yEdit->setValue(config.location.y);
+  presetChangeEventLock = false;
 }
 
 MouseButton MainWindow::getMouseButton() const {
@@ -163,6 +208,8 @@ int MainWindow::getIntervalMs() const {
 
 MainWindow::~MainWindow()
 {
+  settingsman->set("currentPreset", currentPresetWidget ? currentPresetWidget->presetName() : "");
+
   settingsman->save();
   presetsman->save();
   delete ui;
