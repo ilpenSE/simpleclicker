@@ -49,9 +49,30 @@ MainWindow::MainWindow(QWidget *parent)
     connect(it, &QRadioButton::toggled, this, markUnsaved);
   }
   connect(ui->mouseBtnCombo, &QComboBox::currentIndexChanged, this, markUnsaved);
+
+  // Set up addPreset button
+  ui->addPresetBtn->setIcon(loadIconFromSVG(":/icons/add.svg"));
+  connect(ui->addPresetBtn, &QPushButton::clicked, this, [this](){
+      QString newPresetName = QString("New Preset %1").arg(presetsman->presets.count() + 1);
+      QListWidgetItem *newItem = addPresetItem(*ui->presetsList, newPresetName, {});
+      setActivePreset(newItem);
+      PresetItemWidget *newItemWidget = qobject_cast<PresetItemWidget*>(
+          ui->presetsList->itemWidget(newItem));
+      newItemWidget->enterEditMode();
+      presetsman->presets[newPresetName] = {};
+  });
 }
 
-void MainWindow::addPresetItem(QListWidget& list, const QString& presetName, const PresetConfig& config) {
+void MainWindow::setActivePreset(QListWidgetItem *item) {
+  // TODO: introduce better visuals for active elements, for now we have focus
+  auto itemWidget = qobject_cast<PresetItemWidget*>(ui->presetsList->itemWidget(item));
+  applyPreset(itemWidget->config);
+  ui->presetsList->setCurrentItem(item);
+  itemWidget->setActive(true);
+  currentPresetWidget = itemWidget;
+}
+
+QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& presetName, const PresetConfig& config) {
   PresetItemWidget *itemWidget = new PresetItemWidget(presetName, config, &list);
   QListWidgetItem *item = new QListWidgetItem();
   item->setSizeHint(itemWidget->sizeHint());
@@ -61,11 +82,7 @@ void MainWindow::addPresetItem(QListWidget& list, const QString& presetName, con
   static auto cur_preset = settingsman->get<QString>("currentPreset");
   if (!currentPresetWidget && presetName == cur_preset) {
     lg->info("Found current preset = '{}'", cur_preset);
-    applyPreset(config);
-    // TODO: introduce better visuals for active elements, for now we have focus
-    ui->presetsList->setCurrentItem(item);
-    itemWidget->is_active = true;
-    currentPresetWidget = itemWidget;
+    setActivePreset(item);
   }
 
   // Delete an item from preset
@@ -102,6 +119,8 @@ void MainWindow::addPresetItem(QListWidget& list, const QString& presetName, con
     };
     itemWidget->markSaved();
   });
+
+  return item;
 }
 
 void MainWindow::applySettings() {

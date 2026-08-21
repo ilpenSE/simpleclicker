@@ -25,7 +25,8 @@ private:
 
   void applySettings();
   void applyPreset(const PresetConfig& config);
-  void addPresetItem(QListWidget& list, const QString& presetName, const PresetConfig& config);
+  QListWidgetItem* addPresetItem(QListWidget& list, const QString& presetName, const PresetConfig& config);
+  void setActivePreset(QListWidgetItem *item);
   Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

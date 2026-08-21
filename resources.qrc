@@ -4,5 +4,6 @@
     <file alias="cancel.svg">assets/icons/cancel.svg</file>
     <file alias="edit.svg">assets/icons/edit.svg</file>
     <file alias="trash.svg">assets/icons/trash.svg</file>
+    <file alias="add.svg">assets/icons/add.svg</file>
   </qresource>
 </RCC>

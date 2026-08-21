@@ -5,7 +5,7 @@ QIcon loadIconFromSVG(const QString& path) {
   QColor tint = dark ? QColor("#e0e0e0") : QColor("#202020");
 
   QSvgRenderer renderer(path);
-  QPixmap pixmap(24, 24);
+  QPixmap pixmap(22, 22);
   pixmap.fill(Qt::transparent);
 
   QPainter painter(&pixmap);

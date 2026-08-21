@@ -4,13 +4,15 @@
 #include "logger.hpp"
 extern Logger *lg;
 
+constexpr auto itemSize = 26; 
+
 namespace {
 QPushButton *makeIconButton(const QString& symbol, const QString& tooltip, QWidget *parent) {
   auto *btn = new QPushButton(parent);
   btn->setIcon(loadIconFromSVG(symbol));
   btn->setFlat(true);
   btn->setCursor(Qt::PointingHandCursor);
-  btn->setFixedSize(22, 22);
+  btn->setFixedSize(itemSize, itemSize);
   btn->setToolTip(tooltip);
   return btn;
 }
@@ -28,6 +30,9 @@ PresetItemWidget::PresetItemWidget(const QString& presetName, const PresetConfig
   m_nameEdit->hide();
   layout->addWidget(m_nameLabel, 1);
   layout->addWidget(m_nameEdit, 1);
+
+  m_nameLabel->setFixedHeight(itemSize);
+  m_nameEdit->setFixedHeight(itemSize);
 
   m_saveButton = makeIconButton(":/icons/save.svg", "Save", this);
   m_cancelButton = makeIconButton(":/icons/cancel.svg", "Cancel", this);
@@ -49,6 +54,10 @@ PresetItemWidget::PresetItemWidget(const QString& presetName, const PresetConfig
   connect(m_nameEdit, &QLineEdit::returnPressed, this, &PresetItemWidget::onSaveClicked);
 
   updateHoverIcons(false);
+}
+
+void PresetItemWidget::enterEditMode() {
+  onEditClicked();
 }
 
 void PresetItemWidget::updateLabelStyle() {
@@ -169,4 +178,8 @@ void PresetItemWidget::updateButtonVisibility() {
   m_cancelButton->setVisible(renaming || unsaved);
   m_editButton->setVisible(!renaming && !unsaved);
   m_deleteButton->setVisible(!renaming && !unsaved);
+}
+
+void PresetItemWidget::setActive(bool isActive) {
+  m_is_active = isActive;
 }
