@@ -31,6 +31,8 @@ private:
   void blockPresetConfigUi() { _changePresetConfigUi(true); }
   void unblockPresetConfigUi() { _changePresetConfigUi(false); }
   void _changePresetConfigUi(bool is_locked);
+
+  QString generateUniquePresetName() const;
   Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

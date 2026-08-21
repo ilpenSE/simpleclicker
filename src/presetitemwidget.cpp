@@ -139,7 +139,6 @@ void PresetItemWidget::commitRename() {
 
   if (!newName.isEmpty() && newName != m_presetName) {
     emit renameRequested(newName);
-    m_presetName = newName;
     updateLabelStyle();
   }
   updateButtonVisibility();

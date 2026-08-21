@@ -55,13 +55,12 @@ MainWindow::MainWindow(QWidget *parent)
   // Set up addPreset button
   ui->addPresetBtn->setIcon(loadIconFromSVG(":/icons/add.svg"));
   connect(ui->addPresetBtn, &QPushButton::clicked, this, [this](){
-      QString newPresetName = QString("New Preset %1").arg(presetsman->presets.count() + 1);
-      QListWidgetItem *newItem = addPresetItem(*ui->presetsList, newPresetName, {});
-      setActivePreset(newItem);
-      PresetItemWidget *newItemWidget = qobject_cast<PresetItemWidget*>(
-          ui->presetsList->itemWidget(newItem));
-      newItemWidget->enterEditMode();
-      presetsman->presets[newPresetName] = {};
+    QString newPresetName = generateUniquePresetName();
+    QListWidgetItem *newItem = addPresetItem(*ui->presetsList, newPresetName, {});
+    setActivePreset(newItem);
+    PresetItemWidget *newItemWidget = qobject_cast<PresetItemWidget*>(ui->presetsList->itemWidget(newItem));
+    newItemWidget->enterEditMode();
+    presetsman->presets[newPresetName] = {};
   });
 
   // If there's no current preset, block the preset config UI
@@ -120,8 +119,14 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
   // Rename the preset name
   connect(itemWidget, &PresetItemWidget::renameRequested, this, [itemWidget](const QString &newName) {
     lg->info("Renaming preset: '{}' -> '{}'", itemWidget->presetName(), newName);
+    if (presetsman->presets.contains(newName)) {
+      lg->warning("Preset '{}' already exists, rename aborted", newName);
+      return;
+    }
+
     auto cfg = presetsman->presets.take(itemWidget->presetName());
     presetsman->presets.insert(newName, cfg);
+    itemWidget->setPresetName(newName);
   });
 
   // Abort changes, cancel requested
@@ -204,6 +209,15 @@ int MainWindow::getIntervalMs() const {
   res += ui->secondsEdit->value() * 1000;
   res += ui->millisEdit->value();
   return res;
+}
+
+QString MainWindow::generateUniquePresetName() const {
+  int n = presetsman->presets.count() + 1;
+  QString candidate;
+  do {
+    candidate = QString("New Preset %1").arg(n++);
+  } while (presetsman->presets.contains(candidate));
+  return candidate;
 }
 
 MainWindow::~MainWindow()
