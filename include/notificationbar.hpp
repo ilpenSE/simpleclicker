@@ -9,7 +9,7 @@
 #include <QPointer>
 
 enum class NotificationLevel {
-  Info, Warning, Error, Count,
+  Info, Success, Warning, Error, Count,
 };
 
 class NotificationBar : public QWidget {
@@ -20,10 +20,23 @@ public:
   explicit NotificationBar(QWidget *parent = nullptr);
 
   void show(const QString &message, NotificationLevel level, int timeoutMs = -1);
+  void dismiss();
 
-  void info(const QString &message, int timeoutMs = -1) { return show(message, NotificationLevel::Info, timeoutMs); }
-  void error(const QString &message, int timeoutMs = -1) { return show(message, NotificationLevel::Error, timeoutMs); }
-  void warning(const QString &message, int timeoutMs = -1) { return show(message, NotificationLevel::Warning, timeoutMs); }
+  void info(const QString &message, int timeoutMs = -1) {
+    return show(message, NotificationLevel::Info, timeoutMs);
+  }
+
+  void success(const QString &message, int timeoutMs = -1) {
+    return show(message, NotificationLevel::Success, timeoutMs);
+  }
+
+  void error(const QString &message, int timeoutMs = -1) {
+    return show(message, NotificationLevel::Error, timeoutMs);
+  }
+
+  void warning(const QString &message, int timeoutMs = -1) {
+    return show(message, NotificationLevel::Warning, timeoutMs);
+  }
 
   QColor bgColor() const { return m_bgColor; }
   void setBgColor(const QColor &c);
@@ -34,13 +47,13 @@ protected:
     return QSize(width(), maximumHeight());
   }
 
-private:
-  struct QueueItem { QString msg; NotificationLevel level; int timeout; };
+signals:
+  void dismissed();
 
+private:
   void displayNext();
   void startFlash(const QColor &base, const QColor &highlight, int loops);
   void stopFlash();
-  void dismiss();
 
   QLabel *m_label;
   QPushButton *m_closeBtn;
@@ -48,6 +61,5 @@ private:
   QPropertyAnimation *m_heightAnim;
   QTimer *m_autoHideTimer;
   QColor m_bgColor{Qt::transparent};
-  QQueue<QueueItem> m_queue;
   bool m_showing = false;
 };

@@ -17,7 +17,7 @@
 inline bool isDarkTheme() { return QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark; }
 
 // Loads icon from SVG respecting the theme
-QIcon loadIconFromSVG(const QString& path);
+QIcon loadIconFromSVG(const QString& path, bool customDarkTheme = false);
 
 enum class MouseButton : int {
   Left = 0, Right, Middle, Count,

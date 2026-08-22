@@ -5,9 +5,27 @@
 namespace {
 constexpr int BAR_HEIGHT = 36;
 
+int levelLoops(NotificationLevel level) {
+  switch (level) {
+  case NotificationLevel::Warning: return 2;
+  case NotificationLevel::Error: return -1;
+  case NotificationLevel::Success: return 1;
+  default: return 0;
+  }
+}
+
+int levelTimeout(NotificationLevel level) {
+  switch (level) {
+  case NotificationLevel::Warning: return 5000;
+  case NotificationLevel::Error: return -1;
+  default: return 3500;
+  }
+}
+
 QColor levelBaseColor(NotificationLevel level) {
   switch (level) {
   case NotificationLevel::Info:    return QColor("#2b6cb0");
+  case NotificationLevel::Success: return QColor("#13700f");
   case NotificationLevel::Warning: return QColor("#b7791f");
   case NotificationLevel::Error:   return QColor("#b03030");
   default: return QColor(Qt::gray);
@@ -17,6 +35,7 @@ QColor levelBaseColor(NotificationLevel level) {
 QColor levelHighlightColor(NotificationLevel level) {
   switch (level) {
   case NotificationLevel::Info:    return QColor("#4299e1");
+  case NotificationLevel::Success: return QColor("#22c21b");
   case NotificationLevel::Warning: return QColor("#ecc94b");
   case NotificationLevel::Error:   return QColor("#f56565");
   default: return QColor(Qt::lightGray);
@@ -34,7 +53,7 @@ NotificationBar::NotificationBar(QWidget *parent) : QWidget(parent) {
   m_label->setWordWrap(true);
 
   m_closeBtn = new QPushButton(this);
-  m_closeBtn->setIcon(loadIconFromSVG(":/icons/cancel.svg"));
+  m_closeBtn->setIcon(loadIconFromSVG(":/icons/cancel.svg", true));
   m_closeBtn->setFlat(true);
   m_closeBtn->setCursor(Qt::PointingHandCursor);
   m_closeBtn->setStyleSheet("color: white; font-weight: bold; border: none;");
@@ -57,27 +76,13 @@ NotificationBar::NotificationBar(QWidget *parent) : QWidget(parent) {
 }
 
 void NotificationBar::show(const QString &message, NotificationLevel level, int timeoutMs) {
-  m_queue.enqueue({message, level, timeoutMs});
-  if (!m_showing) displayNext();
-}
-
-void NotificationBar::displayNext() {
-  if (m_queue.empty()) {
-    m_showing = false;
-    stopFlash();
-    m_heightAnim->stop();
-    m_heightAnim->setStartValue(maximumHeight());
-    m_heightAnim->setEndValue(0);
-    m_heightAnim->start();
-    return;
-  }
-
+  dismiss(); // overwrite current showing one
   m_showing = true;
-  auto item = m_queue.dequeue();
-  m_label->setText(item.msg);
 
-  QColor base = levelBaseColor(item.level);
-  QColor highlight = levelHighlightColor(item.level);
+  m_label->setText(message);
+
+  const QColor base = levelBaseColor(level);
+  const QColor highlight = levelHighlightColor(level);
   setBgColor(base);
 
   m_heightAnim->stop();
@@ -85,20 +90,26 @@ void NotificationBar::displayNext() {
   m_heightAnim->setEndValue(BAR_HEIGHT);
   m_heightAnim->start();
 
-  switch (item.level) {
-  case NotificationLevel::Warning: startFlash(base, highlight, 3); break;
-  case NotificationLevel::Error: startFlash(base, highlight, -1); break;
-  default: break;
-  }
+  int loops = levelLoops(level);
+  if (loops != 0) startFlash(base, highlight, loops);
 
-  m_autoHideTimer->stop();
-  int timeout = item.timeout;
-  if (timeout < 0 && item.level != NotificationLevel::Error) {
-    timeout = (item.level == NotificationLevel::Info) ? 3500 : 5000;
+  int timeout = timeoutMs;
+  if (timeout < 0 && level != NotificationLevel::Error) {
+    timeout = levelTimeout(level);
   }
   if (timeout > 0) {
     m_autoHideTimer->start(timeout);
   }
+}
+
+void NotificationBar::dismiss() {
+  m_autoHideTimer->stop();
+  stopFlash();
+  m_heightAnim->stop();
+  m_heightAnim->setStartValue(maximumHeight());
+  m_heightAnim->setEndValue(0);
+  m_heightAnim->start();
+  emit dismissed();
 }
 
 void NotificationBar::startFlash(const QColor &base, const QColor &highlight, int loops) {
@@ -117,12 +128,6 @@ void NotificationBar::stopFlash() {
     m_flashAnim->stop();
   }
   m_flashAnim = nullptr;
-}
-
-void NotificationBar::dismiss() {
-  m_autoHideTimer->stop();
-  stopFlash();
-  displayNext();
 }
 
 void NotificationBar::paintEvent(QPaintEvent *) {

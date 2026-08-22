@@ -1,7 +1,7 @@
 #include "common.hpp"
 
-QIcon loadIconFromSVG(const QString& path) {
-  bool dark = isDarkTheme();
+QIcon loadIconFromSVG(const QString& path, bool customDarkTheme) {
+  bool dark = customDarkTheme ? customDarkTheme : isDarkTheme();
   QColor tint = dark ? QColor("#e0e0e0") : QColor("#202020");
 
   QSvgRenderer renderer(path);

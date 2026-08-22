@@ -24,7 +24,6 @@ MainWindow::MainWindow(QWidget *parent)
   qobject_cast<QVBoxLayout *>(centralWidget()->layout())->insertWidget(0, m_notificationBar);
 
   lg->info("Hello from MainWindow!");
-  ui->helpLabel->setVisible(false);
 
   // Add presets to the list
   for (const auto& [name, cfg] : presetsman->presets.asKeyValueRange()) {
@@ -61,22 +60,28 @@ MainWindow::MainWindow(QWidget *parent)
   connect(ui->addPresetBtn, &QPushButton::clicked, this, [this](){
     QString newPresetName = generateUniquePresetName();
     QListWidgetItem *newItem = addPresetItem(*ui->presetsList, newPresetName, {});
-    setActivePreset(newItem, false);
+    setActivePreset(newItem);
     PresetItemWidget *newItemWidget = qobject_cast<PresetItemWidget*>(ui->presetsList->itemWidget(newItem));
     newItemWidget->enterEditMode();
     presetsman->presets[newPresetName] = {};
-    m_notificationBar->info(QString("Created new preset '%1'").arg(newPresetName));
+    m_notificationBar->success(QString("Created new preset '%1'").arg(newPresetName));
   });
 
   // If there's no current preset, block the preset config UI
   if (!currentPresetWidget) {
     blockPresetConfigUi();
+
+    if (presetsman->presets.size() == 0) {
+      m_notificationBar->info("Please create a new preset using (+) button.", 5 * 60 * 1000);
+    } else {
+      m_notificationBar->info("Please select a preset from left panel.", 5 * 60 * 1000);
+    }
   }
 
   uiConstructed = true;
 }
 
-void MainWindow::setActivePreset(QListWidgetItem *item, bool notify) {
+void MainWindow::setActivePreset(QListWidgetItem *item) {
   // TODO: introduce better visuals for active elements, for now we have focus
   if (!item) {
     applyPreset({});
@@ -94,10 +99,7 @@ void MainWindow::setActivePreset(QListWidgetItem *item, bool notify) {
   itemWidget->setActive(true);
   currentPresetWidget = itemWidget;
 
-  if (uiConstructed && notify) {
-    m_notificationBar->info(QString("Setting active preset to %1").arg(itemWidget->presetName()));
-    lg->info("Setting active preset to '{}'", itemWidget->presetName());
-  }
+  lg->info("Setting active preset to '{}'", itemWidget->presetName());
 }
 
 QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& presetName, const PresetConfig& config) {
@@ -109,7 +111,6 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
 
   static auto cur_preset = settingsman->get<QString>("currentPreset");
   if (!currentPresetWidget && presetName == cur_preset) {
-    lg->info("Found current preset: '{}'", cur_preset);
     setActivePreset(item);
   }
 
@@ -120,9 +121,9 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
     int idx = list.row(item);
     if (currentPresetWidget == itemWidget) {
       // if current's gonna be deleted, set active preset to something else
-      setActivePreset(idx <= 0 ? nullptr : list.item(idx - 1), false);
+      setActivePreset(idx <= 0 ? nullptr : list.item(idx - 1));
     }
-    m_notificationBar->info(QString("Preset '%1' removed").arg(itemWidget->presetName()));
+    m_notificationBar->success(QString("Removed preset '%1'.").arg(itemWidget->presetName()));
 
     list.removeItemWidget(item);
     delete list.takeItem(idx);
@@ -139,6 +140,7 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
 
     auto cfg = presetsman->presets.take(itemWidget->presetName());
     presetsman->presets.insert(newName, cfg);
+    m_notificationBar->success(QString("Renamed preset '%1' to '%2'").arg(itemWidget->presetName(), newName));
     itemWidget->setPresetName(newName);
   });
 
@@ -146,6 +148,7 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
   connect(itemWidget, &PresetItemWidget::cancelRequested, this, [this, itemWidget]() {
     if (currentPresetWidget) applyPreset(currentPresetWidget->config);
     itemWidget->markSaved();
+    m_notificationBar->info("Changes aborted.");
   });
 
   // Save preset
@@ -163,11 +166,14 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
     presetsman->presets[pname] = newConfig;
     itemWidget->config = newConfig;
     itemWidget->markSaved();
+    m_notificationBar->success(QString("Saved preset '%1'.").arg(pname));
   });
 
   // Double clicked, set current preset to this
-  connect(itemWidget, &PresetItemWidget::doubleClicked, this,
-          [this, item]() { setActivePreset(item); });
+  connect(itemWidget, &PresetItemWidget::doubleClicked, this, [this, item, itemWidget]() {
+    setActivePreset(item);
+    m_notificationBar->success(QString("Set active preset to %1").arg(itemWidget->presetName()));
+  });
 
   return item;
 }
@@ -179,8 +185,6 @@ void MainWindow::_changePresetConfigUi(bool is_locked) {
 
   ui->startButton->setEnabled(!is_locked);
   ui->stopButton->setEnabled(!is_locked);
-
-  ui->helpLabel->setVisible(is_locked);
 }
 
 void MainWindow::applySettings() {
