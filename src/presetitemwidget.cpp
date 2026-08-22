@@ -71,6 +71,9 @@ void PresetItemWidget::updateLabelStyle() {
 }
 
 void PresetItemWidget::updateHoverIcons(bool hovering) {
+  m_hovering = hovering;
+  update();
+
   if (is_set(m_state, PresetItemState::Renaming)) return;
   const bool unsaved = is_set(m_state, PresetItemState::Unsaved);
 
@@ -192,5 +195,18 @@ void PresetItemWidget::updateButtonVisibility() {
 }
 
 void PresetItemWidget::setActive(bool isActive) {
-  m_is_active = isActive;
+  if (m_active == isActive) return;
+  m_active = isActive;
+  update();
+}
+
+void PresetItemWidget::paintEvent(QPaintEvent *event) {
+  QPainter p(this);
+  if (m_active) {
+    p.fillRect(rect(), QColor(66, 135, 245, 35));
+    p.fillRect(QRect(0, 0, 3, height()), QColor("#4287f5"));
+  } else {
+    p.fillRect(rect(), QColor(255, 255, 255, 14));
+  }
+  QWidget::paintEvent(event);
 }

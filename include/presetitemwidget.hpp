@@ -55,7 +55,7 @@ public:
   PresetItemWidget(const QString& presetName, const PresetConfig& config, QWidget *parent = nullptr);
 
   void setActive(bool isActive);
-  bool isActive() { return m_is_active; }
+  bool isActive() { return m_active; }
   struct PresetConfig config;
 
   const QString& presetName() const { return m_presetName; }
@@ -86,6 +86,7 @@ protected:
   void leaveEvent(QEvent *event) override;
   bool eventFilter(QObject *watched, QEvent *event) override;
   void mouseDoubleClickEvent(QMouseEvent *event) override;
+  void paintEvent(QPaintEvent *event) override;
 
 private:
   void commitRename();
@@ -103,5 +104,6 @@ private:
 
   QString m_presetName{};
   PresetItemState m_state = PresetItemState::None;
-  bool m_is_active = false;
+  bool m_active = false;
+  bool m_hovering = false;
 };

@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent) , ui(new Ui::MainWindow)
 {
   ui->setupUi(this);
+  ui->presetsList->setSelectionMode(QAbstractItemView::NoSelection);
   m_notificationBar = new NotificationBar(this);
   qobject_cast<QVBoxLayout *>(centralWidget()->layout())->insertWidget(0, m_notificationBar);
 
@@ -82,9 +83,9 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 void MainWindow::setActivePreset(QListWidgetItem *item) {
-  // TODO: introduce better visuals for active elements, for now we have focus
   if (!item) {
     applyPreset({});
+    if (currentPresetWidget) currentPresetWidget->setActive(false);
     currentPresetWidget = nullptr;
     lg->info("Setting active preset to null");
     blockPresetConfigUi();
@@ -95,7 +96,11 @@ void MainWindow::setActivePreset(QListWidgetItem *item) {
 
   auto itemWidget = qobject_cast<PresetItemWidget*>(ui->presetsList->itemWidget(item));
   applyPreset(itemWidget->config);
-  ui->presetsList->setCurrentItem(item);
+
+  if (currentPresetWidget && currentPresetWidget != itemWidget) {
+    currentPresetWidget->setActive(false);
+  }
+
   itemWidget->setActive(true);
   currentPresetWidget = itemWidget;
 
