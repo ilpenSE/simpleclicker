@@ -4,6 +4,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 option(ENABLE_SANITIZERS "Enable ASan and UBSan" OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # build/compile_commands.json
 
 project(SimpleClicker LANGUAGES CXX)
 
@@ -23,6 +24,8 @@ qt_add_executable(SimpleClicker
   src/presets.cpp
   src/settings.cpp
   src/presetitemwidget.cpp
+  src/notificationbar.cpp
+  include/notificationbar.hpp
   include/presetitemwidget.hpp
   include/mainwindow.h
   mainwindow.ui

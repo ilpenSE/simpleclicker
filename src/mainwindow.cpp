@@ -14,11 +14,15 @@ static PresetItemWidget *currentPresetWidget = nullptr;
 constexpr auto SAVE_CHANGES_KEYBIND = "Ctrl+S";
 constexpr auto ABORT_CHANGES_KEYBIND = "Ctrl+K";
 static bool presetChangeEventLock = false;
+static bool uiConstructed = false;
 
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent) , ui(new Ui::MainWindow)
 {
   ui->setupUi(this);
+  m_notificationBar = new NotificationBar(this);
+  qobject_cast<QVBoxLayout *>(centralWidget()->layout())->insertWidget(0, m_notificationBar);
+
   lg->info("Hello from MainWindow!");
   ui->helpLabel->setVisible(false);
 
@@ -42,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent)
   });
 
   // Connect to preset config changes on UI
-  auto markUnsaved = [](){ if (currentPresetWidget && !presetChangeEventLock) currentPresetWidget->markUnsaved(); };
+  auto markUnsaved = [](){ if (currentPresetWidget && !presetChangeEventLock && uiConstructed) currentPresetWidget->markUnsaved(); };
   for (auto it : { ui->hoursEdit, ui->minutesEdit, ui->secondsEdit, ui->millisEdit,
                    ui->repeatEdit, ui->xEdit, ui->yEdit }) {
     connect(it, &QSpinBox::valueChanged, this, markUnsaved);
@@ -57,19 +61,22 @@ MainWindow::MainWindow(QWidget *parent)
   connect(ui->addPresetBtn, &QPushButton::clicked, this, [this](){
     QString newPresetName = generateUniquePresetName();
     QListWidgetItem *newItem = addPresetItem(*ui->presetsList, newPresetName, {});
-    setActivePreset(newItem);
+    setActivePreset(newItem, false);
     PresetItemWidget *newItemWidget = qobject_cast<PresetItemWidget*>(ui->presetsList->itemWidget(newItem));
     newItemWidget->enterEditMode();
     presetsman->presets[newPresetName] = {};
+    m_notificationBar->info(QString("Created new preset '%1'").arg(newPresetName));
   });
 
   // If there's no current preset, block the preset config UI
   if (!currentPresetWidget) {
     blockPresetConfigUi();
   }
+
+  uiConstructed = true;
 }
 
-void MainWindow::setActivePreset(QListWidgetItem *item) {
+void MainWindow::setActivePreset(QListWidgetItem *item, bool notify) {
   // TODO: introduce better visuals for active elements, for now we have focus
   if (!item) {
     applyPreset({});
@@ -86,7 +93,11 @@ void MainWindow::setActivePreset(QListWidgetItem *item) {
   ui->presetsList->setCurrentItem(item);
   itemWidget->setActive(true);
   currentPresetWidget = itemWidget;
-  lg->info("Setting active preset to '{}'", itemWidget->presetName());
+
+  if (uiConstructed && notify) {
+    m_notificationBar->info(QString("Setting active preset to %1").arg(itemWidget->presetName()));
+    lg->info("Setting active preset to '{}'", itemWidget->presetName());
+  }
 }
 
 QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& presetName, const PresetConfig& config) {
@@ -109,17 +120,19 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
     int idx = list.row(item);
     if (currentPresetWidget == itemWidget) {
       // if current's gonna be deleted, set active preset to something else
-      setActivePreset(idx <= 0 ? nullptr : list.item(idx - 1));
+      setActivePreset(idx <= 0 ? nullptr : list.item(idx - 1), false);
     }
+    m_notificationBar->info(QString("Preset '%1' removed").arg(itemWidget->presetName()));
 
     list.removeItemWidget(item);
     delete list.takeItem(idx);
   });
 
   // Rename the preset name
-  connect(itemWidget, &PresetItemWidget::renameRequested, this, [itemWidget](const QString &newName) {
+  connect(itemWidget, &PresetItemWidget::renameRequested, this, [itemWidget, this](const QString &newName) {
     lg->info("Renaming preset: '{}' -> '{}'", itemWidget->presetName(), newName);
     if (presetsman->presets.contains(newName)) {
+      m_notificationBar->warning(QString("Preset '%1' already exists, rename aborted").arg(newName));
       lg->warning("Preset '{}' already exists, rename aborted", newName);
       return;
     }
@@ -153,9 +166,8 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
   });
 
   // Double clicked, set current preset to this
-  connect(itemWidget, &PresetItemWidget::doubleClicked, this, [this, item](){
-    setActivePreset(item);
-  });
+  connect(itemWidget, &PresetItemWidget::doubleClicked, this,
+          [this, item]() { setActivePreset(item); });
 
   return item;
 }

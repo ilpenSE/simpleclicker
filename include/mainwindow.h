@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QListWidget>
+#include "notificationbar.hpp"
 #include "presets.hpp"
 
 QT_BEGIN_NAMESPACE
@@ -26,7 +27,7 @@ private:
   void applySettings();
   void applyPreset(const PresetConfig& config);
   QListWidgetItem* addPresetItem(QListWidget& list, const QString& presetName, const PresetConfig& config);
-  void setActivePreset(QListWidgetItem *item);
+  void setActivePreset(QListWidgetItem *item, bool notify = true);
 
   void blockPresetConfigUi() { _changePresetConfigUi(true); }
   void unblockPresetConfigUi() { _changePresetConfigUi(false); }
@@ -34,5 +35,6 @@ private:
 
   QString generateUniquePresetName() const;
   Ui::MainWindow *ui;
+  NotificationBar *m_notificationBar;
 };
 #endif // MAINWINDOW_H
