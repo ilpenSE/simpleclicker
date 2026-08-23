@@ -5,6 +5,7 @@
 #include <QKeySequenceEdit>
 #include <QComboBox>
 #include <QDialogButtonBox>
+#include "notificationbar.hpp"
 #include "common.hpp"
 
 class SettingsDialog : public QDialog {
@@ -27,4 +28,5 @@ private:
   QComboBox *m_themeCombo;
   QKeySequenceEdit *m_hotkeyEdit;
   QDialogButtonBox *m_buttonBox;
+  NotificationBar *m_notificationBar;
 };

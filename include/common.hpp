@@ -15,6 +15,9 @@
 #include <QIcon>
 #include <QPushButton>
 
+constexpr auto SAVE_CHANGES_KEYBIND = "Ctrl+S";
+constexpr auto ABORT_CHANGES_KEYBIND = "Ctrl+K";
+
 enum class Theme : int { Dark = 0, Light, Count };
 
 enum class Language : int { English = 0, Turkish, Count };

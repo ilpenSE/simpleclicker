@@ -1,16 +1,18 @@
 #include "notificationbar.hpp"
+#include <algorithm>
 #include "common.hpp"
 #include <QHBoxLayout>
 #include "theme.hpp"
 extern ThemeManager *thememan;
 
 namespace {
-constexpr int BAR_HEIGHT = 36;
+constexpr int MIN_BAR_HEIGHT = 36;
+constexpr int MAX_BAR_HEIGHT = 160;
 
 int levelLoops(NotificationLevel level) {
   switch (level) {
   case NotificationLevel::Warning: return 2;
-  case NotificationLevel::Error: return -1;
+  case NotificationLevel::Error: return 3;
   case NotificationLevel::Success: return 1;
   default: return 0;
   }
@@ -44,11 +46,18 @@ QColor levelHighlightColor(NotificationLevel level) {
   }
 }
 
+constexpr int LAYOUT_LEFT_MARGIN = 12;
+constexpr int LAYOUT_RIGHT_MARGIN = 8;
+constexpr int LAYOUT_TOP_MARGIN = 6;
+constexpr int LAYOUT_BOT_MARGIN = 6;
+constexpr int LAYOUT_SPACING = 6;
+
 } // namespace
 
 NotificationBar::NotificationBar(QWidget *parent) : QWidget(parent) {
   auto layout = new QHBoxLayout(this);
-  layout->setContentsMargins(12, 6, 8, 6);
+  layout->setContentsMargins(LAYOUT_LEFT_MARGIN, LAYOUT_TOP_MARGIN, LAYOUT_RIGHT_MARGIN, LAYOUT_BOT_MARGIN);
+  layout->setSpacing(LAYOUT_SPACING);
 
   m_label = new QLabel(this);
   m_label->setWordWrap(true);
@@ -80,6 +89,7 @@ void NotificationBar::show(const QString &message, NotificationLevel level, int 
   m_showing = true;
 
   m_label->setText(message);
+  const int targetHeight = computeRequiredHeight(message);
 
   const QColor base = levelBaseColor(level);
   const QColor highlight = levelHighlightColor(level);
@@ -87,7 +97,7 @@ void NotificationBar::show(const QString &message, NotificationLevel level, int 
 
   m_heightAnim->stop();
   m_heightAnim->setStartValue(maximumHeight());
-  m_heightAnim->setEndValue(BAR_HEIGHT);
+  m_heightAnim->setEndValue(targetHeight);
   m_heightAnim->start();
 
   int loops = levelLoops(level);
@@ -138,4 +148,20 @@ void NotificationBar::paintEvent(QPaintEvent *) {
 void NotificationBar::setBgColor(const QColor &c) {
   m_bgColor = c;
   update();
+}
+
+int NotificationBar::computeRequiredHeight(const QString &text) const {
+  const int margins = LAYOUT_LEFT_MARGIN + LAYOUT_RIGHT_MARGIN;
+  const int closeBtnSpace = m_closeBtn->width() + LAYOUT_SPACING;
+  int availableWidth = width() - margins - closeBtnSpace;
+  if (availableWidth <= 0) availableWidth = 300;
+
+  QFontMetrics fm(m_label->font());
+  QRect bounds = fm.boundingRect(QRect(0, 0, availableWidth, 0),
+                                 Qt::TextWordWrap, text);
+
+  const int verticalPadding = LAYOUT_TOP_MARGIN + LAYOUT_BOT_MARGIN;
+  int required = bounds.height() + verticalPadding;
+
+  return std::clamp(required, static_cast<int>(MIN_BAR_HEIGHT), static_cast<int>(MAX_BAR_HEIGHT));
 }

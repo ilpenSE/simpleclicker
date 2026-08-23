@@ -17,8 +17,6 @@ extern SettingsManager *settingsman;
 extern ThemeManager *thememan;
 
 static PresetItemWidget *currentPresetWidget = nullptr;
-constexpr auto SAVE_CHANGES_KEYBIND = "Ctrl+S";
-constexpr auto ABORT_CHANGES_KEYBIND = "Ctrl+K";
 static bool presetChangeEventLock = false;
 static bool uiConstructed = false;
 

@@ -1,5 +1,6 @@
 #include "settingsdialog.hpp"
 #include <QFormLayout>
+#include "common.hpp"
 #include "logger.hpp"
 #include "theme.hpp"
 #include "settings.hpp"
@@ -11,8 +12,18 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent) {
   setWindowTitle("Settings");
   setModal(true);
   setMinimumWidth(360);
+  setMinimumHeight(200);
 
-  auto layout = new QFormLayout(this);
+  auto outerLayout = new QVBoxLayout(this);
+  outerLayout->setContentsMargins(0, 0, 0, 0);
+  outerLayout->setSpacing(0);
+
+  m_notificationBar = new NotificationBar(this);
+  outerLayout->addWidget(m_notificationBar);
+
+  auto *formContainer = new QWidget(this);
+  auto layout = new QFormLayout(formContainer);
+  layout->setContentsMargins(16, 16, 16, 16);
 
   m_languageCombo = new QComboBox(this);
   m_languageCombo->addItem("English", static_cast<int>(Language::English));
@@ -29,6 +40,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent) {
 
   m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Save | QDialogButtonBox::Cancel, this);
   layout->addRow(m_buttonBox);
+  outerLayout->addWidget(formContainer);
 
   connect(m_buttonBox, &QDialogButtonBox::accepted, this, &SettingsDialog::onSave);
   connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
@@ -51,18 +63,26 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent) {
 void SettingsDialog::onSave() {
   bool madeChanges = false;
 
+  auto selectedHotkey = m_hotkeyEdit->keySequence().toString();
+  if (selectedHotkey != m_currentHotkey) {
+    if (selectedHotkey == SAVE_CHANGES_KEYBIND ||
+        selectedHotkey == ABORT_CHANGES_KEYBIND) {
+      m_notificationBar->error(QString("Cannot change hotkey because it's in already use, try something else other than %1").arg(selectedHotkey));
+      lg->error("Cannot change hotkey because it's reserved for program");
+      m_hotkeyEdit->setKeySequence(m_currentHotkey);
+      return;
+    } else {
+      madeChanges = true;
+      settingsman->set("keybind", selectedHotkey);
+      // TODO: Add hotkey manager's change/set hotkey function here
+    }
+  }
+
   Language selectedLanguage = static_cast<Language>(m_languageCombo->currentData().toInt());
   if (selectedLanguage != m_currentLang) {
     madeChanges = true;
     settingsman->set<Language>("language", selectedLanguage);
     // TODO: Add language manager's change/set language function here
-  }
-
-  auto selectedHotkey = m_hotkeyEdit->keySequence().toString();
-  if (selectedHotkey != m_currentHotkey) {
-    madeChanges = true;
-    settingsman->set("keybind", selectedHotkey);
-    // TODO: Add hotkey manager's change/set hotkey function here
   }
 
   Theme selectedTheme = static_cast<Theme>(m_themeCombo->currentData().toInt());

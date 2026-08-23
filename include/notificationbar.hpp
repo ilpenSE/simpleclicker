@@ -51,6 +51,7 @@ signals:
   void dismissed();
 
 private:
+  int computeRequiredHeight(const QString &text) const;
   void displayNext();
   void startFlash(const QColor &base, const QColor &highlight, int loops);
   void stopFlash();
