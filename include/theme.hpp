@@ -3,22 +3,7 @@
 #include <QMap>
 #include <QObject>
 #include <QApplication>
-
-enum class Theme : int { Dark = 0, Light };
-
-inline const char *to_cstr(Theme theme) {
-  switch (theme) {
-  case Theme::Dark: return "dark";
-  case Theme::Light: return "light";
-  default: return nullptr;
-  }
-}
-
-inline Theme to_theme(const QString &qstr) {
-  if (qstr == "dark") return Theme::Dark;
-  if (qstr == "light") return Theme::Light;
-  return Theme::Dark;
-}
+#include "common.hpp"
 
 class ThemeManager : public QObject {
   Q_OBJECT

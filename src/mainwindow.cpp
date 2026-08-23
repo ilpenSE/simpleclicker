@@ -9,6 +9,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include "helpdialog.hpp"
+#include "settingsdialog.hpp"
 
 extern Logger *lg;
 extern PresetManager *presetsman;
@@ -87,10 +88,14 @@ MainWindow::MainWindow(QWidget *parent)
     }
   }
 
-  // For test purposes
-  connect(ui->settingsBtn, &QPushButton::clicked, this, []() {
-    Theme now = thememan->theme();
-    thememan->setTheme(now == Theme::Light ? Theme::Dark : Theme::Light);
+  // Set up settings button
+  connect(ui->settingsBtn, &QPushButton::clicked, this, [this]() {
+    SettingsDialog dlg(this);
+    connect(&dlg, &SettingsDialog::settingsApplied, this, [this]() {
+      applySettings();
+      lg->info("Settings changed and applied.");
+    });
+    dlg.exec();
   });
 
   // Show internal embedded readme to user with a dialog

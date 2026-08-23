@@ -1,6 +1,7 @@
 #pragma once
 #include <QFile>
 #include <QJsonObject>
+#include "common.hpp"
 
 class SettingsManager {
 public:
@@ -25,6 +26,7 @@ public:
 
   QJsonObject settings = {
     {"currentPreset", ""},
+    {"language", "en"},
     {"version", "1.0.0"},
     {"keybind", "F6"},
     {"theme", "dark"},

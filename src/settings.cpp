@@ -1,11 +1,9 @@
 #include "settings.hpp"
-#include "common.hpp"
 #include <QIODeviceBase>
 #include <QJsonParseError>
 #include <QByteArray>
 #include <QJsonObject>
 #include <QJsonArray>
-#include <type_traits>
 #include "logger.hpp"
 extern Logger *lg;
 

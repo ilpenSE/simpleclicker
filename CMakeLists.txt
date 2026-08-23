@@ -27,6 +27,7 @@ qt_add_executable(SimpleClicker
   src/presetitemwidget.cpp include/presetitemwidget.hpp
   src/helpdialog.cpp       include/helpdialog.hpp
   src/notificationbar.cpp  include/notificationbar.hpp
+  src/settingsdialog.cpp  include/settingsdialog.hpp
   mainwindow.ui
 )
 
