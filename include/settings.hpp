@@ -14,8 +14,8 @@ public:
   void save();
 
   template <typename T>
-  T get(const QString& fieldName) {
-    return fromJsonValue<T>(settings.value(fieldName));
+  T get(const QString& fieldName, const T& def = T{}) {
+    return fromJsonValue<T>(settings.value(fieldName), def);
   }
 
   template <typename T>
@@ -27,6 +27,7 @@ public:
     {"currentPreset", ""},
     {"version", "1.0.0"},
     {"keybind", "F6"},
+    {"theme", "dark"},
   };
 
   SettingsManager(const SettingsManager&) = delete;

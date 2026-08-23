@@ -101,6 +101,9 @@
           <property name="frameShape">
            <enum>QFrame::Shape::NoFrame</enum>
           </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SelectionMode::NoSelection</enum>
+          </property>
           <property name="spacing">
            <number>2</number>
           </property>

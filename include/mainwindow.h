@@ -5,6 +5,7 @@
 #include <QListWidget>
 #include "notificationbar.hpp"
 #include "presets.hpp"
+#include "theme.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,6 +20,9 @@ class MainWindow : public QMainWindow
 public:
   explicit MainWindow(QWidget *parent = nullptr);
   ~MainWindow() override;
+
+public slots:
+  void applyTheme(Theme newTheme);
 
 private:
   MouseButton getMouseButton() const;

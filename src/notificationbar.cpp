@@ -1,6 +1,8 @@
 #include "notificationbar.hpp"
 #include "common.hpp"
 #include <QHBoxLayout>
+#include "theme.hpp"
+extern ThemeManager *thememan;
 
 namespace {
 constexpr int BAR_HEIGHT = 36;
@@ -24,21 +26,21 @@ int levelTimeout(NotificationLevel level) {
 
 QColor levelBaseColor(NotificationLevel level) {
   switch (level) {
-  case NotificationLevel::Info:    return QColor("#2b6cb0");
-  case NotificationLevel::Success: return QColor("#13700f");
-  case NotificationLevel::Warning: return QColor("#b7791f");
-  case NotificationLevel::Error:   return QColor("#b03030");
-  default: return QColor(Qt::gray);
+  case NotificationLevel::Info:    return thememan->color("notification-info-base");
+  case NotificationLevel::Success: return thememan->color("notification-success-base");
+  case NotificationLevel::Warning: return thememan->color("notification-warning-base");
+  case NotificationLevel::Error:   return thememan->color("notification-error-base");
+  default: return thememan->color("notification-default-base");
   }
 }
 
 QColor levelHighlightColor(NotificationLevel level) {
   switch (level) {
-  case NotificationLevel::Info:    return QColor("#4299e1");
-  case NotificationLevel::Success: return QColor("#22c21b");
-  case NotificationLevel::Warning: return QColor("#ecc94b");
-  case NotificationLevel::Error:   return QColor("#f56565");
-  default: return QColor(Qt::lightGray);
+  case NotificationLevel::Info:    return thememan->color("notification-info-highlight");
+  case NotificationLevel::Success: return thememan->color("notification-success-highlight");
+  case NotificationLevel::Warning: return thememan->color("notification-warning-highlight");
+  case NotificationLevel::Error:   return thememan->color("notification-error-highlight");
+  default: return thememan->color("notification-default-highlight");
   }
 }
 
@@ -49,14 +51,12 @@ NotificationBar::NotificationBar(QWidget *parent) : QWidget(parent) {
   layout->setContentsMargins(12, 6, 8, 6);
 
   m_label = new QLabel(this);
-  m_label->setStyleSheet("color: white; font-weight: 500;");
   m_label->setWordWrap(true);
 
   m_closeBtn = new QPushButton(this);
-  m_closeBtn->setIcon(loadIconFromSVG(":/icons/cancel.svg", true));
+  makeDynamicIconButton(m_closeBtn, "cancel.svg");
   m_closeBtn->setFlat(true);
   m_closeBtn->setCursor(Qt::PointingHandCursor);
-  m_closeBtn->setStyleSheet("color: white; font-weight: bold; border: none;");
   m_closeBtn->setFixedSize(22, 22);
 
   layout->addWidget(m_label, 1);

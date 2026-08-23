@@ -20,14 +20,12 @@ qt_add_executable(SimpleClicker
   src/common.cpp
   src/main.cpp
   src/logger.cpp
-  src/mainwindow.cpp
   src/presets.cpp
   src/settings.cpp
-  src/presetitemwidget.cpp
-  src/notificationbar.cpp
-  include/notificationbar.hpp
-  include/presetitemwidget.hpp
-  include/mainwindow.h
+  src/mainwindow.cpp       include/mainwindow.h
+  src/theme.cpp            include/theme.hpp
+  src/presetitemwidget.cpp include/presetitemwidget.hpp
+  src/notificationbar.cpp  include/notificationbar.hpp
   mainwindow.ui
 )
 

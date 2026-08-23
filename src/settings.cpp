@@ -48,4 +48,5 @@ void SettingsManager::save() {
   m_file.resize(0);
   m_file.seek(0);
   m_file.write(QJsonDocument(settings).toJson());
+  lg->info("Settings saved to JSON!");
 }

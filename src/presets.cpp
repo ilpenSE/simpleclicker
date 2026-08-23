@@ -68,4 +68,5 @@ void PresetManager::save() {
   m_file.resize(0);
   m_file.seek(0);
   m_file.write(QJsonDocument(obj).toJson());
+  lg->info("Presets saved to JSON!");
 }

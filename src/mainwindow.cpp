@@ -3,12 +3,14 @@
 #include "common.hpp"
 #include "logger.hpp"
 #include "settings.hpp"
+#include "theme.hpp"
 #include "presetitemwidget.hpp"
 #include <QShortcut>
 
 extern Logger *lg;
 extern PresetManager *presetsman;
 extern SettingsManager *settingsman;
+extern ThemeManager *thememan;
 
 static PresetItemWidget *currentPresetWidget = nullptr;
 constexpr auto SAVE_CHANGES_KEYBIND = "Ctrl+S";
@@ -20,11 +22,14 @@ MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent) , ui(new Ui::MainWindow)
 {
   ui->setupUi(this);
-  ui->presetsList->setSelectionMode(QAbstractItemView::NoSelection);
   m_notificationBar = new NotificationBar(this);
   qobject_cast<QVBoxLayout *>(centralWidget()->layout())->insertWidget(0, m_notificationBar);
 
-  lg->info("Hello from MainWindow!");
+  lg->info("MainWindow initialized");
+
+  // Set up theme manager
+  connect(thememan, &ThemeManager::themeChanged, this, &MainWindow::applyTheme);
+  applyTheme(thememan->theme());
 
   // Add presets to the list
   for (const auto& [name, cfg] : presetsman->presets.asKeyValueRange()) {
@@ -57,7 +62,7 @@ MainWindow::MainWindow(QWidget *parent)
   connect(ui->mouseBtnCombo, &QComboBox::currentIndexChanged, this, markUnsaved);
 
   // Set up addPreset button
-  ui->addPresetBtn->setIcon(loadIconFromSVG(":/icons/add.svg"));
+  makeDynamicIconButton(ui->addPresetBtn, "add.svg");
   connect(ui->addPresetBtn, &QPushButton::clicked, this, [this](){
     QString newPresetName = generateUniquePresetName();
     QListWidgetItem *newItem = addPresetItem(*ui->presetsList, newPresetName, {});
@@ -78,6 +83,12 @@ MainWindow::MainWindow(QWidget *parent)
       m_notificationBar->info("Please select a preset from left panel.", 5 * 60 * 1000);
     }
   }
+
+  // For test purposes
+  connect(ui->settingsBtn, &QPushButton::clicked, this, []() {
+    Theme now = thememan->theme();
+    thememan->setTheme(now == Theme::Light ? Theme::Dark : Theme::Light);
+  });
 
   uiConstructed = true;
 }
@@ -241,11 +252,17 @@ QString MainWindow::generateUniquePresetName() const {
   return candidate;
 }
 
+void MainWindow::applyTheme(Theme newTheme) {
+  lg->info("Applied theme: '{}'", to_cstr(newTheme));
+}
+
 MainWindow::~MainWindow()
 {
   settingsman->set("currentPreset", currentPresetWidget ? currentPresetWidget->presetName() : "");
 
   settingsman->save();
   presetsman->save();
+
+  lg->info("Goodbye from MainWindow!");
   delete ui;
 }

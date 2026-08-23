@@ -1,28 +1,31 @@
 #include "presetitemwidget.hpp"
 #include <QHBoxLayout>
 #include "common.hpp"
+#include "theme.hpp"
 #include "logger.hpp"
 extern Logger *lg;
-
-constexpr auto itemSize = 26;
+extern ThemeManager *thememan;
 
 namespace {
-QPushButton *makeIconButton(const QString& symbol, const QString& tooltip, QWidget *parent) {
-  auto *btn = new QPushButton(parent);
-  btn->setIcon(loadIconFromSVG(symbol));
+constexpr auto itemSize = 26;
+
+QPushButton *makeIconButton(const QString& symbol, const QString& tooltip, int size, QWidget *parent) {
+  auto btn = new QPushButton(parent);
+  btn->setToolTip(tooltip);
   btn->setFlat(true);
   btn->setCursor(Qt::PointingHandCursor);
-  btn->setFixedSize(itemSize, itemSize);
-  btn->setToolTip(tooltip);
+  btn->setFixedSize(size, size);
+  makeDynamicIconButton(btn, symbol);
   return btn;
 }
+
 } // namespace
 
-PresetItemWidget::PresetItemWidget(const QString& presetName, const PresetConfig& config, QWidget *parent)
-  : config(config), QWidget(parent), m_presetName(presetName)
+PresetItemWidget::PresetItemWidget(const QString &presetName, const PresetConfig &config, QWidget *parent)
+    : config(config), QWidget(parent), m_presetName(presetName)
 {
-  auto *layout = new QHBoxLayout(this);
-  layout->setContentsMargins(8, 4, 8, 4);
+  auto layout = new QHBoxLayout(this);
+  layout->setContentsMargins(8, 6, 8, 6);
   layout->setSpacing(4);
 
   m_nameLabel = new QLabel(presetName, this);
@@ -35,10 +38,10 @@ PresetItemWidget::PresetItemWidget(const QString& presetName, const PresetConfig
   m_nameEdit->setFixedHeight(itemSize);
   m_nameLabel->installEventFilter(this); // for double click events
 
-  m_saveButton = makeIconButton(":/icons/save.svg", "Save", this);
-  m_cancelButton = makeIconButton(":/icons/cancel.svg", "Cancel", this);
-  m_editButton = makeIconButton(":/icons/edit.svg", "Edit", this);
-  m_deleteButton = makeIconButton(":/icons/trash.svg", "Delete", this);
+  m_saveButton = makeIconButton("save.svg", "Save", itemSize, this);
+  m_cancelButton = makeIconButton("cancel.svg", "Cancel", itemSize, this);
+  m_editButton = makeIconButton("edit.svg", "Edit", itemSize, this);
+  m_deleteButton = makeIconButton("trash.svg", "Delete", itemSize, this);
 
   layout->addWidget(m_saveButton);
   layout->addWidget(m_cancelButton);
@@ -203,10 +206,19 @@ void PresetItemWidget::setActive(bool isActive) {
 void PresetItemWidget::paintEvent(QPaintEvent *event) {
   QPainter p(this);
   if (m_active) {
-    p.fillRect(rect(), QColor(66, 135, 245, 35));
-    p.fillRect(QRect(0, 0, 3, height()), QColor("#4287f5"));
+    if (m_hovering) {
+      p.fillRect(rect(), thememan->color("preset-button-active-hover"));
+    } else {
+      p.fillRect(rect(), thememan->color("preset-button-active"));
+    }
+    p.fillRect(QRect(0, 0, 3, height()), thememan->color("preset-button-accent"));
   } else {
-    p.fillRect(rect(), QColor(255, 255, 255, 14));
+    if (m_hovering) {
+      p.fillRect(rect(), thememan->color("preset-button-hover"));
+    } else {
+      p.fillRect(rect(), thememan->color("preset-button"));
+    }
   }
+
   QWidget::paintEvent(event);
 }

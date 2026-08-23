@@ -13,11 +13,7 @@
 #include <QGuiApplication>
 #include <QStyleHints>
 #include <QIcon>
-
-inline bool isDarkTheme() { return QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark; }
-
-// Loads icon from SVG respecting the theme
-QIcon loadIconFromSVG(const QString& path, bool customDarkTheme = false);
+#include <QPushButton>
 
 enum class MouseButton : int {
   Left = 0, Right, Middle, Count,
@@ -81,3 +77,5 @@ struct std::formatter<QString> : std::formatter<std::string> {
     return std::formatter<std::string>::format(qstr.toStdString(), ctx);
   }
 };
+
+void makeDynamicIconButton(QPushButton *btn, const QString& symbol);

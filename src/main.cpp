@@ -2,15 +2,18 @@
 #include <QStandardPaths>
 #include <QDateTime>
 #include <cstdio>
+#include <QObject>
 
 #include "mainwindow.h"
 #include "logger.hpp"
 #include "presets.hpp"
 #include "settings.hpp"
+#include "theme.hpp"
 
 Logger *lg;
 PresetManager *presetsman;
 SettingsManager *settingsman;
+ThemeManager *thememan;
 
 int main(int argc, char *argv[])
 {
@@ -47,6 +50,15 @@ int main(int argc, char *argv[])
   presetsman = &PresetManager::instance(appdata_dir.filePath("presets.json"));
   if (!presetsman->load()) return 1;
   lg->info("Preset manager initialized");
+
+  // Theme manager initialization
+  thememan = &ThemeManager::instance();
+  thememan->setTheme(to_theme(settingsman->get<QString>("theme", "dark")));
+  thememan->applyTheme(app);
+  QObject::connect(thememan, &ThemeManager::themeChanged, &app, [&app](Theme) {
+    thememan->applyTheme(app);
+  });
+  lg->info("Theme manager initialized");
 
   MainWindow w;
   w.show();
