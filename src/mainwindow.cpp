@@ -6,6 +6,9 @@
 #include "theme.hpp"
 #include "presetitemwidget.hpp"
 #include <QShortcut>
+#include <QDesktopServices>
+#include <QUrl>
+#include "helpdialog.hpp"
 
 extern Logger *lg;
 extern PresetManager *presetsman;
@@ -88,6 +91,12 @@ MainWindow::MainWindow(QWidget *parent)
   connect(ui->settingsBtn, &QPushButton::clicked, this, []() {
     Theme now = thememan->theme();
     thememan->setTheme(now == Theme::Light ? Theme::Dark : Theme::Light);
+  });
+
+  // Show internal embedded readme to user with a dialog
+  connect(ui->helpBtn, &QPushButton::clicked, this, [this]() {
+    HelpDialog dlg(this);
+    dlg.exec();
   });
 
   uiConstructed = true;

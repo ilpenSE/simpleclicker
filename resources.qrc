@@ -7,4 +7,7 @@
     <file alias="trash.svg">assets/icons/trash.svg</file>
     <file alias="add.svg">assets/icons/add.svg</file>
   </qresource>
+  <qresource>
+    <file alias="readme.md">README.md</file>
+  </qresource>
 </RCC>
