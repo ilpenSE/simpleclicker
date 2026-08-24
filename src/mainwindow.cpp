@@ -4,6 +4,7 @@
 #include "logger.hpp"
 #include "settings.hpp"
 #include "theme.hpp"
+#include "language.hpp"
 #include "presetitemwidget.hpp"
 #include <QShortcut>
 #include <QDesktopServices>
@@ -15,6 +16,7 @@ extern Logger *lg;
 extern PresetManager *presetsman;
 extern SettingsManager *settingsman;
 extern ThemeManager *thememan;
+extern LanguageManager *langman;
 
 static PresetItemWidget *currentPresetWidget = nullptr;
 static bool presetChangeEventLock = false;
@@ -32,6 +34,10 @@ MainWindow::MainWindow(QWidget *parent)
   // Set up theme manager
   connect(thememan, &ThemeManager::themeChanged, this, &MainWindow::applyTheme);
   applyTheme(thememan->theme());
+
+  // Subscribe to language changes
+  connect(langman, &LanguageManager::languageChanged, this, &MainWindow::retranslateUi);
+  retranslateUi();
 
   // Add presets to the list
   for (const auto& [name, cfg] : presetsman->presets.asKeyValueRange()) {
@@ -72,7 +78,7 @@ MainWindow::MainWindow(QWidget *parent)
     PresetItemWidget *newItemWidget = qobject_cast<PresetItemWidget*>(ui->presetsList->itemWidget(newItem));
     newItemWidget->enterEditMode();
     presetsman->presets[newPresetName] = {};
-    m_notificationBar->success(QString("Created new preset '%1'").arg(newPresetName));
+    m_notificationBar->success(QString(tr("Created new preset called %1, you can rename it now")).arg(newPresetName));
   });
 
   // If there's no current preset, block the preset config UI
@@ -80,9 +86,9 @@ MainWindow::MainWindow(QWidget *parent)
     blockPresetConfigUi();
 
     if (presetsman->presets.size() == 0) {
-      m_notificationBar->info("Please create a new preset using (+) button.", 5 * 60 * 1000);
+      m_notificationBar->info(tr("You can create a new preset using (+) button."), 5 * 60 * 1000);
     } else {
-      m_notificationBar->info("Please select a preset from left panel.", 5 * 60 * 1000);
+      m_notificationBar->info(tr("You can select a preset from left panel."), 5 * 60 * 1000);
     }
   }
 
@@ -92,6 +98,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&dlg, &SettingsDialog::settingsApplied, this, [this]() {
       applySettings();
       lg->info("Settings changed and applied.");
+      m_notificationBar->success(tr("Settings has been applied successfully!"));
     });
     dlg.exec();
   });
@@ -103,6 +110,10 @@ MainWindow::MainWindow(QWidget *parent)
   });
 
   uiConstructed = true;
+}
+
+void MainWindow::retranslateUi() {
+  ui->retranslateUi(this);
 }
 
 void MainWindow::setActivePreset(QListWidgetItem *item) {
@@ -151,7 +162,7 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
       // if current's gonna be deleted, set active preset to something else
       setActivePreset(idx <= 0 ? nullptr : list.item(idx - 1));
     }
-    m_notificationBar->success(QString("Removed preset '%1'.").arg(itemWidget->presetName()));
+    m_notificationBar->success(QString(tr("Removed preset '%1'.")).arg(itemWidget->presetName()));
 
     list.removeItemWidget(item);
     delete list.takeItem(idx);
@@ -161,14 +172,14 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
   connect(itemWidget, &PresetItemWidget::renameRequested, this, [itemWidget, this](const QString &newName) {
     lg->info("Renaming preset: '{}' -> '{}'", itemWidget->presetName(), newName);
     if (presetsman->presets.contains(newName)) {
-      m_notificationBar->warning(QString("Preset '%1' already exists, rename aborted").arg(newName));
+      m_notificationBar->warning(QString(tr("Preset '%1' already exists, rename aborted")).arg(newName));
       lg->warning("Preset '{}' already exists, rename aborted", newName);
       return;
     }
 
     auto cfg = presetsman->presets.take(itemWidget->presetName());
     presetsman->presets.insert(newName, cfg);
-    m_notificationBar->success(QString("Renamed preset '%1' to '%2'").arg(itemWidget->presetName(), newName));
+    m_notificationBar->success(QString(tr("Renamed preset '%1' to '%2'")).arg(itemWidget->presetName(), newName));
     itemWidget->setPresetName(newName);
   });
 
@@ -176,7 +187,7 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
   connect(itemWidget, &PresetItemWidget::cancelRequested, this, [this, itemWidget]() {
     if (currentPresetWidget) applyPreset(currentPresetWidget->config);
     itemWidget->markSaved();
-    m_notificationBar->info("Changes aborted.");
+    m_notificationBar->info(tr("Changes aborted."));
   });
 
   // Save preset
@@ -194,13 +205,13 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
     presetsman->presets[pname] = newConfig;
     itemWidget->config = newConfig;
     itemWidget->markSaved();
-    m_notificationBar->success(QString("Saved preset '%1'.").arg(pname));
+    m_notificationBar->success(QString(tr("Preset %1 has been saved successfully!")).arg(pname));
   });
 
   // Double clicked, set current preset to this
   connect(itemWidget, &PresetItemWidget::doubleClicked, this, [this, item, itemWidget]() {
     setActivePreset(item);
-    m_notificationBar->success(QString("Set active preset to %1").arg(itemWidget->presetName()));
+    m_notificationBar->success(QString(tr("Set active preset to %1")).arg(itemWidget->presetName()));
   });
 
   return item;
@@ -217,8 +228,8 @@ void MainWindow::_changePresetConfigUi(bool is_locked) {
 
 void MainWindow::applySettings() {
   auto kbd = settingsman->get<QString>("keybind");
-  ui->startButton->setText(QString("START (%1)").arg(kbd));
-  ui->stopButton->setText(QString("STOP (%1)").arg(kbd));
+  ui->startButton->setText(QString(tr("Start (%1)")).arg(kbd));
+  ui->stopButton->setText(QString(tr("Stop (%1)")).arg(kbd));
 }
 
 void MainWindow::applyPreset(const PresetConfig& config) {
@@ -259,13 +270,14 @@ QString MainWindow::generateUniquePresetName() const {
   int n = presetsman->presets.count() + 1;
   QString candidate;
   do {
-    candidate = QString("New Preset %1").arg(n++);
+    candidate = QString(tr("New Preset %1")).arg(n++);
   } while (presetsman->presets.contains(candidate));
   return candidate;
 }
 
 void MainWindow::applyTheme(Theme newTheme) {
-  lg->info("Applied theme: '{}'", to_cstr(newTheme));
+  if (!uiConstructed) return;
+  lg->info("Applied theme: '{}'", newTheme);
 }
 
 MainWindow::~MainWindow()

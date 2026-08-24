@@ -4,6 +4,7 @@
 #include <QPalette>
 #include <QPainter>
 #include <QIcon>
+#include <QApplication>
 
 QMap<QString, QColor> ThemeManager::darkColors = {
     {"icon-tint", "#e0e0e0"},
@@ -85,7 +86,7 @@ QMap<QString, QColor> ThemeManager::lightColors = {
     {"notification-error-highlight", "#e57a77"},
 };
 
-void ThemeManager::applyTheme(QApplication &app) const {
+void ThemeManager::applyTheme() const {
   QPalette pal;
 
   pal.setColor(QPalette::Window,          color("window"));
@@ -108,7 +109,7 @@ void ThemeManager::applyTheme(QApplication &app) const {
   pal.setColor(QPalette::Disabled, QPalette::ButtonText, color("disabled-text"));
   pal.setColor(QPalette::Disabled, QPalette::Button,     color("disabled-button"));
 
-  app.setPalette(pal);
+  qApp->setPalette(pal);
 }
 
 QIcon ThemeManager::icon(const QString &path) {

@@ -27,6 +27,7 @@ private:
   QComboBox *m_languageCombo;
   QComboBox *m_themeCombo;
   QKeySequenceEdit *m_hotkeyEdit;
-  QDialogButtonBox *m_buttonBox;
+  QPushButton *m_saveBtn;
+  QPushButton *m_cancelBtn;
   NotificationBar *m_notificationBar;
 };

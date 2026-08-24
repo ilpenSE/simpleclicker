@@ -14,7 +14,7 @@
    <string>Simple Clicker</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset>
     <normaloff>:/icons/app.png</normaloff>:/icons/app.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -68,13 +68,13 @@
              </size>
             </property>
             <property name="toolTip">
-             <string>Add a Preset</string>
+             <string>Create a new preset</string>
             </property>
             <property name="text">
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="resources.qrc">
+             <iconset>
               <normaloff>:/icons/add.svg</normaloff>:/icons/add.svg</iconset>
             </property>
             <property name="iconSize">
@@ -115,7 +115,7 @@
            <bool>false</bool>
           </property>
           <property name="text">
-           <string>Simple Clicker v1.0.0 by ilpeN</string>
+           <string>Simple Clicker v1.0.0 - ilpeN</string>
           </property>
          </widget>
         </item>
@@ -263,7 +263,7 @@
              <item>
               <widget class="QRadioButton" name="repeatCountRadio">
                <property name="text">
-                <string>Repeat</string>
+                <string/>
                </property>
                <property name="checked">
                 <bool>true</bool>
@@ -302,7 +302,7 @@
            <item>
             <widget class="QRadioButton" name="repeatUntilStoppedRadio">
              <property name="text">
-              <string>repeat until stopped</string>
+              <string>Repeat until stopped</string>
              </property>
             </widget>
            </item>
@@ -312,7 +312,7 @@
         <item>
          <widget class="QGroupBox" name="positionBox">
           <property name="title">
-           <string>Position</string>
+           <string>Mouse Cursor Position</string>
           </property>
           <layout class="QHBoxLayout" name="positionHLayout">
            <item>
@@ -403,14 +403,14 @@
             <item>
              <widget class="QPushButton" name="startButton">
               <property name="text">
-               <string>START</string>
+               <string>Start</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="stopButton">
               <property name="text">
-               <string>STOP</string>
+               <string>Stop</string>
               </property>
              </widget>
             </item>
@@ -421,14 +421,14 @@
             <item>
              <widget class="QPushButton" name="settingsBtn">
               <property name="text">
-               <string>SETTINGS</string>
+               <string>Settings</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="helpBtn">
               <property name="text">
-               <string>HELP</string>
+               <string>Help</string>
               </property>
              </widget>
             </item>
@@ -443,8 +443,6 @@
    </layout>
   </widget>
  </widget>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

@@ -37,6 +37,8 @@ private:
   void unblockPresetConfigUi() { _changePresetConfigUi(false); }
   void _changePresetConfigUi(bool is_locked);
 
+  void retranslateUi();
+
   QString generateUniquePresetName() const;
   Ui::MainWindow *ui;
   NotificationBar *m_notificationBar;

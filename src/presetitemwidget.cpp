@@ -2,16 +2,21 @@
 #include <QHBoxLayout>
 #include "common.hpp"
 #include "theme.hpp"
+#include "language.hpp"
 #include "logger.hpp"
 extern Logger *lg;
 extern ThemeManager *thememan;
+extern LanguageManager *langman;
 
 namespace {
 constexpr auto itemSize = 26;
+constexpr auto COMMIT_RENAME_KEYBIND = Qt::Key_Return;
+constexpr auto ABORT_RENAME_KEYBIND = Qt::Key_Escape;
+constexpr auto COMMIT_RENAME_KEYBIND_STR = "ENTER";
+constexpr auto ABORT_RENAME_KEYBIND_STR = "ESC";
 
-QPushButton *makeIconButton(const QString& symbol, const QString& tooltip, int size, QWidget *parent) {
+QPushButton *makeIconButton(const QString& symbol, int size, QWidget *parent) {
   auto btn = new QPushButton(parent);
-  btn->setToolTip(tooltip);
   btn->setFlat(true);
   btn->setCursor(Qt::PointingHandCursor);
   btn->setFixedSize(size, size);
@@ -30,6 +35,7 @@ PresetItemWidget::PresetItemWidget(const QString &presetName, const PresetConfig
 
   m_nameLabel = new QLabel(presetName, this);
   m_nameEdit = new QLineEdit(this);
+  m_nameEdit->installEventFilter(this);
   m_nameEdit->hide();
   layout->addWidget(m_nameLabel, 1);
   layout->addWidget(m_nameEdit, 1);
@@ -38,10 +44,10 @@ PresetItemWidget::PresetItemWidget(const QString &presetName, const PresetConfig
   m_nameEdit->setFixedHeight(itemSize);
   m_nameLabel->installEventFilter(this); // for double click events
 
-  m_saveButton = makeIconButton("save.svg", "Save", itemSize, this);
-  m_cancelButton = makeIconButton("cancel.svg", "Cancel", itemSize, this);
-  m_editButton = makeIconButton("edit.svg", "Edit", itemSize, this);
-  m_deleteButton = makeIconButton("trash.svg", "Delete", itemSize, this);
+  m_saveButton = makeIconButton("save.svg", itemSize, this);
+  m_cancelButton = makeIconButton("cancel.svg",  itemSize, this);
+  m_editButton = makeIconButton("rename.svg",  itemSize, this);
+  m_deleteButton = makeIconButton("trash.svg",  itemSize, this);
 
   layout->addWidget(m_saveButton);
   layout->addWidget(m_cancelButton);
@@ -55,9 +61,24 @@ PresetItemWidget::PresetItemWidget(const QString &presetName, const PresetConfig
   connect(m_cancelButton, &QPushButton::clicked, this, &PresetItemWidget::onCancelClicked);
   connect(m_editButton, &QPushButton::clicked, this, &PresetItemWidget::onEditClicked);
   connect(m_deleteButton, &QPushButton::clicked, this, &PresetItemWidget::onDeleteClicked);
-  connect(m_nameEdit, &QLineEdit::returnPressed, this, &PresetItemWidget::onSaveClicked);
+
+  connect(langman, &LanguageManager::languageChanged, this, &PresetItemWidget::retranslate);
+  retranslate();
 
   updateHoverIcons(false);
+}
+
+void PresetItemWidget::retranslate() {
+  m_editButton->setToolTip(tr("Rename"));
+  m_deleteButton->setToolTip(tr("Delete"));
+
+  if (is_set(m_state, PresetItemState::Renaming)) {
+    m_saveButton->setToolTip(QString(tr("Save (%1)")).arg(COMMIT_RENAME_KEYBIND_STR));
+    m_cancelButton->setToolTip(QString(tr("Cancel (%1)")).arg(ABORT_RENAME_KEYBIND_STR));
+  } else {
+    m_saveButton->setToolTip(QString(tr("Save (%1)")).arg(SAVE_CHANGES_KEYBIND));
+    m_cancelButton->setToolTip(QString(tr("Cancel (%1)")).arg(ABORT_CHANGES_KEYBIND));
+  }
 }
 
 void PresetItemWidget::enterEditMode() {
@@ -114,6 +135,9 @@ void PresetItemWidget::onEditClicked() {
   m_nameEdit->setFocus();
   m_nameEdit->selectAll();
 
+  m_saveButton->setToolTip(QString(tr("Save (%1)")).arg(COMMIT_RENAME_KEYBIND_STR));
+  m_cancelButton->setToolTip(QString(tr("Cancel (%1)")).arg(ABORT_RENAME_KEYBIND_STR));
+
   m_state |= PresetItemState::Renaming;
   updateButtonVisibility();
 }
@@ -141,6 +165,9 @@ void PresetItemWidget::commitRename() {
   const QString newName = m_nameEdit->text().trimmed();
   m_nameEdit->hide();
   m_nameLabel->show();
+  m_saveButton->setToolTip(QString(tr("Save (%1)")).arg(SAVE_CHANGES_KEYBIND));
+  m_cancelButton->setToolTip(QString(tr("Cancel (%1)")).arg(ABORT_CHANGES_KEYBIND));
+
   m_state &= ~PresetItemState::Renaming;
 
   if (!newName.isEmpty() && newName != m_presetName) {
@@ -167,9 +194,12 @@ void PresetItemWidget::leaveEvent(QEvent *event) {
 
 bool PresetItemWidget::eventFilter(QObject *watched, QEvent *event) {
   if (watched == m_nameEdit && event->type() == QEvent::KeyPress) {
-    auto *keyEvent = static_cast<QKeyEvent*>(event);
-    if (keyEvent->key() == Qt::Key_Escape) {
+    auto keyEvent = static_cast<QKeyEvent *>(event);
+    if (keyEvent->key() == ABORT_RENAME_KEYBIND) {
       onCancelClicked();
+      return true;
+    } else if (keyEvent->key() == COMMIT_RENAME_KEYBIND) {
+      onSaveClicked();
       return true;
     }
   }

@@ -70,6 +70,13 @@ inline Language to_language(const QString &qstr) {
   return Language::English;
 }
 
+inline Language to_language(QLocale::Language locale_lang) {
+  switch (locale_lang) {
+  case QLocale::Turkish: return Language::Turkish;
+  default: return Language::English;
+  }
+}
+
 constexpr const char *to_cstr(MouseButton msbtn) {
   switch (msbtn) {
   case MouseButton::Left: return "left";
@@ -130,6 +137,39 @@ template<>
 struct std::formatter<QString> : std::formatter<std::string> {
   auto format(const QString& qstr, std::format_context& ctx) const {
     return std::formatter<std::string>::format(qstr.toStdString(), ctx);
+  }
+};
+
+template<>
+struct std::formatter<Language> : std::formatter<std::string> {
+  auto format(Language lang, std::format_context& ctx) const {
+    return std::formatter<std::string>::format(to_cstr(lang), ctx);
+  }
+};
+
+template<>
+struct std::formatter<Theme> : std::formatter<std::string> {
+  auto format(Theme theme, std::format_context& ctx) const {
+    return std::formatter<std::string>::format(to_cstr(theme), ctx);
+  }
+};
+
+template<>
+struct std::formatter<Location> : std::formatter<std::string> {
+  auto format(Location loc, std::format_context &ctx) const {
+    std::string result = "Location{";
+    result += std::to_string(loc.x);
+    result += ", ";
+    result += std::to_string(loc.y);
+    result += "}";
+    return std::formatter<std::string>::format(result, ctx);
+  }
+};
+
+template<>
+struct std::formatter<MouseButton> : std::formatter<std::string> {
+  auto format(MouseButton msbtn, std::format_context &ctx) const {
+    return std::formatter<std::string>::format(to_cstr(msbtn), ctx);
   }
 };
 

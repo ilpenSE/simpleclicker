@@ -9,8 +9,8 @@ class ThemeManager : public QObject {
   Q_OBJECT
 
 public:
-  static ThemeManager& instance() {
-    static ThemeManager inst;
+  static ThemeManager& instance(Theme initTheme = Theme::Dark) {
+    static ThemeManager inst(initTheme);
     return inst;
   }
 
@@ -31,7 +31,7 @@ public:
     emit themeChanged(theme);
   }
 
-  void applyTheme(QApplication& app) const;
+  void applyTheme() const;
 
   ThemeManager(const ThemeManager&) = delete;
   ThemeManager &operator=(const ThemeManager &) = delete;
@@ -40,7 +40,11 @@ signals:
   void themeChanged(Theme newTheme);
 
 private:
-  ThemeManager(QObject *parent = nullptr) : QObject(parent) {}
+  ThemeManager(Theme initTheme, QObject *parent = nullptr)
+      : m_theme(initTheme), QObject(parent) {
+    applyTheme();
+  }
+
   ~ThemeManager() override = default;
 
   Theme m_theme = Theme::Dark;

@@ -45,7 +45,7 @@ constexpr PresetItemState& operator &=(PresetItemState &a, PresetItemState b) {
 
 constexpr bool operator &(PresetItemState a, bool) = delete;
 
-inline constexpr bool is_set(PresetItemState states, PresetItemState value) {
+constexpr bool is_set(PresetItemState states, PresetItemState value) {
   return (states & value) != PresetItemState::None;
 }
 
@@ -94,6 +94,7 @@ private:
   void updateButtonVisibility();
   void updateLabelStyle();
   void updateHoverIcons(bool hovering);
+  void retranslate();
 
   QLabel *m_nameLabel;
   QLineEdit *m_nameEdit;

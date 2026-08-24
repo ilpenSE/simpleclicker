@@ -9,11 +9,13 @@
 #include "presets.hpp"
 #include "settings.hpp"
 #include "theme.hpp"
+#include "language.hpp"
 
 Logger *lg;
 PresetManager *presetsman;
 SettingsManager *settingsman;
 ThemeManager *thememan;
+LanguageManager *langman;
 
 int main(int argc, char *argv[])
 {
@@ -42,6 +44,7 @@ int main(int argc, char *argv[])
   lg = &Logger::instance(logs_dir);
   lg->info("Logger initialized");
 
+  // Settings manager initialization
   settingsman = &SettingsManager::instance(appdata_dir.filePath("settings.json"));
   if (!settingsman->load()) return 1;
   lg->info("Settings manager initialized!");
@@ -52,13 +55,24 @@ int main(int argc, char *argv[])
   lg->info("Preset manager initialized");
 
   // Theme manager initialization
-  thememan = &ThemeManager::instance();
-  thememan->setTheme(to_theme(settingsman->get<QString>("theme", "dark")));
-  thememan->applyTheme(app);
+  Theme initTheme = settingsman->get<Theme>("theme", Theme::Dark);
+  thememan = &ThemeManager::instance(initTheme);
   QObject::connect(thememan, &ThemeManager::themeChanged, &app, [&app](Theme) {
-    thememan->applyTheme(app);
+    thememan->applyTheme();
   });
-  lg->info("Theme manager initialized");
+  lg->info("Theme manager initialized with {} theme", initTheme);
+
+  // Language manager initialization
+  Language initLang;
+  if (settingsman->get<bool>("firstRun", true)) {
+    Language sysLang = to_language(QLocale::system().language());
+    lg->info("Detected system language: '{}', setting it", sysLang);
+    settingsman->set("language", sysLang);
+    settingsman->set("firstRun", false);
+    initLang = sysLang;
+  } else initLang = settingsman->get("language", Language::English);
+  langman = &LanguageManager::instance(initLang);
+  lg->info("Language manager initialized with {} language", initLang);
 
   MainWindow w;
   w.show();

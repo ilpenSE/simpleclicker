@@ -30,6 +30,7 @@ public:
     {"version", "1.0.0"},
     {"keybind", "F6"},
     {"theme", "dark"},
+    {"firstRun", true},
   };
 
   SettingsManager(const SettingsManager&) = delete;
