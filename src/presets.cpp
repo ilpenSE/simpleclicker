@@ -13,8 +13,7 @@ PresetManager::PresetManager(const QString& file_path)
   : m_file(file_path)
 {
   if (!m_file.open(QIODeviceBase::ReadWrite)) {
-    lg->fatal("Failed to open {}", file_path);
-    return;
+    panic("Failed to open {}", file_path);
   }
 }
 

@@ -110,11 +110,7 @@ MainWindow::MainWindow(QWidget *parent)
     lg->info("Hotkey pressed!");
   });
   connect(hotkeyman, &HotkeyManager::hotkeyRegistrationFailed, this, [this]() {
-    if (hotkeyman->isWayland()) {
-      m_notificationBar->error(tr("Start/Stop hotkey couldn't be registered please restart the app and confirm the box"));
-    } else {
-      m_notificationBar->error(tr("Start/Stop hotkey couldn't be registered please restart the app"));
-    }
+    m_notificationBar->error(tr("Start/Stop hotkey couldn't be registered please restart the app"));
     lg->error("Hotkey registeration failed!");
   });
 
@@ -163,7 +159,7 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
   list.addItem(item);
   list.setItemWidget(item, itemWidget);
 
-  static auto cur_preset = settingsman->get<QString>("currentPreset");
+  static auto cur_preset = settingsman->get<currentPreset>();
   if (!currentPresetWidget && presetName == cur_preset) {
     setActivePreset(item);
   }
@@ -242,7 +238,7 @@ void MainWindow::_changePresetConfigUi(bool is_locked) {
 }
 
 void MainWindow::applySettings() {
-  auto kbd = settingsman->get<QString>("keybind");
+  auto kbd = settingsman->get<keybind>().toString();
   ui->startButton->setText(QString(tr("Start (%1)")).arg(kbd));
   ui->stopButton->setText(QString(tr("Stop (%1)")).arg(kbd));
 }
@@ -297,7 +293,7 @@ void MainWindow::applyTheme(Theme newTheme) {
 
 MainWindow::~MainWindow()
 {
-  settingsman->set("currentPreset", currentPresetWidget ? currentPresetWidget->presetName() : "");
+  settingsman->set<currentPreset>(currentPresetWidget ? currentPresetWidget->presetName() : "");
 
   settingsman->save();
   presetsman->save();

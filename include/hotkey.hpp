@@ -21,8 +21,6 @@ public:
   bool set(const Hotkey& hotkey);
   bool unset();
 
-  bool isWayland() const { return m_isWayland; }
-
   HotkeyManager(const HotkeyManager&) = delete;
   HotkeyManager operator=(const HotkeyManager&) = delete;
 
@@ -41,22 +39,13 @@ private:
 
 #ifdef _WIN32
   static constexpr int HOTKEY_ID = 1;
-#else // Linux
-  // X11
+#else // Linux X11
   xcb_keycode_t m_keycode = 0;
   quint16 m_modifiers = 0;
   xcb_connection_t *m_connection = nullptr;
   xcb_window_t m_rootWindow = 0;
 
-  bool registerHotkeyX11(const Hotkey& hotkey);
-  bool unregisterHotkeyX11();
-
-  // Wayland (not implemented yet)
-  bool registerHotkeyWayland(const Hotkey& hotkey);
-  bool unregisterHotkeyWayland();
-
 #endif
-  bool m_isWayland = false;
   bool m_registered = false;
 
   explicit HotkeyManager(const Hotkey &init_hotkey, QObject *parent);

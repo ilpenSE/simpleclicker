@@ -150,12 +150,13 @@ xcb_keycode_t toKeycode(xcb_connection_t *connection, Qt::Key key) {
 
 } // namespace
 
-HotkeyManager::HotkeyManager(const Hotkey& init_hotkey, QObject *parent) : QObject(parent) {
-  m_isWayland = QGuiApplication::platformName().startsWith("wayland");
+HotkeyManager::HotkeyManager(const Hotkey& init_hotkey, QObject *parent) : QObject(parent)
+{
+  bool isWayland = QGuiApplication::platformName().startsWith("wayland");
   lg->info("Detected platform = {}", QGuiApplication::platformName());
 
-  if (m_isWayland) {
-    assert(false && "HotkeyManager for Wayland is not implemented yet");
+  if (isWayland) {
+    Q_UNREACHABLE();
   } else {
     auto x11App = qApp->nativeInterface<QNativeInterface::QX11Application>();
     m_connection = x11App->connection();
@@ -174,10 +175,6 @@ HotkeyManager::~HotkeyManager() {
 }
 
 bool HotkeyManager::registerHotkey(const Hotkey& hotkey) {
-  return m_isWayland ? registerHotkeyWayland(hotkey) : registerHotkeyX11(hotkey);
-}
-
-bool HotkeyManager::registerHotkeyX11(const Hotkey& hotkey) {
   if (!m_connection) return false;
   m_keycode = toKeycode(m_connection, hotkey.key);
   if (m_keycode == 0) return false;
@@ -195,7 +192,7 @@ bool HotkeyManager::registerHotkeyX11(const Hotkey& hotkey) {
     xcb_generic_error_t *err = xcb_request_check(m_connection, cookie);
     if (err) {
       free(err);
-      unregisterHotkeyX11();
+      unregisterHotkey();
       emit hotkeyRegistrationFailed("This keybind probably in already use by another program");
       return false;
     }
@@ -205,16 +202,7 @@ bool HotkeyManager::registerHotkeyX11(const Hotkey& hotkey) {
   return true;
 }
 
-bool HotkeyManager::registerHotkeyWayland(const Hotkey& hotkey) {
-  assert(false && "registerHotkey is not implemented for Wayland yet");
-  return true;
-}
-
 bool HotkeyManager::unregisterHotkey() {
-  return m_isWayland ? unregisterHotkeyWayland() : unregisterHotkeyX11();
-}
-
-bool HotkeyManager::unregisterHotkeyX11() {
   if (!m_connection || m_keycode == 0) return false;
 
   for (unsigned int ignored : ignoredMasks) {
@@ -226,13 +214,8 @@ bool HotkeyManager::unregisterHotkeyX11() {
   return true;
 }
 
-bool HotkeyManager::unregisterHotkeyWayland() {
-  assert(false && "unregisterHotkey is not implemented for Wayland yet");
-  return true;
-}
-
 bool HotkeyManager::nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result) {
-  if (m_isWayland || eventType != "xcb_generic_event_t") return false;
+  if (eventType != "xcb_generic_event_t") return false;
 
   xcb_generic_event_t *event = static_cast<xcb_generic_event_t *>(message);
 

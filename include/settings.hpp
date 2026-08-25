@@ -2,6 +2,29 @@
 #include <QFile>
 #include <QJsonObject>
 #include "common.hpp"
+#include <type_traits>
+
+#define SETTINGS_FIELDS \
+  X(currentPreset, QString, "") \
+  X(language, Language, Language::English) \
+  X(keybind, Hotkey, Hotkey::from("F6")) \
+  X(theme, Theme, Theme::Dark) \
+  X(firstRun, bool, true) \
+  X(version, QString, "1.0.0")
+
+template <typename T>
+struct is_settings_field : std::false_type {};
+
+#define X(Name, Type, DefaultValue)                                            \
+  struct Name {                                                                \
+    Type value = DefaultValue;                                                 \
+  };                                                                           \
+  template <> struct is_settings_field<Name> : std::true_type {};
+SETTINGS_FIELDS
+#undef X
+
+template <typename T>
+concept SettingsField = is_settings_field<T>::value;
 
 class SettingsManager {
 public:
@@ -14,23 +37,26 @@ public:
   bool load();
   void save();
 
-  template <typename T>
-  T get(const QString& fieldName, const T& def = T{}) {
-    return fromJsonValue<T>(settings.value(fieldName), def);
+  template <SettingsField TFieldName>
+  auto get() {
+#define X(Name, Type, DefaultValue) \
+    if constexpr (std::same_as<TFieldName, Name>) return fromJsonValue<Type>(settings.value(#Name), DefaultValue);
+SETTINGS_FIELDS
+#undef X
   }
 
-  template <typename T>
-  void set(const QString& fieldName, const T& val) {
-    settings[fieldName] = toJsonValue(val);
+  template <SettingsField TFieldName>
+  void set(const decltype(TFieldName::value)& val) {
+#define X(Name, Type, DefaultValue) \
+    if constexpr (std::same_as<TFieldName, Name>) settings[#Name] = toJsonValue(val);
+SETTINGS_FIELDS
+#undef X
   }
 
   QJsonObject settings = {
-    {"currentPreset", ""},
-    {"language", "en"},
-    {"version", "1.0.0"},
-    {"keybind", "F6"},
-    {"theme", "dark"},
-    {"firstRun", true},
+#define X(Name, Type, DefaultValue) {#Name, toJsonValue(DefaultValue)},
+          SETTINGS_FIELDS
+#undef X
   };
 
   SettingsManager(const SettingsManager&) = delete;

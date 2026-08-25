@@ -246,3 +246,14 @@ struct std::formatter<MouseButton> : std::formatter<std::string> {
 };
 
 void makeDynamicIconButton(QPushButton *btn, const QString& symbol);
+
+
+template <typename... Args>
+[[noreturn]]
+inline void panic(std::format_string<Args...> fmt, Args &&...args) {
+  std::string s = std::format(fmt, std::forward<Args>(args)...);
+  fprintf(stderr, "\e[0;31mPROGRAM PANICKED!\e[0m\n");
+  fprintf(stderr, "Because a fatal error has occured.\n\n");
+  fprintf(stderr, "\e[0;31mREASON:\e[0m %.*s\n", (int)s.size(), s.c_str());
+  abort();
+}

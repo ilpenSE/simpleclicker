@@ -5,7 +5,6 @@
 #include <QFile>
 #include <QDir>
 #include <QJsonDocument>
-#include <cstddef>
 
 #define PRESET_FIELDS \
   X(location, Location, (Location{0, 0})) \

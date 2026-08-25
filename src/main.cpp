@@ -1,7 +1,6 @@
 #include <QApplication>
 #include <QStandardPaths>
 #include <QDateTime>
-#include <cstdio>
 #include <QObject>
 
 #include "mainwindow.h"
@@ -19,8 +18,17 @@ ThemeManager *thememan;
 LanguageManager *langman;
 HotkeyManager *hotkeyman;
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
+  // Force X11 (XCB) to global hotkeys work
+  if (qEnvironmentVariableIsEmpty("QT_QPA_PLATFORM")) {
+    qputenv("QT_QPA_PLATFORM", "xcb");
+  } else {
+    QByteArray qpaPlatform = qgetenv("QT_QPA_PLATFORM");
+    if (qpaPlatform != "xcb") {
+      panic("Only X11 (XCB) is supported, try setting QT_QPA_PLATFORM=xcb environment variable or don't set it");
+    }
+  }
+
   QApplication app(argc, argv);
   QCoreApplication::setOrganizationName("");
   QCoreApplication::setApplicationName("SimpleClicker");
@@ -29,16 +37,13 @@ int main(int argc, char *argv[])
 
   // Create application data folder
   if (!appdata_dir.mkpath(".")) {
-    printf("FATAL: Couldn't make directory: %s\n", appdata_path.toUtf8().constData());
-    return 1;
+    panic("Couldn't make directory: {}", appdata_path);
   }
 
   // Create logs folder in appdata folder
   QDir logs_dir(appdata_dir);
   if (!logs_dir.mkpath("logs")) {
-    fprintf(stderr, "FATAL: Couldn't make logs directory in AppData folder\n");
-    fprintf(stderr, "    which is %s\n", appdata_path.toUtf8().constData());
-    return 1;
+    panic("Couldn't make 'logs' directory in AppData folder\nwhich is {}", appdata_path);
   }
   logs_dir.cd("logs");
 
@@ -57,7 +62,7 @@ int main(int argc, char *argv[])
   lg->info("Preset manager initialized");
 
   // Theme manager initialization
-  Theme initTheme = settingsman->get<Theme>("theme", Theme::Dark);
+  Theme initTheme = settingsman->get<theme>();
   thememan = &ThemeManager::instance(initTheme);
   QObject::connect(thememan, &ThemeManager::themeChanged, &app, [&app](Theme) {
     thememan->applyTheme();
@@ -66,18 +71,18 @@ int main(int argc, char *argv[])
 
   // Language manager initialization
   Language initLang;
-  if (settingsman->get<bool>("firstRun", true)) {
+  if (settingsman->get<firstRun>()) {
     Language sysLang = to_language(QLocale::system().language());
     lg->info("Detected system language: '{}', setting it", sysLang);
-    settingsman->set("language", sysLang);
-    settingsman->set("firstRun", false);
+    settingsman->set<language>(sysLang);
+    settingsman->set<firstRun>(false);
     initLang = sysLang;
-  } else initLang = settingsman->get("language", Language::English);
+  } else initLang = settingsman->get<language>();
   langman = &LanguageManager::instance(initLang);
   lg->info("Language manager initialized with {} language", initLang);
 
   // Hotkey manager initialization
-  Hotkey hotkey = settingsman->get<Hotkey>("keybind", Hotkey::from("F6"));
+  Hotkey hotkey = settingsman->get<keybind>();
   hotkeyman = &HotkeyManager::instance(hotkey);
   lg->info("Hotkey manager initialized");
 

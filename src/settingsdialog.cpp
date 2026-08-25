@@ -62,17 +62,17 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent) {
   connect(m_cancelBtn, &QPushButton::clicked, this, &QDialog::reject);
 
   // Load language
-  m_currentLang = settingsman->get<Language>("language");
+  m_currentLang = settingsman->get<language>();
   int idx = m_languageCombo->findData(static_cast<int>(m_currentLang));
   if (idx >= 0) m_languageCombo->setCurrentIndex(idx);
 
   // Load theme
-  m_currentTheme = settingsman->get<Theme>("theme");
+  m_currentTheme = settingsman->get<theme>();
   idx = m_themeCombo->findData(static_cast<int>(m_currentTheme));
   if (idx >= 0) m_themeCombo->setCurrentIndex(idx);
 
   // Load hotkey
-  m_currentHotkey = settingsman->get<Hotkey>("keybind");
+  m_currentHotkey = settingsman->get<keybind>();
   m_hotkeyEdit->setKeySequence(m_currentHotkey.toKeySequence());
 }
 
@@ -89,7 +89,7 @@ void SettingsDialog::onSave() {
       return;
     } else {
       madeChanges = true;
-      settingsman->set("keybind", selectedHotkey);
+      settingsman->set<keybind>(selectedHotkey);
       hotkeyman->unset();
       hotkeyman->set(selectedHotkey);
     }
@@ -99,14 +99,14 @@ void SettingsDialog::onSave() {
   if (selectedLanguage != m_currentLang) {
     madeChanges = true;
     langman->set(selectedLanguage);
-    settingsman->set<Language>("language", selectedLanguage);
+    settingsman->set<language>(selectedLanguage);
   }
 
   Theme selectedTheme = static_cast<Theme>(m_themeCombo->currentData().toInt());
   if (selectedTheme != m_currentTheme) {
     madeChanges = true;
     thememan->setTheme(selectedTheme);
-    settingsman->set<Theme>("theme", selectedTheme);
+    settingsman->set<theme>(selectedTheme);
   }
 
   if (madeChanges) emit settingsApplied();
