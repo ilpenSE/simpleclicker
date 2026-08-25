@@ -11,12 +11,14 @@
 #include <QUrl>
 #include "helpdialog.hpp"
 #include "settingsdialog.hpp"
+#include "hotkey.hpp"
 
 extern Logger *lg;
 extern PresetManager *presetsman;
 extern SettingsManager *settingsman;
 extern ThemeManager *thememan;
 extern LanguageManager *langman;
+extern HotkeyManager *hotkeyman;
 
 static PresetItemWidget *currentPresetWidget = nullptr;
 static bool presetChangeEventLock = false;
@@ -47,13 +49,13 @@ MainWindow::MainWindow(QWidget *parent)
   applySettings();
 
   // Bind Save keybind
-  auto *saveShortcut = new QShortcut(QKeySequence(SAVE_CHANGES_KEYBIND), this);
+  auto *saveShortcut = new QShortcut(SAVE_CHANGES_KEYBIND.toKeySequence(), this);
   connect(saveShortcut, &QShortcut::activated, this, [this]() {
     if (currentPresetWidget) emit currentPresetWidget->saveRequested();
   });
 
   // Bind Cancel keybind
-  auto *cancelShortcut = new QShortcut(QKeySequence(ABORT_CHANGES_KEYBIND), this);
+  auto *cancelShortcut = new QShortcut(ABORT_CHANGES_KEYBIND.toKeySequence(), this);
   connect(cancelShortcut, &QShortcut::activated, this, [this]() {
     if (currentPresetWidget) emit currentPresetWidget->cancelRequested();
   });
@@ -101,6 +103,19 @@ MainWindow::MainWindow(QWidget *parent)
       m_notificationBar->success(tr("Settings has been applied successfully!"));
     });
     dlg.exec();
+  });
+
+  // Subscribe to hotkey event
+  connect(hotkeyman, &HotkeyManager::hotkeyPressed, this, [](){
+    lg->info("Hotkey pressed!");
+  });
+  connect(hotkeyman, &HotkeyManager::hotkeyRegistrationFailed, this, [this]() {
+    if (hotkeyman->isWayland()) {
+      m_notificationBar->error(tr("Start/Stop hotkey couldn't be registered please restart the app and confirm the box"));
+    } else {
+      m_notificationBar->error(tr("Start/Stop hotkey couldn't be registered please restart the app"));
+    }
+    lg->error("Hotkey registeration failed!");
   });
 
   // Show internal embedded readme to user with a dialog

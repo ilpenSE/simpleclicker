@@ -22,7 +22,7 @@ private slots:
 private:
   Language m_currentLang;
   Theme m_currentTheme;
-  QString m_currentHotkey;
+  Hotkey m_currentHotkey;
 
   QComboBox *m_languageCombo;
   QComboBox *m_themeCombo;

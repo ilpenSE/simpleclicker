@@ -5,11 +5,13 @@
 #include "theme.hpp"
 #include "settings.hpp"
 #include "language.hpp"
+#include "hotkey.hpp"
 
 extern ThemeManager *thememan;
 extern SettingsManager *settingsman;
 extern Logger *lg;
 extern LanguageManager *langman;
+extern HotkeyManager *hotkeyman;
 
 SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent) {
   setWindowTitle(tr("Settings"));
@@ -70,25 +72,26 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent) {
   if (idx >= 0) m_themeCombo->setCurrentIndex(idx);
 
   // Load hotkey
-  m_currentHotkey = settingsman->get<QString>("keybind");
-  m_hotkeyEdit->setKeySequence(QKeySequence(m_currentHotkey));
+  m_currentHotkey = settingsman->get<Hotkey>("keybind");
+  m_hotkeyEdit->setKeySequence(m_currentHotkey.toKeySequence());
 }
 
 void SettingsDialog::onSave() {
   bool madeChanges = false;
 
-  auto selectedHotkey = m_hotkeyEdit->keySequence().toString();
+  auto selectedHotkey = Hotkey::from(m_hotkeyEdit->keySequence());
   if (selectedHotkey != m_currentHotkey) {
     if (selectedHotkey == SAVE_CHANGES_KEYBIND ||
         selectedHotkey == ABORT_CHANGES_KEYBIND) {
-      m_notificationBar->error(QString(tr("%1 is reserved for program, please try something else")).arg(selectedHotkey));
-      lg->error("Cannot change hotkey ({}) because it's reserved for program", selectedHotkey);
-      m_hotkeyEdit->setKeySequence(m_currentHotkey);
+      m_notificationBar->error(QString(tr("%1 is reserved for program, please try something else")).arg(selectedHotkey.toString()));
+      lg->error("Cannot change hotkey ({}) because it's reserved for program", selectedHotkey.toString());
+      m_hotkeyEdit->setKeySequence(m_currentHotkey.toKeySequence());
       return;
     } else {
       madeChanges = true;
       settingsman->set("keybind", selectedHotkey);
-      // TODO: Add hotkey manager's change/set hotkey function here
+      hotkeyman->unset();
+      hotkeyman->set(selectedHotkey);
     }
   }
 

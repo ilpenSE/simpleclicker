@@ -5,7 +5,6 @@
 #include <QListWidget>
 #include "notificationbar.hpp"
 #include "presets.hpp"
-#include "theme.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

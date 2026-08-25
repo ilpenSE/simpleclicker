@@ -76,8 +76,8 @@ void PresetItemWidget::retranslate() {
     m_saveButton->setToolTip(QString(tr("Save (%1)")).arg(COMMIT_RENAME_KEYBIND_STR));
     m_cancelButton->setToolTip(QString(tr("Cancel (%1)")).arg(ABORT_RENAME_KEYBIND_STR));
   } else {
-    m_saveButton->setToolTip(QString(tr("Save (%1)")).arg(SAVE_CHANGES_KEYBIND));
-    m_cancelButton->setToolTip(QString(tr("Cancel (%1)")).arg(ABORT_CHANGES_KEYBIND));
+    m_saveButton->setToolTip(QString(tr("Save (%1)")).arg(SAVE_CHANGES_KEYBIND.toString()));
+    m_cancelButton->setToolTip(QString(tr("Cancel (%1)")).arg(ABORT_CHANGES_KEYBIND.toString()));
   }
 }
 
@@ -165,8 +165,8 @@ void PresetItemWidget::commitRename() {
   const QString newName = m_nameEdit->text().trimmed();
   m_nameEdit->hide();
   m_nameLabel->show();
-  m_saveButton->setToolTip(QString(tr("Save (%1)")).arg(SAVE_CHANGES_KEYBIND));
-  m_cancelButton->setToolTip(QString(tr("Cancel (%1)")).arg(ABORT_CHANGES_KEYBIND));
+  m_saveButton->setToolTip(QString(tr("Save (%1)")).arg(SAVE_CHANGES_KEYBIND.toString()));
+  m_cancelButton->setToolTip(QString(tr("Cancel (%1)")).arg(ABORT_CHANGES_KEYBIND.toString()));
 
   m_state &= ~PresetItemState::Renaming;
 

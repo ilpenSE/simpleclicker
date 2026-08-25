@@ -22,6 +22,7 @@ qt_add_executable(SimpleClicker
   src/logger.cpp
   src/presets.cpp
   src/settings.cpp
+  src/hotkey.cpp           include/hotkey.hpp
   src/language.cpp         include/language.hpp
   src/theme.cpp            include/theme.hpp
   src/mainwindow.cpp       include/mainwindow.h
@@ -47,6 +48,15 @@ if(ENABLE_SANITIZERS AND (CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU"))
   )
   target_link_options(SimpleClicker PRIVATE
     -fsanitize=address,undefined
+  )
+endif()
+
+if(WIN32)
+  target_link_libraries(SimpleClicker PRIVATE user32)
+else()
+  target_link_libraries(SimpleClicker PRIVATE
+    xcb
+    xcb-keysyms
   )
 endif()
 

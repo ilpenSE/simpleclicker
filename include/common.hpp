@@ -15,8 +15,69 @@
 #include <QIcon>
 #include <QPushButton>
 
-constexpr auto SAVE_CHANGES_KEYBIND = "Ctrl+S";
-constexpr auto ABORT_CHANGES_KEYBIND = "Ctrl+K";
+struct Hotkey {
+  Qt::Key key = Qt::Key_unknown;
+  bool ctrl = false;
+  bool shift = false;
+  bool alt = false;
+
+  bool operator==(const Hotkey &other) const {
+    return key == other.key && ctrl == other.ctrl
+           && shift == other.shift && alt == other.alt;
+  }
+  bool operator!=(const Hotkey &other) const {
+    return !(*this == other);
+  }
+
+  QString toString() const {
+    if (!isValid()) return "";
+    int combined = key;
+    if (ctrl)  combined |= Qt::CTRL;
+    if (shift) combined |= Qt::SHIFT;
+    if (alt)   combined |= Qt::ALT;
+    return QKeySequence(combined).toString(QKeySequence::PortableText);
+  }
+
+  QKeySequence toKeySequence() const {
+    if (!isValid()) return {};
+    int combined = key;
+    if (ctrl)  combined |= Qt::CTRL;
+    if (shift) combined |= Qt::SHIFT;
+    if (alt) combined |= Qt::ALT;
+    return combined;
+  }
+
+  static Hotkey from(const QKeySequence& seq) {
+    if (seq.isEmpty()) return {};
+    Hotkey hk;
+    int combined = seq[0].toCombined();
+    hk.ctrl  = (combined & Qt::CTRL)  != 0;
+    hk.shift = (combined & Qt::SHIFT) != 0;
+    hk.alt   = (combined & Qt::ALT)   != 0;
+    hk.key = static_cast<Qt::Key>(combined &
+                                  ~(Qt::CTRL | Qt::SHIFT | Qt::ALT | Qt::META));
+    return hk;
+  }
+
+  static Hotkey from(const QString& str) {
+    if (str.isEmpty()) return {};
+    QKeySequence seq(str, QKeySequence::PortableText);
+    if (seq.isEmpty()) return {}; // parse error
+    Hotkey hk;
+    int combined = seq[0].toCombined();
+    hk.ctrl  = (combined & Qt::CTRL)  != 0;
+    hk.shift = (combined & Qt::SHIFT) != 0;
+    hk.alt   = (combined & Qt::ALT)   != 0;
+    hk.key = static_cast<Qt::Key>(combined &
+                                  ~(Qt::CTRL | Qt::SHIFT | Qt::ALT | Qt::META));
+    return hk;
+  }
+
+  constexpr bool isValid() const { return key != Qt::Key_unknown; }
+};
+
+constexpr auto SAVE_CHANGES_KEYBIND = Hotkey{.key=Qt::Key_S, .ctrl=true};
+constexpr auto ABORT_CHANGES_KEYBIND = Hotkey{.key=Qt::Key_K, .ctrl=true};
 
 enum class Theme : int { Dark = 0, Light, Count };
 
@@ -120,6 +181,9 @@ T fromJsonValue(const QJsonValue& jv, const T& def = T{}) {
   else if constexpr (std::is_same_v<T, Language>) {
     return to_language(jv.toString(to_cstr(def)));
   }
+  else if constexpr (std::is_same_v<T, Hotkey>) {
+    return Hotkey::from(jv.toString(def.toString()));
+  }
   else static_assert(!sizeof(T) && "jsonValue<T>: unsupported type");
 }
 
@@ -130,6 +194,7 @@ QJsonValue toJsonValue(const T& v) {
   else if constexpr (std::is_same_v<T, MouseButton>) return QJsonValue(to_cstr(v));
   else if constexpr (std::is_same_v<T, Theme>) return QJsonValue(to_cstr(v));
   else if constexpr (std::is_same_v<T, Language>) return QJsonValue(to_cstr(v));
+  else if constexpr (std::is_same_v<T, Hotkey>) return QJsonValue(v.toString());
   else return QJsonValue(v);
 }
 
@@ -163,6 +228,13 @@ struct std::formatter<Location> : std::formatter<std::string> {
     result += std::to_string(loc.y);
     result += "}";
     return std::formatter<std::string>::format(result, ctx);
+  }
+};
+
+template<>
+struct std::formatter<Hotkey> : std::formatter<std::string> {
+  auto format(const Hotkey& hk, std::format_context &ctx) const {
+    return std::formatter<std::string>::format(hk.toString().toStdString(), ctx);
   }
 };
 

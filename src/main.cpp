@@ -10,12 +10,14 @@
 #include "settings.hpp"
 #include "theme.hpp"
 #include "language.hpp"
+#include "hotkey.hpp"
 
 Logger *lg;
 PresetManager *presetsman;
 SettingsManager *settingsman;
 ThemeManager *thememan;
 LanguageManager *langman;
+HotkeyManager *hotkeyman;
 
 int main(int argc, char *argv[])
 {
@@ -73,6 +75,11 @@ int main(int argc, char *argv[])
   } else initLang = settingsman->get("language", Language::English);
   langman = &LanguageManager::instance(initLang);
   lg->info("Language manager initialized with {} language", initLang);
+
+  // Hotkey manager initialization
+  Hotkey hotkey = settingsman->get<Hotkey>("keybind", Hotkey::from("F6"));
+  hotkeyman = &HotkeyManager::instance(hotkey);
+  lg->info("Hotkey manager initialized");
 
   MainWindow w;
   w.show();
