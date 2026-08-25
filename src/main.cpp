@@ -11,6 +11,7 @@
 #include "language.hpp"
 #include "hotkey.hpp"
 #include "click.hpp"
+#include "x11.hpp"
 
 Logger *lg;
 PresetManager *presetsman;
@@ -19,8 +20,10 @@ ThemeManager *thememan;
 LanguageManager *langman;
 HotkeyManager *hotkeyman;
 ClickEngine *clickengine;
+X11 *x11inst;
 
 int main(int argc, char *argv[]) {
+#ifdef __linux__
   // Force X11 (XCB) to global hotkeys work
   if (qEnvironmentVariableIsEmpty("QT_QPA_PLATFORM")) {
     qputenv("QT_QPA_PLATFORM", "xcb");
@@ -30,10 +33,16 @@ int main(int argc, char *argv[]) {
       panic("Only X11 (XCB) is supported, try setting QT_QPA_PLATFORM=xcb environment variable or don't set it");
     }
   }
+#endif
 
   QApplication app(argc, argv);
   QCoreApplication::setOrganizationName("");
   QCoreApplication::setApplicationName("SimpleClicker");
+
+#ifdef __linux__
+  x11inst = &X11::instance();
+#endif
+
   QString appdata_path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
   QDir appdata_dir(appdata_path);
 

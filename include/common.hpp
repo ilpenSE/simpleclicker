@@ -162,6 +162,10 @@ inline MouseButton to_mouse_button(const QString& qstr) {
   return MouseButton::Left;
 }
 
+constexpr inline Location to_location(QPoint point) {
+  return {point.x(), point.y()};
+}
+
 template <typename T>
 T fromJsonValue(const QJsonValue& jv, const T& def = T{}) {
   if constexpr (std::is_same_v<T, QString>) return jv.toString(def);

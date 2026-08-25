@@ -2,10 +2,7 @@
 #include <QObject>
 #include "common.hpp"
 #include <QAbstractNativeEventFilter>
-
-#ifdef __linux__
-#include <xcb/xcb.h>
-#endif
+#include "x11.hpp"
 
 class HotkeyManager : public QObject, public QAbstractNativeEventFilter {
   Q_OBJECT
@@ -42,8 +39,7 @@ private:
 #else // Linux X11
   xcb_keycode_t m_keycode = 0;
   quint16 m_modifiers = 0;
-  xcb_connection_t *m_connection = nullptr;
-  xcb_window_t m_rootWindow = 0;
+  X11 *m_x11inst;
 
 #endif
   bool m_registered = false;

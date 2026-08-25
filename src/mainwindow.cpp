@@ -126,10 +126,17 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
     dlg.exec();
   });
 
+  // Subscribe to stop events of click engine
+  connect(clickengine, &ClickEngine::clickFinished, this, &MainWindow::stopClicking, Qt::QueuedConnection);
+
   uiConstructed = true;
 }
 
 void MainWindow::startClicking() {
+  blockPresetConfigUi();
+  ui->presetsList->setEnabled(false);
+  ui->addPresetBtn->setEnabled(false);
+
   ui->startButton->setEnabled(false);
   ui->stopButton->setEnabled(true);
   clickengine->start();
@@ -137,8 +144,12 @@ void MainWindow::startClicking() {
 };
 
 void MainWindow::stopClicking() {
+  unblockPresetConfigUi();
   ui->startButton->setEnabled(true);
   ui->stopButton->setEnabled(false);
+
+  ui->presetsList->setEnabled(true);
+  ui->addPresetBtn->setEnabled(true);
   clickengine->stop();
   lg->info("Clicking stopped");
 };
@@ -185,7 +196,9 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
   }
 
   // Delete an item from preset
-  connect(itemWidget, &PresetItemWidget::deleteRequested, this, [this, &list, item, itemWidget]() {
+  connect(itemWidget, &PresetItemWidget::deleteRequested, this,
+          [this, &list, item, itemWidget]() {
+    if (!itemWidget->isEnabled()) return;
     lg->info("Removing preset: '{}'", itemWidget->presetName());
     presetsman->presets.remove(itemWidget->presetName());
     int idx = list.row(item);
@@ -201,6 +214,7 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
 
   // Rename the preset name
   connect(itemWidget, &PresetItemWidget::renameRequested, this, [itemWidget, this](const QString &newName) {
+    if (!itemWidget->isEnabled()) return;
     lg->info("Renaming preset: '{}' -> '{}'", itemWidget->presetName(), newName);
     if (presetsman->presets.contains(newName)) {
       m_notificationBar->warning(QString(tr("Preset '%1' already exists, rename aborted")).arg(newName));
@@ -216,13 +230,16 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
 
   // Abort changes, cancel requested
   connect(itemWidget, &PresetItemWidget::cancelRequested, this, [this, itemWidget]() {
+    if (!itemWidget->isEnabled()) return;
     if (currentPresetWidget) applyPreset(currentPresetWidget->config);
     itemWidget->markSaved();
     m_notificationBar->info(tr("Changes aborted."));
   });
 
   // Save preset
-  connect(itemWidget, &PresetItemWidget::saveRequested, this, [this, itemWidget]() {
+  connect(itemWidget, &PresetItemWidget::saveRequested, this,
+          [this, itemWidget]() {
+    if (!itemWidget->isEnabled()) return;
     auto pname = itemWidget->presetName();
     lg->info("Saving preset: '{}'", pname);
      PresetConfig newConfig = {
@@ -236,11 +253,14 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
     presetsman->presets[pname] = newConfig;
     itemWidget->config = newConfig;
     itemWidget->markSaved();
+    clickengine->setPreset(newConfig);
     m_notificationBar->success(QString(tr("Preset %1 has been saved successfully!")).arg(pname));
   });
 
   // Double clicked, set current preset to this
-  connect(itemWidget, &PresetItemWidget::doubleClicked, this, [this, item, itemWidget]() {
+  connect(itemWidget, &PresetItemWidget::doubleClicked, this,
+          [this, item, itemWidget]() {
+    if (!itemWidget->isEnabled()) return;
     setActivePreset(item);
     m_notificationBar->success(QString(tr("Set active preset to %1")).arg(itemWidget->presetName()));
   });
@@ -252,9 +272,8 @@ void MainWindow::_changePresetConfigUi(bool is_locked) {
   for (auto it : {ui->clickOptionsBox, ui->clickIntervalBox, ui->repeatBox, ui->positionBox}) {
     it->setEnabled(!is_locked);
   }
-
-  ui->startButton->setEnabled(!is_locked && !clickengine->running);
-  ui->stopButton->setEnabled(!is_locked && clickengine->running);
+  ui->startButton->setEnabled(!is_locked);
+  ui->stopButton->setEnabled(!is_locked);
 }
 
 void MainWindow::applySettings() {
@@ -279,6 +298,8 @@ void MainWindow::applyPreset(const PresetConfig& config) {
   ui->pickLocationRadio->setChecked(!config.currentLocation);
   ui->xEdit->setValue(config.location.x);
   ui->yEdit->setValue(config.location.y);
+
+  clickengine->setPreset(config);
   presetChangeEventLock = false;
 }
 

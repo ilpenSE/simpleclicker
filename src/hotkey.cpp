@@ -1,6 +1,7 @@
 #include "hotkey.hpp"
 #include "logger.hpp"
 extern Logger *lg;
+extern X11 *x11inst;
 
 // TODO: Add support for Turkish keys
 bool HotkeyManager::isSupportedKey(Qt::Key key) {
@@ -152,19 +153,6 @@ xcb_keycode_t toKeycode(xcb_connection_t *connection, Qt::Key key) {
 
 HotkeyManager::HotkeyManager(const Hotkey& init_hotkey, QObject *parent) : QObject(parent)
 {
-  bool isWayland = QGuiApplication::platformName().startsWith("wayland");
-  lg->info("Detected platform = {}", QGuiApplication::platformName());
-
-  if (isWayland) {
-    Q_UNREACHABLE();
-  } else {
-    auto x11App = qApp->nativeInterface<QNativeInterface::QX11Application>();
-    m_connection = x11App->connection();
-
-    xcb_screen_t *screen = xcb_setup_roots_iterator(xcb_get_setup(m_connection)).data;
-    m_rootWindow = screen->root;
-  }
-
   qApp->installNativeEventFilter(this);
   set(init_hotkey);
 }
@@ -175,8 +163,8 @@ HotkeyManager::~HotkeyManager() {
 }
 
 bool HotkeyManager::registerHotkey(const Hotkey& hotkey) {
-  if (!m_connection) return false;
-  m_keycode = toKeycode(m_connection, hotkey.key);
+  if (!x11inst->connection) return false;
+  m_keycode = toKeycode(x11inst->connection, hotkey.key);
   if (m_keycode == 0) return false;
 
   quint16 mods = 0;
@@ -186,10 +174,10 @@ bool HotkeyManager::registerHotkey(const Hotkey& hotkey) {
   m_modifiers = mods;
 
   for (quint16 ignored : ignoredMasks) {
-    auto cookie = xcb_grab_key_checked(m_connection, 0, m_rootWindow,
+    auto cookie = xcb_grab_key_checked(x11inst->connection, 0, x11inst->rootWindow,
                                        mods | ignored, m_keycode,
                                        XCB_GRAB_MODE_ASYNC, XCB_GRAB_MODE_ASYNC);
-    xcb_generic_error_t *err = xcb_request_check(m_connection, cookie);
+    xcb_generic_error_t *err = xcb_request_check(x11inst->connection, cookie);
     if (err) {
       free(err);
       unregisterHotkey();
@@ -197,18 +185,18 @@ bool HotkeyManager::registerHotkey(const Hotkey& hotkey) {
       return false;
     }
   }
-  xcb_flush(m_connection);
+  xcb_flush(x11inst->connection);
 
   return true;
 }
 
 bool HotkeyManager::unregisterHotkey() {
-  if (!m_connection || m_keycode == 0) return false;
+  if (!x11inst->connection || m_keycode == 0) return false;
 
   for (unsigned int ignored : ignoredMasks) {
-    xcb_ungrab_key(m_connection, m_keycode, m_rootWindow, m_modifiers | ignored);
+    xcb_ungrab_key(x11inst->connection, m_keycode, x11inst->rootWindow, m_modifiers | ignored);
   }
-  xcb_flush(m_connection);
+  xcb_flush(x11inst->connection);
 
   m_registered = false;
   return true;
