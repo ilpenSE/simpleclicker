@@ -17,7 +17,7 @@ class MainWindow : public QMainWindow
   Q_OBJECT
 
 public:
-  explicit MainWindow(QWidget *parent = nullptr);
+  explicit MainWindow(QString initPreset, QWidget *parent = nullptr);
   ~MainWindow() override;
 
 public slots:
@@ -38,8 +38,12 @@ private:
 
   void retranslateUi();
 
+  void startClicking();
+  void stopClicking();
+
   QString generateUniquePresetName() const;
   Ui::MainWindow *ui;
   NotificationBar *m_notificationBar;
+  QString m_currentPreset;
 };
 #endif // MAINWINDOW_H

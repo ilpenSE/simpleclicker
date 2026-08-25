@@ -51,6 +51,14 @@
     <source>Removed preset '%1'.</source>
     <translation>Removed preset '%1' successfully.</translation>
   </message>
+  <message>
+    <source>v%1 by ilpeN</source>
+    <translation>v%1 by ilpeN</translation>
+  </message>
+  <message>
+    <source>Start/Stop hotkey couldn't be registered please restart or reinstall the app</source>
+    <translation>Start/Stop hotkey couldn't be registered please restart or reinstall the app</translation>
+  </message>
 
   <!-- Click Interval -->
   <message>

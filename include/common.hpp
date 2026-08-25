@@ -14,6 +14,7 @@
 #include <QStyleHints>
 #include <QIcon>
 #include <QPushButton>
+#include <QMessageBox>
 
 struct Hotkey {
   Qt::Key key = Qt::Key_unknown;
@@ -247,7 +248,6 @@ struct std::formatter<MouseButton> : std::formatter<std::string> {
 
 void makeDynamicIconButton(QPushButton *btn, const QString& symbol);
 
-
 template <typename... Args>
 [[noreturn]]
 inline void panic(std::format_string<Args...> fmt, Args &&...args) {
@@ -255,5 +255,11 @@ inline void panic(std::format_string<Args...> fmt, Args &&...args) {
   fprintf(stderr, "\e[0;31mPROGRAM PANICKED!\e[0m\n");
   fprintf(stderr, "Because a fatal error has occured.\n\n");
   fprintf(stderr, "\e[0;31mREASON:\e[0m %.*s\n", (int)s.size(), s.c_str());
+
+  QString title;
+  if (qgetenv("LANG").startsWith("tr_TR")) title = "ÖLÜMCÜL HATA";
+  else title = "FATAL ERROR";
+  QMessageBox::critical(nullptr, std::move(title), QString::fromUtf8(s));
+
   abort();
 }

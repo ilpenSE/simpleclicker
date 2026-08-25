@@ -10,6 +10,7 @@
 #include "theme.hpp"
 #include "language.hpp"
 #include "hotkey.hpp"
+#include "click.hpp"
 
 Logger *lg;
 PresetManager *presetsman;
@@ -17,6 +18,7 @@ SettingsManager *settingsman;
 ThemeManager *thememan;
 LanguageManager *langman;
 HotkeyManager *hotkeyman;
+ClickEngine *clickengine;
 
 int main(int argc, char *argv[]) {
   // Force X11 (XCB) to global hotkeys work
@@ -86,7 +88,13 @@ int main(int argc, char *argv[]) {
   hotkeyman = &HotkeyManager::instance(hotkey);
   lg->info("Hotkey manager initialized");
 
-  MainWindow w;
+  auto current_preset = settingsman->get<currentPreset>();
+
+  // Click engine initialization
+  clickengine = &ClickEngine::instance(presetsman->presets.value(current_preset));
+  lg->info("Click engine initialized");
+
+  MainWindow w(std::move(current_preset));
   w.show();
   return QApplication::exec();
 }

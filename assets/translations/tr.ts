@@ -55,6 +55,14 @@
     <source>Removed preset '%1'.</source>
     <translation>'%1' ön ayarı başarıyla silindi.</translation>
   </message>
+  <message>
+    <source>v%1 by ilpeN</source>
+    <translation>v%1 ilpeN tarafından</translation>
+  </message>
+  <message>
+    <source>Start/Stop hotkey couldn't be registered please restart or reinstall the app</source>
+    <translation>Başlat/Durdur kısayolu kaydedilemedi, lütfen uygulamayı yeniden başlatın veya indirin</translation>
+  </message>
 
   <!-- Click Interval -->
   <message>

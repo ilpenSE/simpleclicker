@@ -12,6 +12,7 @@
 #include "helpdialog.hpp"
 #include "settingsdialog.hpp"
 #include "hotkey.hpp"
+#include "click.hpp"
 
 extern Logger *lg;
 extern PresetManager *presetsman;
@@ -19,13 +20,14 @@ extern SettingsManager *settingsman;
 extern ThemeManager *thememan;
 extern LanguageManager *langman;
 extern HotkeyManager *hotkeyman;
+extern ClickEngine *clickengine;
 
 static PresetItemWidget *currentPresetWidget = nullptr;
 static bool presetChangeEventLock = false;
 static bool uiConstructed = false;
 
-MainWindow::MainWindow(QWidget *parent)
-  : QMainWindow(parent) , ui(new Ui::MainWindow)
+MainWindow::MainWindow(QString initPreset, QWidget *parent)
+  : QMainWindow(parent) , m_currentPreset(initPreset), ui(new Ui::MainWindow)
 {
   ui->setupUi(this);
   m_notificationBar = new NotificationBar(this);
@@ -105,12 +107,16 @@ MainWindow::MainWindow(QWidget *parent)
     dlg.exec();
   });
 
+  // Subscribe to start/stop buttons
+  connect(ui->startButton, &QPushButton::clicked, this, &MainWindow::startClicking);
+  connect(ui->stopButton, &QPushButton::clicked, this, &MainWindow::stopClicking);
+
   // Subscribe to hotkey event
-  connect(hotkeyman, &HotkeyManager::hotkeyPressed, this, [](){
-    lg->info("Hotkey pressed!");
+  connect(hotkeyman, &HotkeyManager::hotkeyPressed, this, [this]() {
+    if (clickengine->running) stopClicking(); else startClicking();
   });
   connect(hotkeyman, &HotkeyManager::hotkeyRegistrationFailed, this, [this]() {
-    m_notificationBar->error(tr("Start/Stop hotkey couldn't be registered please restart the app"));
+    m_notificationBar->error(tr("Start/Stop hotkey couldn't be registered please restart or reinstall the app"));
     lg->error("Hotkey registeration failed!");
   });
 
@@ -123,8 +129,23 @@ MainWindow::MainWindow(QWidget *parent)
   uiConstructed = true;
 }
 
+void MainWindow::startClicking() {
+  ui->startButton->setEnabled(false);
+  ui->stopButton->setEnabled(true);
+  clickengine->start();
+  lg->info("Clicking started");
+};
+
+void MainWindow::stopClicking() {
+  ui->startButton->setEnabled(true);
+  ui->stopButton->setEnabled(false);
+  clickengine->stop();
+  lg->info("Clicking stopped");
+};
+
 void MainWindow::retranslateUi() {
   ui->retranslateUi(this);
+  ui->infoLabel->setText(ui->infoLabel->text().arg(settingsman->get<version>()));
 }
 
 void MainWindow::setActivePreset(QListWidgetItem *item) {
@@ -159,8 +180,7 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
   list.addItem(item);
   list.setItemWidget(item, itemWidget);
 
-  static auto cur_preset = settingsman->get<currentPreset>();
-  if (!currentPresetWidget && presetName == cur_preset) {
+  if (!currentPresetWidget && presetName == m_currentPreset) {
     setActivePreset(item);
   }
 
@@ -233,8 +253,8 @@ void MainWindow::_changePresetConfigUi(bool is_locked) {
     it->setEnabled(!is_locked);
   }
 
-  ui->startButton->setEnabled(!is_locked);
-  ui->stopButton->setEnabled(!is_locked);
+  ui->startButton->setEnabled(!is_locked && !clickengine->running);
+  ui->stopButton->setEnabled(!is_locked && clickengine->running);
 }
 
 void MainWindow::applySettings() {

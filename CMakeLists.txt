@@ -23,6 +23,7 @@ qt_add_executable(SimpleClicker
   src/presets.cpp
   src/settings.cpp
   src/hotkey.cpp           include/hotkey.hpp
+  src/click.cpp            include/click.hpp
   src/language.cpp         include/language.hpp
   src/theme.cpp            include/theme.hpp
   src/mainwindow.cpp       include/mainwindow.h
