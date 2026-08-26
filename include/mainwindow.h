@@ -24,6 +24,7 @@ public slots:
   void applyTheme(Theme newTheme);
 
 private:
+  void showLocationPicker();
   MouseButton getMouseButton() const;
   int getIntervalMs() const;
 

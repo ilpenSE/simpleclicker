@@ -13,6 +13,7 @@
 #include "settingsdialog.hpp"
 #include "hotkey.hpp"
 #include "click.hpp"
+#include "locationpickeroverlay.hpp"
 
 extern Logger *lg;
 extern PresetManager *presetsman;
@@ -129,7 +130,26 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
   // Subscribe to stop events of click engine
   connect(clickengine, &ClickEngine::clickFinished, this, &MainWindow::stopClicking, Qt::QueuedConnection);
 
+  // Set up location picker
+  connect(ui->pickLocationButton, &QPushButton::clicked, this, &MainWindow::showLocationPicker);
+
   uiConstructed = true;
+}
+
+void MainWindow::showLocationPicker() {
+  auto picker = new LocationPickerOverlay();
+  connect(picker, &LocationPickerOverlay::locationPicked, this, [this](QPoint pos) {
+    lg->info("Picked location: {} {}", pos.x(), pos.y());
+    ui->xEdit->setValue(pos.x());
+    ui->yEdit->setValue(pos.y());
+    ui->pickLocationRadio->setChecked(true);
+    ui->currentLocationRadio->setChecked(false);
+  });
+
+  connect(picker, &LocationPickerOverlay::cancelled, this, [this]() {
+    lg->info("Location picking cancelled");
+  });
+  picker->show();
 }
 
 void MainWindow::startClicking() {

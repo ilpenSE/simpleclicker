@@ -22,15 +22,16 @@ qt_add_executable(SimpleClicker
   src/logger.cpp
   src/presets.cpp
   src/settings.cpp
-  src/hotkey.cpp           include/hotkey.hpp
-  src/click.cpp            include/click.hpp
-  src/language.cpp         include/language.hpp
-  src/theme.cpp            include/theme.hpp
-  src/mainwindow.cpp       include/mainwindow.h
-  src/presetitemwidget.cpp include/presetitemwidget.hpp
-  src/helpdialog.cpp       include/helpdialog.hpp
-  src/notificationbar.cpp  include/notificationbar.hpp
-  src/settingsdialog.cpp   include/settingsdialog.hpp
+  src/hotkey.cpp                include/hotkey.hpp
+  src/click.cpp                 include/click.hpp
+  src/language.cpp              include/language.hpp
+  src/theme.cpp                 include/theme.hpp
+  src/mainwindow.cpp            include/mainwindow.h
+  src/presetitemwidget.cpp      include/presetitemwidget.hpp
+  src/locationpickeroverlay.cpp include/locationpickeroverlay.hpp
+  src/helpdialog.cpp            include/helpdialog.hpp
+  src/notificationbar.cpp       include/notificationbar.hpp
+  src/settingsdialog.cpp        include/settingsdialog.hpp
   mainwindow.ui
 )
 
