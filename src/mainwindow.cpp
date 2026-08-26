@@ -176,7 +176,7 @@ void MainWindow::stopClicking() {
 
 void MainWindow::retranslateUi() {
   ui->retranslateUi(this);
-  ui->infoLabel->setText(ui->infoLabel->text().arg(settingsman->get<version>()));
+  ui->infoLabel->setText(ui->infoLabel->text().arg(settingsman->get<version>().toQString()));
 }
 
 void MainWindow::setActivePreset(QListWidgetItem *item) {

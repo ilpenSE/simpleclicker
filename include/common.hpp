@@ -16,6 +16,23 @@
 #include <QPushButton>
 #include <QMessageBox>
 
+namespace {
+// string -> int converter only for version
+constexpr bool parse_uint8_version(std::string_view sv, uint8_t& out) {
+  if (sv.empty() || sv.size() > 3) return false;
+
+  unsigned int val = 0;
+  for (char c : sv) {
+    if (c < '0' || c > '9') return false;
+    val = val * 10 + static_cast<unsigned int>(c - '0');
+    if (val > 255) return false; // overflow guard
+  }
+
+  out = static_cast<uint8_t>(val);
+  return true;
+}
+} // namespace
+
 struct Hotkey {
   Qt::Key key = Qt::Key_unknown;
   bool ctrl = false;
@@ -166,6 +183,49 @@ constexpr inline Location to_location(QPoint point) {
   return {point.x(), point.y()};
 }
 
+struct Version {
+  uint8_t major = 0, minor = 0, patch = 0;
+  bool is_beta = false;
+
+  QString toQString() const {
+    if (is_beta) return QString("%1.%2.%3-beta").arg(major).arg(minor).arg(patch);
+    return QString("%1.%2.%3").arg(major).arg(minor).arg(patch);
+  }
+
+  std::string toString() const {
+    if (is_beta) return std::format("{}.{}.{}-beta", major, minor, patch);
+    return std::format("{}.{}.{}", major, minor, patch);
+  }
+
+  static Version from(QStringView sv);
+
+  static constexpr Version from(std::string_view sv) {
+    bool is_beta = sv.ends_with("-beta");
+    if (is_beta) sv.remove_suffix(5);
+
+    Version res;
+    res.is_beta = is_beta;
+
+    for (int i = 0; i < 3; ++i) {
+      size_t dot = sv.find('.');
+      std::string_view part = (dot == std::string_view::npos) ? sv : sv.substr(0, dot);
+
+      uint8_t val = 0;
+      if (!parse_uint8_version(part, val)) return {};
+
+      if (i == 0) res.major = val;
+      else if (i == 1) res.minor = val;
+      else res.patch = val;
+
+      if (dot == std::string_view::npos) break;
+      sv.remove_prefix(dot + 1);
+    }
+    return res;
+  }
+};
+
+constexpr Version APP_VERSION = Version::from("1.0.0");
+
 template <typename T>
 T fromJsonValue(const QJsonValue& jv, const T& def = T{}) {
   if constexpr (std::is_same_v<T, QString>) return jv.toString(def);
@@ -189,6 +249,9 @@ T fromJsonValue(const QJsonValue& jv, const T& def = T{}) {
   else if constexpr (std::is_same_v<T, Hotkey>) {
     return Hotkey::from(jv.toString(def.toString()));
   }
+  else if constexpr (std::is_same_v<T, Version>) {
+    return Version::from(jv.toString(def.toQString()));
+  }
   else static_assert(!sizeof(T) && "jsonValue<T>: unsupported type");
 }
 
@@ -200,6 +263,7 @@ QJsonValue toJsonValue(const T& v) {
   else if constexpr (std::is_same_v<T, Theme>) return QJsonValue(to_cstr(v));
   else if constexpr (std::is_same_v<T, Language>) return QJsonValue(to_cstr(v));
   else if constexpr (std::is_same_v<T, Hotkey>) return QJsonValue(v.toString());
+  else if constexpr (std::is_same_v<T, Version>) return QJsonValue(v.toQString());
   else return QJsonValue(v);
 }
 
@@ -250,15 +314,21 @@ struct std::formatter<MouseButton> : std::formatter<std::string> {
   }
 };
 
+template<>
+struct std::formatter<Version> : std::formatter<std::string> {
+  auto format(Version ver, std::format_context &ctx) const {
+    return std::formatter<std::string>::format(ver.toString(), ctx);
+  }
+};
+
 void makeDynamicIconButton(QPushButton *btn, const QString& symbol);
 
 template <typename... Args>
 [[noreturn]]
 inline void panic(std::format_string<Args...> fmt, Args &&...args) {
-  std::string s = std::format(fmt, std::forward<Args>(args)...);
+  std::string s = std::format<Args...>(fmt, std::forward<Args>(args)...);
   fprintf(stderr, "\e[0;31mPROGRAM PANICKED!\e[0m\n");
-  fprintf(stderr, "Because a fatal error has occured.\n\n");
-  fprintf(stderr, "\e[0;31mREASON:\e[0m %.*s\n", (int)s.size(), s.c_str());
+  fprintf(stderr, "\e[0;31mFATAL ERROR:\e[0m %.*s\n", s);
 
   QString title;
   if (qgetenv("LANG").startsWith("tr_TR")) title = "ÖLÜMCÜL HATA";

@@ -33,8 +33,7 @@ bool SettingsManager::load() {
   for (auto it = root_obj.constBegin(); it != root_obj.constEnd(); ++it) {
     QString name = it.key();
     QJsonValue jvalue = it.value();
-    if (!settings.contains(name))
-      continue;
+    if (!settings.contains(name)) continue;
 
     QJsonValue defaultValue = settings.value(name);
     if (defaultValue.type() == jvalue.type()) settings[name] = jvalue;

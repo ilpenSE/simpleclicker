@@ -10,7 +10,7 @@
   X(keybind, Hotkey, Hotkey::from("F6")) \
   X(theme, Theme, Theme::Dark) \
   X(firstRun, bool, true) \
-  X(version, QString, "1.0.0")
+  X(version, Version, APP_VERSION)
 
 template <typename T>
 struct is_settings_field : std::false_type {};
