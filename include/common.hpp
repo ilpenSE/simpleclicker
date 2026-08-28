@@ -224,7 +224,7 @@ struct Version {
   }
 };
 
-constexpr Version APP_VERSION = Version::from("1.0.0");
+constexpr Version APP_VERSION = Version::from("1.0.0-beta");
 
 template <typename T>
 T fromJsonValue(const QJsonValue& jv, const T& def = T{}) {
@@ -321,12 +321,12 @@ struct std::formatter<Version> : std::formatter<std::string> {
   }
 };
 
-void makeDynamicIconButton(QPushButton *btn, const QString& symbol);
+extern void makeDynamicIconButton(QPushButton *btn, const QString& symbol);
 
 template <typename... Args>
 [[noreturn]]
 inline void panic(std::format_string<Args...> fmt, Args &&...args) {
-  std::string s = std::format<Args...>(fmt, std::forward<Args>(args)...);
+  std::string s = std::format(fmt, std::forward<Args>(args)...);
   fprintf(stderr, "\e[0;31mPROGRAM PANICKED!\e[0m\n");
   fprintf(stderr, "\e[0;31mFATAL ERROR:\e[0m %.*s\n", s);
 

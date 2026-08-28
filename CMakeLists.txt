@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.19)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-option(ENABLE_SANITIZERS "Enable ASan and UBSan" ON)
+option(ENABLE_SANITIZERS "Enable ASan and UBSan" OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # build/compile_commands.json
 
 project(SimpleClicker LANGUAGES CXX)
@@ -15,8 +15,13 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 qt_standard_project_setup()
 
+if(WIN32)
+  set(APP_ICON_RESOURCE "${CMAKE_SOURCE_DIR}/assets/app.rc")
+endif()
+
 qt_add_executable(SimpleClicker
   WIN32 MACOSX_BUNDLE
+  ${APP_ICON_RESOURCE}
   src/common.cpp
   src/main.cpp
   src/logger.cpp
@@ -77,9 +82,17 @@ install(TARGETS SimpleClicker
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
-qt_generate_deploy_app_script(
-  TARGET SimpleClicker
-  OUTPUT_SCRIPT deploy_script
-  NO_UNSUPPORTED_PLATFORM_ERROR
-)
-install(SCRIPT ${deploy_script})
+if(LINUX)
+  install(TARGETS SimpleClicker DESTINATION bin)
+  install(FILES assets/SimpleClicker.desktop DESTINATION share/applications)
+  install(FILES assets/icons/app.png DESTINATION share/icons/hicolor/256x256/apps RENAME simpleclicker.png)
+endif()
+
+if(WIN32)
+  qt_generate_deploy_app_script(
+    TARGET SimpleClicker
+    OUTPUT_SCRIPT deploy_script
+    NO_UNSUPPORTED_PLATFORM_ERROR
+  )
+  install(SCRIPT ${deploy_script})
+endif()

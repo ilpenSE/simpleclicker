@@ -23,6 +23,7 @@ public:
   }
 
   QIcon icon(const QString& path);
+  QIcon icon(const QString& path, QColor color);
 
   Theme theme() { return m_theme; }
   void setTheme(Theme theme) {

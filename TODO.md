@@ -1,5 +1,5 @@
 # TODO List for Simple Clicker
 
-- [x] Add position picker
+- [ ] Enhance visuality for Windows
 - [ ] Add async-auto-update checker
 - [ ] Add full Turkish and English README

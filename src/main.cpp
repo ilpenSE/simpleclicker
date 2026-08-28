@@ -75,10 +75,13 @@ int main(int argc, char *argv[]) {
   // Theme manager initialization
   Theme initTheme = settingsman->get<theme>();
   thememan = &ThemeManager::instance(initTheme);
-  QObject::connect(thememan, &ThemeManager::themeChanged, &app, [&app](Theme) {
-    thememan->applyTheme();
-  });
+  QObject::connect(thememan, &ThemeManager::themeChanged, &app,
+                   [&app](Theme) { thememan->applyTheme(); });
   lg->info("Theme manager initialized with {} theme", initTheme);
+
+#ifdef _WIN32
+  app.setStyle("fusion");
+#endif
 
   // Language manager initialization
   Language initLang;

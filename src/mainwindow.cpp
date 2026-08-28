@@ -139,7 +139,7 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
 void MainWindow::showLocationPicker() {
   auto picker = new LocationPickerOverlay();
   connect(picker, &LocationPickerOverlay::locationPicked, this, [this](QPoint pos) {
-    lg->info("Picked location: {} {}", pos.x(), pos.y());
+    lg->info("Picked location: x: {}, y: {}", pos.x(), pos.y());
     ui->xEdit->setValue(pos.x());
     ui->yEdit->setValue(pos.y());
     ui->pickLocationRadio->setChecked(true);
@@ -176,7 +176,7 @@ void MainWindow::stopClicking() {
 
 void MainWindow::retranslateUi() {
   ui->retranslateUi(this);
-  ui->infoLabel->setText(ui->infoLabel->text().arg(settingsman->get<version>().toQString()));
+  ui->infoLabel->setText(ui->infoLabel->text().arg(APP_VERSION.toQString()));
 }
 
 void MainWindow::setActivePreset(QListWidgetItem *item) {
@@ -355,6 +355,7 @@ void MainWindow::applyTheme(Theme newTheme) {
 MainWindow::~MainWindow()
 {
   settingsman->set<currentPreset>(currentPresetWidget ? currentPresetWidget->presetName() : "");
+  settingsman->set<version>(APP_VERSION);
 
   settingsman->save();
   presetsman->save();

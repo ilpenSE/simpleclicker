@@ -7,10 +7,12 @@
     <file alias="trash.svg">assets/icons/trash.svg</file>
     <file alias="add.svg">assets/icons/add.svg</file>
   </qresource>
+
   <qresource prefix="/docs">
     <file alias="readme.md">README.md</file>
     <file alias="readme.tr.md">README.tr.md</file>
   </qresource>
+
   <qresource prefix="/translations">
     <file alias="tr.qm">assets/translations/tr.qm</file>
     <file alias="en.qm">assets/translations/en.qm</file>

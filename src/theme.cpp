@@ -113,8 +113,10 @@ void ThemeManager::applyTheme() const {
 }
 
 QIcon ThemeManager::icon(const QString &path) {
-  QColor tint = color("icon-tint");
+  return icon(path, color("icon-tint"));
+}
 
+QIcon ThemeManager::icon(const QString &path, QColor tint) {
   QSvgRenderer renderer(":/icons/" + path);
   QPixmap pixmap(22, 22);
   pixmap.fill(Qt::transparent);

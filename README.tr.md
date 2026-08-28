@@ -5,3 +5,4 @@
 - Sol menüdeki `+` butonuna basarak yeni bir ön ayar oluşturabilirsiniz
 - Tüm ön ayarlar, uygulama ayarları ve kayıtları makinenizdeki `AppData` veya `~/.local/share` klasörlerinde tutulur
 - Bu, [AutoClicker](https://github.com/ilpenSE/autoclicker) projesinin devamıdır
+- Not: Şu anda uygulama beta sürümündedir ve kararsız olabilir.
