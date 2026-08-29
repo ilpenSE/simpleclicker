@@ -6,6 +6,8 @@
     <file alias="rename.svg">assets/icons/rename.svg</file>
     <file alias="trash.svg">assets/icons/trash.svg</file>
     <file alias="add.svg">assets/icons/add.svg</file>
+    <file alias="down.svg">assets/icons/down.svg</file>
+    <file alias="up.svg">assets/icons/up.svg</file>
   </qresource>
 
   <qresource prefix="/docs">
@@ -16,5 +18,13 @@
   <qresource prefix="/translations">
     <file alias="tr.qm">assets/translations/tr.qm</file>
     <file alias="en.qm">assets/translations/en.qm</file>
+  </qresource>
+
+  <qresource prefix="/styles">
+    <file alias="breeze.qss">assets/styles/breeze.qss</file>
+  </qresource>
+
+  <qresource prefix="/fonts">
+    <file alias="Ubuntu.ttf">assets/fonts/Ubuntu.ttf</file>
   </qresource>
 </RCC>

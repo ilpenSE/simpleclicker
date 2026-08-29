@@ -1,0 +1,198 @@
+/*
+  Arg order:
+  border, borderHover, buttonBg, buttonText,
+  accent, altBase, disabledBg, disabledText, base
+  see: theme.cpp, styleSheet() function implementation
+*/
+
+QPushButton, QToolButton {
+  border: 1px solid %1;
+  border-radius: 6px;
+  padding: 8px;
+  background-color: %3;
+  color: %4;
+}
+
+QPushButton:hover, QToolButton:hover { border-color: %2; }
+QPushButton:pressed, QToolButton:pressed { background-color: %6; }
+QPushButton:default { border: 1px solid %5; }
+QPushButton:disabled, QToolButton:disabled {
+  background-color: %7;
+  color: %8;
+  border-color: %1;
+}
+
+QComboBox {
+  border: 1px solid %1;
+  border-radius: 6px;
+  background-color: %3;
+  padding: 6px;
+  padding-right: 24px;
+}
+
+QLineEdit {
+  border: 1px solid %1;
+  border-radius: 6px;
+  padding: 6px;
+  background-color: %9;
+}
+
+QSpinBox, QDoubleSpinBox {
+  border: 1px solid %1;
+  border-radius: 4px;
+  padding: 5px;
+  background-color: %9;
+}
+QComboBox:focus, QSpinBox:focus, QDoubleSpinBox:focus, QLineEdit:focus {
+  border-color: %5;
+}
+
+QComboBox::drop-down {
+  border: none;
+  width: 18px;
+}
+
+QComboBox::drop-down {
+  border: none;
+  width: 18px;
+}
+
+QComboBox::down-arrow {
+  image: url(%10);
+  width: 16px;
+  height: 16px;
+}
+
+QSpinBox, QDoubleSpinBox {
+  padding-right: 18px;
+}
+
+QComboBox:hover, QLineEdit:hover, QSpinBox:hover, QDoubleSpinBox:hover {
+  border-color: %2;
+}
+
+QSpinBox::up-button, QDoubleSpinBox::up-button {
+  subcontrol-origin: border;
+  subcontrol-position: top right;
+  width: 18px;
+  height: 18px;
+  border-left: 1px solid %1;
+  border-bottom: 1px solid %1;
+  border-top-right-radius: 3px;
+  background-color: %3;
+}
+
+QSpinBox::down-button, QDoubleSpinBox::down-button {
+  subcontrol-origin: border;
+  subcontrol-position: bottom right;
+  width: 18px;
+  height: 18px;
+  border-left: 1px solid %1;
+  border-bottom-right-radius: 3px;
+  background-color: %3;
+}
+
+QSpinBox::up-button:hover, QSpinBox::down-button:hover,
+QDoubleSpinBox::up-button:hover, QDoubleSpinBox::down-button:hover {
+  background-color: %6;
+}
+
+QSpinBox::up-arrow, QDoubleSpinBox::up-arrow {
+  image: url(%11);
+  width: 12px;
+  height: 12px;
+}
+
+QSpinBox::down-arrow, QDoubleSpinBox::down-arrow {
+  image: url(%10);
+  width: 12px;
+  height: 12px;
+}
+
+QComboBox QAbstractItemView {
+  border: 1px solid %1;
+  border-radius: 3px;
+  background-color: %9;
+  outline: none;
+  selection-background-color: %5;
+  selection-color: %4;
+}
+
+QComboBox QAbstractItemView::item {
+  padding: 4px 8px;
+  border-radius: 3px;
+}
+
+QListView, QListWidget, QTreeView {
+  border: 1px solid %1;
+  border-radius: 3px;
+  background-color: %9;
+  outline: none;
+}
+QListView::item, QListWidget::item, QTreeView::item {
+  border-radius: 3px;
+  border: none;
+}
+
+QGroupBox {
+  border: 1px solid %1;
+  border-radius: 6px;
+  margin-top: 1.2em;
+  padding-top: 0.6em;
+  font-weight: bold;
+}
+QGroupBox::title {
+  subcontrol-origin: margin;
+  padding: 0;
+}
+
+QRadioButton::indicator, QCheckBox::indicator {
+  width: 16px;
+  height: 16px;
+  border: 1px solid %1;
+  background-color: %9;
+}
+QRadioButton::indicator { border-radius: 8px; }
+QCheckBox::indicator { border-radius: 3px; }
+QCheckBox::indicator:checked {
+  background-color: %5;
+  border-color: %5;
+}
+QRadioButton::indicator:checked {
+  border: 1px solid %5;
+  background-color: qradialgradient(
+    cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5,
+    stop:0 %5, stop:0.42 %5, stop:0.5 %9, stop:1 %9);
+}
+
+QRadioButton::indicator:hover, QCheckBox::indicator:hover {
+  border-color: %2;
+}
+
+QTabWidget::pane {
+  border: 1px solid %1;
+  border-radius: 3px;
+}
+QTabBar::tab {
+  border: 1px solid %1;
+  border-bottom: none;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  padding: 4px 10px;
+  background-color: transparent;
+}
+QTabBar::tab:selected { background-color: %9; }
+
+QScrollBar:vertical, QScrollBar:horizontal {
+  background: transparent;
+  border: none;
+  margin: 0px;
+}
+QScrollBar::handle {
+  background: %1;
+  border-radius: 4px;
+  min-height: 20px;
+  min-width: 20px;
+}
+QScrollBar::handle:hover { background: %2; }
+QScrollBar::add-line, QScrollBar::sub-line { height: 0px; width: 0px; }

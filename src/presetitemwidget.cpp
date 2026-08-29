@@ -9,7 +9,7 @@ extern ThemeManager *thememan;
 extern LanguageManager *langman;
 
 namespace {
-constexpr auto itemSize = 26;
+constexpr auto itemSize = 32;
 constexpr auto COMMIT_RENAME_KEYBIND = Qt::Key_Return;
 constexpr auto ABORT_RENAME_KEYBIND = Qt::Key_Escape;
 constexpr auto COMMIT_RENAME_KEYBIND_STR = "ENTER";
@@ -30,7 +30,7 @@ PresetItemWidget::PresetItemWidget(const QString &presetName, const PresetConfig
     : config(config), QWidget(parent), m_presetName(presetName)
 {
   auto layout = new QHBoxLayout(this);
-  layout->setContentsMargins(8, 6, 8, 6);
+  layout->setContentsMargins(8, 8, 8, 8);
   layout->setSpacing(4);
 
   m_nameLabel = new QLabel(presetName, this);
@@ -73,11 +73,11 @@ void PresetItemWidget::retranslate() {
   m_deleteButton->setToolTip(tr("Delete"));
 
   if (is_set(m_state, PresetItemState::Renaming)) {
-    m_saveButton->setToolTip(QString(tr("Save (%1)")).arg(COMMIT_RENAME_KEYBIND_STR));
-    m_cancelButton->setToolTip(QString(tr("Cancel (%1)")).arg(ABORT_RENAME_KEYBIND_STR));
+    m_saveButton->setToolTip(QString(tr("Rename") + " (%1)").arg(COMMIT_RENAME_KEYBIND_STR));
+    m_cancelButton->setToolTip(QString(tr("Cancel") + "(%1)").arg(ABORT_RENAME_KEYBIND_STR));
   } else {
-    m_saveButton->setToolTip(QString(tr("Save (%1)")).arg(SAVE_CHANGES_KEYBIND.toString()));
-    m_cancelButton->setToolTip(QString(tr("Cancel (%1)")).arg(ABORT_CHANGES_KEYBIND.toString()));
+    m_saveButton->setToolTip(QString(tr("Save") + " (%1)").arg(SAVE_CHANGES_KEYBIND.toString()));
+    m_cancelButton->setToolTip(QString(tr("Cancel") + " (%1)").arg(ABORT_CHANGES_KEYBIND.toString()));
   }
 }
 

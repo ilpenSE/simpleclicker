@@ -138,12 +138,12 @@
 
   <!-- Control Panel -->
   <message>
-    <source>Start (%1)</source>
-    <translation>Başlat (%1)</translation>
+    <source>Start</source>
+    <translation>Başlat</translation>
   </message>
   <message>
-    <source>Stop (%1)</source>
-    <translation>Durdur (%1)</translation>
+    <source>Stop</source>
+    <translation>Durdur</translation>
   </message>
   <message>
     <source>Settings</source>
@@ -159,8 +159,8 @@
 <context>
   <name>PresetItemWidget</name>
   <message>
-    <source>Save (%1)</source>
-    <translation>Kaydet (%1)</translation>
+    <source>Save</source>
+    <translation>Kaydet</translation>
   </message>
   <message>
     <source>Rename</source>
@@ -171,8 +171,8 @@
     <translation>Sil</translation>
   </message>
   <message>
-    <source>Cancel (%1)</source>
-    <translation>İptal Et (%1)</translation>
+    <source>Cancel</source>
+    <translation>İptal Et</translation>
   </message>
 
 </context>

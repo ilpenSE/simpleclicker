@@ -5,6 +5,7 @@
 #include <QListWidget>
 #include "notificationbar.hpp"
 #include "presets.hpp"
+#include "presetitemwidget.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -27,6 +28,8 @@ private:
   void showLocationPicker();
   MouseButton getMouseButton() const;
   int getIntervalMs() const;
+
+  void savePreset(PresetItemWidget *itemWidget);
 
   void applySettings();
   void applyPreset(const PresetConfig& config);

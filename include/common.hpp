@@ -224,7 +224,7 @@ struct Version {
   }
 };
 
-constexpr Version APP_VERSION = Version::from("1.0.0-beta");
+constexpr Version APP_VERSION = Version::from("1.1.0-beta");
 
 template <typename T>
 T fromJsonValue(const QJsonValue& jv, const T& def = T{}) {
@@ -328,7 +328,7 @@ template <typename... Args>
 inline void panic(std::format_string<Args...> fmt, Args &&...args) {
   std::string s = std::format(fmt, std::forward<Args>(args)...);
   fprintf(stderr, "\e[0;31mPROGRAM PANICKED!\e[0m\n");
-  fprintf(stderr, "\e[0;31mFATAL ERROR:\e[0m %.*s\n", s);
+  fprintf(stderr, "\e[0;31mFATAL ERROR:\e[0m %.*s\n", (int)s.size(), s.c_str());
 
   QString title;
   if (qgetenv("LANG").startsWith("tr_TR")) title = "ÖLÜMCÜL HATA";

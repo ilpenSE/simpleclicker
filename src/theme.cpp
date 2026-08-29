@@ -5,6 +5,8 @@
 #include <QPainter>
 #include <QIcon>
 #include <QApplication>
+#include <QFile>
+#include <QDir>
 
 QMap<QString, QColor> ThemeManager::darkColors = {
     {"icon-tint", "#e0e0e0"},
@@ -24,6 +26,10 @@ QMap<QString, QColor> ThemeManager::darkColors = {
     {"tooltip-text", "#ffffff"},
     {"disabled-text", "#7f7f7f"},
     {"disabled-button", "#1a1a1a"},
+
+    // breeze-style shape borders
+    {"border", "#4d4d4d"},
+    {"border-hover", "#4287f5"},
 
     // preset button
     {"preset-button", QColor(255, 255, 255, 15)},
@@ -65,6 +71,10 @@ QMap<QString, QColor> ThemeManager::lightColors = {
     {"disabled-button", "#d8d8d8"},
     {"icon-tint", "#202020"},
 
+    // breeze-style shape borders
+    {"border", "#bcbcbc"},
+    {"border-hover", "#4287f5"},
+
     // preset button
     {"preset-button", QColor(255, 255, 255, 90)},
     {"preset-button-hover", QColor(0, 0, 0, 15)},
@@ -85,6 +95,15 @@ QMap<QString, QColor> ThemeManager::lightColors = {
     {"notification-warning-highlight", "#f0c060"},
     {"notification-error-highlight", "#e57a77"},
 };
+
+ThemeManager::ThemeManager(const char *ssName, Theme initTheme, QObject *parent) : m_theme(initTheme), QObject(parent) {
+  QFile ss(ssName);
+  if (!ss.open(QIODevice::ReadOnly)) {
+    panic("Could not open resource file: {}", ssName);
+  }
+  m_styleSheet = ss.readAll();
+  applyTheme();
+}
 
 void ThemeManager::applyTheme() const {
   QPalette pal;
@@ -110,13 +129,44 @@ void ThemeManager::applyTheme() const {
   pal.setColor(QPalette::Disabled, QPalette::Button,     color("disabled-button"));
 
   qApp->setPalette(pal);
+  qApp->setStyleSheet(styleSheet());
 }
 
-QIcon ThemeManager::icon(const QString &path) {
+QString ThemeManager::styleSheet() const {
+  const QString border       = color("border").name();
+  const QString borderHover  = color("border-hover").name();
+  const QString accent       = color("preset-button-accent").name();
+  const QString buttonBg     = color("button").name();
+  const QString buttonText   = color("button-text").name();
+  const QString base         = color("base").name();
+  const QString altBase      = color("alternate-base").name();
+  const QString disabledBg   = color("disabled-button").name();
+  const QString disabledText = color("disabled-text").name();
+  const QString downArrow    = arrowIconPath("down");
+  const QString upArrow      = arrowIconPath("up");
+
+  // Breeze-like stylesheet
+  return m_styleSheet.arg(border, borderHover, buttonBg, buttonText)
+                     .arg(accent, altBase, disabledBg, disabledText)
+                     .arg(base, downArrow, upArrow);
+}
+
+QString ThemeManager::arrowIconPath(const QString& direction) const {
+  const QString filename = QDir::tempPath() + QString("/breeze_arrow_%1_%2.png")
+      .arg(direction, m_theme == Theme::Dark ? "dark" : "light");
+
+  const QIcon ic = icon(direction + ".svg");
+  const QPixmap pm = ic.pixmap(24, 24);
+  pm.save(filename);
+
+  return filename;
+}
+
+QIcon ThemeManager::icon(const QString &path) const {
   return icon(path, color("icon-tint"));
 }
 
-QIcon ThemeManager::icon(const QString &path, QColor tint) {
+QIcon ThemeManager::icon(const QString &path, QColor tint) const {
   QSvgRenderer renderer(":/icons/" + path);
   QPixmap pixmap(22, 22);
   pixmap.fill(Qt::transparent);

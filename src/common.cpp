@@ -4,7 +4,8 @@ extern ThemeManager *thememan;
 
 void makeDynamicIconButton(QPushButton *btn, const QString &symbol) {
   btn->setIcon(thememan->icon(symbol));
-  if (btn->text() == "") btn->setStyleSheet("QPushButton { background-color: none; border: none; }");
+  if (btn->text() == "") btn->setStyleSheet(R"(QPushButton { background-color: none; border: none; }
+                                             QPushButton:hover { border: 1px solid #4287f5; } )");
   QObject::connect(thememan, &ThemeManager::themeChanged, btn, [btn, symbol](){
     btn->setIcon(thememan->icon(symbol));
   });

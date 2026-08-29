@@ -2,6 +2,8 @@
 #include <QStandardPaths>
 #include <QDateTime>
 #include <QObject>
+#include <QFontDatabase>
+#include <QFont>
 
 #include "mainwindow.h"
 #include "logger.hpp"
@@ -74,14 +76,18 @@ int main(int argc, char *argv[]) {
 
   // Theme manager initialization
   Theme initTheme = settingsman->get<theme>();
-  thememan = &ThemeManager::instance(initTheme);
+  thememan = &ThemeManager::instance(":/styles/breeze.qss", initTheme);
   QObject::connect(thememan, &ThemeManager::themeChanged, &app,
                    [&app](Theme) { thememan->applyTheme(); });
   lg->info("Theme manager initialized with {} theme", initTheme);
 
-#ifdef _WIN32
   app.setStyle("fusion");
-#endif
+  int fontId = QFontDatabase::addApplicationFont(":/fonts/Ubuntu.ttf");
+  if (fontId != -1) {
+    QString fontFamily = QFontDatabase::applicationFontFamilies(fontId).at(0);
+    QFont font(fontFamily, 11);
+    app.setFont(font);
+  }
 
   // Language manager initialization
   Language initLang;

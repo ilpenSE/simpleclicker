@@ -32,6 +32,10 @@
     <translation>Preset %1 has been saved successfully!</translation>
   </message>
   <message>
+    <source>Set active preset to %1</source>
+    <translation>Set active preset to %1</translation>
+  </message>
+  <message>
     <source>Renamed preset '%1' to '%2'</source>
     <translation>Renamed preset '%1' to '%2'</translation>
   </message>
@@ -134,12 +138,12 @@
 
   <!-- Control Panel -->
   <message>
-    <source>Start (%1)</source>
-    <translation>Start (%1)</translation>
+    <source>Start</source>
+    <translation>Start</translation>
   </message>
   <message>
-    <source>Stop (%1)</source>
-    <translation>Stop (%1)</translation>
+    <source>Stop</source>
+    <translation>Stop</translation>
   </message>
   <message>
     <source>Settings</source>
@@ -196,8 +200,8 @@
 <context>
   <name>PresetItemWidget</name>
   <message>
-    <source>Save (%1)</source>
-    <translation>Save (%1)</translation>
+    <source>Save</source>
+    <translation>Save</translation>
   </message>
   <message>
     <source>Rename</source>
@@ -208,8 +212,8 @@
     <translation>Delete</translation>
   </message>
   <message>
-    <source>Cancel (%1)</source>
-    <translation>Cancel (%1)</translation>
+    <source>Cancel</source>
+    <translation>Cancel</translation>
   </message>
 
 </context>

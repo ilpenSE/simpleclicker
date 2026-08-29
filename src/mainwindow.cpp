@@ -133,6 +133,7 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
   // Set up location picker
   connect(ui->pickLocationButton, &QPushButton::clicked, this, &MainWindow::showLocationPicker);
 
+  ui->stopButton->setEnabled(false);
   uiConstructed = true;
 }
 
@@ -153,6 +154,7 @@ void MainWindow::showLocationPicker() {
 }
 
 void MainWindow::startClicking() {
+  savePreset(currentPresetWidget);
   blockPresetConfigUi();
   ui->presetsList->setEnabled(false);
   ui->addPresetBtn->setEnabled(false);
@@ -250,7 +252,7 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
 
   // Abort changes, cancel requested
   connect(itemWidget, &PresetItemWidget::cancelRequested, this, [this, itemWidget]() {
-    if (!itemWidget->isEnabled()) return;
+    if (!itemWidget->isEnabled() || !itemWidget->isUnsaved()) return;
     if (currentPresetWidget) applyPreset(currentPresetWidget->config);
     itemWidget->markSaved();
     m_notificationBar->info(tr("Changes aborted."));
@@ -259,22 +261,7 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
   // Save preset
   connect(itemWidget, &PresetItemWidget::saveRequested, this,
           [this, itemWidget]() {
-    if (!itemWidget->isEnabled()) return;
-    auto pname = itemWidget->presetName();
-    lg->info("Saving preset: '{}'", pname);
-     PresetConfig newConfig = {
-      .location = Location{ui->xEdit->value(), ui->yEdit->value()},
-      .interval = getIntervalMs(),
-      .repeat = ui->repeatEdit->value(),
-      .mouseButton = getMouseButton(),
-      .repeatUntilStopped = ui->repeatUntilStoppedRadio->isChecked(),
-      .currentLocation = ui->currentLocationRadio->isChecked(),
-    };
-    presetsman->presets[pname] = newConfig;
-    itemWidget->config = newConfig;
-    itemWidget->markSaved();
-    clickengine->setPreset(newConfig);
-    m_notificationBar->success(QString(tr("Preset %1 has been saved successfully!")).arg(pname));
+    savePreset(itemWidget);
   });
 
   // Double clicked, set current preset to this
@@ -288,6 +275,26 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
   return item;
 }
 
+void MainWindow::savePreset(PresetItemWidget *itemWidget) {
+  if (!itemWidget) return;
+  if (!itemWidget->isEnabled() || !itemWidget->isUnsaved()) return;
+  auto pname = itemWidget->presetName();
+  lg->info("Saving preset: '{}'", pname);
+  PresetConfig newConfig = {
+    .location = Location{ui->xEdit->value(), ui->yEdit->value()},
+    .interval = getIntervalMs(),
+    .repeat = ui->repeatEdit->value(),
+    .mouseButton = getMouseButton(),
+    .repeatUntilStopped = ui->repeatUntilStoppedRadio->isChecked(),
+    .currentLocation = ui->currentLocationRadio->isChecked(),
+  };
+  presetsman->presets[pname] = newConfig;
+  itemWidget->config = newConfig;
+  itemWidget->markSaved();
+  clickengine->setPreset(newConfig);
+  m_notificationBar->success(QString(tr("Preset %1 has been saved successfully!")).arg(pname));
+}
+
 void MainWindow::_changePresetConfigUi(bool is_locked) {
   for (auto it : {ui->clickOptionsBox, ui->clickIntervalBox, ui->repeatBox, ui->positionBox}) {
     it->setEnabled(!is_locked);
@@ -298,8 +305,8 @@ void MainWindow::_changePresetConfigUi(bool is_locked) {
 
 void MainWindow::applySettings() {
   auto kbd = settingsman->get<keybind>().toString();
-  ui->startButton->setText(QString(tr("Start (%1)")).arg(kbd));
-  ui->stopButton->setText(QString(tr("Stop (%1)")).arg(kbd));
+  ui->startButton->setText(QString(tr("Start") + " (%1)").arg(kbd));
+  ui->stopButton->setText(QString(tr("Stop") + " (%1)").arg(kbd));
 }
 
 void MainWindow::applyPreset(const PresetConfig& config) {
