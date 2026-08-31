@@ -14,6 +14,7 @@
 #include "hotkey.hpp"
 #include "click.hpp"
 #include "x11.hpp"
+#include "update.hpp"
 
 Logger *lg;
 PresetManager *presetsman;
@@ -22,6 +23,7 @@ ThemeManager *thememan;
 LanguageManager *langman;
 HotkeyManager *hotkeyman;
 ClickEngine *clickengine;
+UpdateManager *updateman;
 X11 *x11inst;
 
 int main(int argc, char *argv[]) {
@@ -64,6 +66,9 @@ int main(int argc, char *argv[]) {
   lg = &Logger::instance(logs_dir);
   lg->info("Logger initialized");
 
+  updateman = &UpdateManager::instance();
+  lg->info("Update manager initialized");
+
   // Settings manager initialization
   settingsman = &SettingsManager::instance(appdata_dir.filePath("settings.json"));
   if (!settingsman->load()) return 1;
@@ -85,7 +90,7 @@ int main(int argc, char *argv[]) {
   int fontId = QFontDatabase::addApplicationFont(":/fonts/Ubuntu.ttf");
   if (fontId != -1) {
     QString fontFamily = QFontDatabase::applicationFontFamilies(fontId).at(0);
-    QFont font(fontFamily, 11);
+    QFont font(fontFamily, 10);
     app.setFont(font);
   }
 

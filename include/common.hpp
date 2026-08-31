@@ -183,18 +183,27 @@ constexpr inline Location to_location(QPoint point) {
   return {point.x(), point.y()};
 }
 
+enum class VersionChannel : uint8_t {
+  Release, Beta, ReleaseCandidate
+};
+
 struct Version {
   uint8_t major = 0, minor = 0, patch = 0;
-  bool is_beta = false;
+  VersionChannel channel = VersionChannel::Release;
 
   QString toQString() const {
-    if (is_beta) return QString("%1.%2.%3-beta").arg(major).arg(minor).arg(patch);
-    return QString("%1.%2.%3").arg(major).arg(minor).arg(patch);
+    return QString("%1.%2.%3%4")
+        .arg(major)
+        .arg(minor)
+        .arg(patch)
+        .arg(channel == VersionChannel::Beta ? "-beta" : channel == VersionChannel::ReleaseCandidate ? "-rc" : "");
   }
 
   std::string toString() const {
-    if (is_beta) return std::format("{}.{}.{}-beta", major, minor, patch);
-    return std::format("{}.{}.{}", major, minor, patch);
+    return std::format("{}.{}.{}{}", major, minor, patch,
+                       channel == VersionChannel::Beta               ? "-beta"
+                       : channel == VersionChannel::ReleaseCandidate ? "-rc"
+                                                                 : "");
   }
 
   static Version from(QStringView sv);
@@ -202,9 +211,13 @@ struct Version {
   static constexpr Version from(std::string_view sv) {
     bool is_beta = sv.ends_with("-beta");
     if (is_beta) sv.remove_suffix(5);
+    bool is_rc = sv.ends_with("-rc");
+    if (is_rc) sv.remove_suffix(3);
 
     Version res;
-    res.is_beta = is_beta;
+    res.channel = is_beta ? VersionChannel::Beta
+                : is_rc ? VersionChannel::ReleaseCandidate
+                        : VersionChannel::Release;
 
     for (int i = 0; i < 3; ++i) {
       size_t dot = sv.find('.');
@@ -224,7 +237,7 @@ struct Version {
   }
 };
 
-constexpr Version APP_VERSION = Version::from("1.1.0-beta");
+constexpr Version APP_VERSION = Version::from("1.0.0-beta");
 
 template <typename T>
 T fromJsonValue(const QJsonValue& jv, const T& def = T{}) {

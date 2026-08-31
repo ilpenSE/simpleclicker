@@ -14,9 +14,13 @@ void makeDynamicIconButton(QPushButton *btn, const QString &symbol) {
 Version Version::from(QStringView sv) {
   bool is_beta = sv.endsWith(u"-beta");
   if (is_beta) sv.chop(5);
+  bool is_rc = sv.endsWith(u"-rc");
+  if (is_rc) sv.chop(2);
 
   Version res;
-  res.is_beta = is_beta;
+  res.channel = is_beta ? VersionChannel::Beta
+              : is_rc ? VersionChannel::ReleaseCandidate
+                : VersionChannel::Release;
 
   QStringView rest = sv;
   for (int i = 0; i < 3; ++i) {

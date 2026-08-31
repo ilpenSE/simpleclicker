@@ -8,7 +8,7 @@ mkdir -p "$INSTALL_PATH"
 
 cp -v linuxinstall.sh $INSTALL_PATH/install.sh
 cp -v linuxuninstall.sh $INSTALL_PATH/uninstall.sh
-cp -v ../build/SimpleClicker $INSTALL_PATH
+cp -v ../build-rel/SimpleClicker $INSTALL_PATH
 cp -v ../assets/icons/app.png $INSTALL_PATH/simpleclicker.png
 cp -v ../assets/SimpleClicker.desktop $INSTALL_PATH
 

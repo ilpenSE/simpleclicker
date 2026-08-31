@@ -91,7 +91,7 @@ protected:
 private:
   void commitRename();
   void abortRename();
-  void updateButtonVisibility();
+  void updateButtons();
   void updateLabelStyle();
   void updateHoverIcons(bool hovering);
   void retranslate();

@@ -8,7 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # build/compile_commands.json
 
 project(SimpleClicker LANGUAGES CXX)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets Svg)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets Svg Network)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -28,6 +28,7 @@ qt_add_executable(SimpleClicker
   src/presets.cpp
   src/settings.cpp
   src/hotkey.cpp                include/hotkey.hpp
+  src/update.cpp                include/update.hpp
   src/click.cpp                 include/click.hpp
   src/language.cpp              include/language.hpp
   src/theme.cpp                 include/theme.hpp
@@ -74,6 +75,7 @@ target_link_libraries(SimpleClicker PRIVATE
   Qt::Core
   Qt::Widgets
   Qt::Svg
+  Qt::Network
 )
 
 install(TARGETS SimpleClicker

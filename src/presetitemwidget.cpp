@@ -113,17 +113,16 @@ void PresetItemWidget::setPresetName(const QString& newName) {
 void PresetItemWidget::markSaved() {
   m_state &= ~PresetItemState::Unsaved;
   updateLabelStyle();
-  updateButtonVisibility();
+  updateButtons();
 }
 
 void PresetItemWidget::markUnsaved() {
   m_state |= PresetItemState::Unsaved;
   updateLabelStyle();
-  updateButtonVisibility();
+  updateButtons();
 }
 
 void PresetItemWidget::onDeleteClicked() {
-
   emit deleteRequested();
 }
 
@@ -135,11 +134,8 @@ void PresetItemWidget::onEditClicked() {
   m_nameEdit->setFocus();
   m_nameEdit->selectAll();
 
-  m_saveButton->setToolTip(QString(tr("Save (%1)")).arg(COMMIT_RENAME_KEYBIND_STR));
-  m_cancelButton->setToolTip(QString(tr("Cancel (%1)")).arg(ABORT_RENAME_KEYBIND_STR));
-
   m_state |= PresetItemState::Renaming;
-  updateButtonVisibility();
+  updateButtons();
 }
 
 void PresetItemWidget::onSaveClicked() {
@@ -165,8 +161,6 @@ void PresetItemWidget::commitRename() {
   const QString newName = m_nameEdit->text().trimmed();
   m_nameEdit->hide();
   m_nameLabel->show();
-  m_saveButton->setToolTip(QString(tr("Save (%1)")).arg(SAVE_CHANGES_KEYBIND.toString()));
-  m_cancelButton->setToolTip(QString(tr("Cancel (%1)")).arg(ABORT_CHANGES_KEYBIND.toString()));
 
   m_state &= ~PresetItemState::Renaming;
 
@@ -174,14 +168,14 @@ void PresetItemWidget::commitRename() {
     emit renameRequested(newName);
     updateLabelStyle();
   }
-  updateButtonVisibility();
+  updateButtons();
 }
 
 void PresetItemWidget::abortRename() {
   m_nameEdit->hide();
   m_nameLabel->show();
   m_state &= ~PresetItemState::Renaming;
-  updateButtonVisibility();
+  updateButtons();
 }
 
 void PresetItemWidget::enterEvent(QEnterEvent *event) {
@@ -217,7 +211,7 @@ void PresetItemWidget::mouseDoubleClickEvent(QMouseEvent *event) {
   QWidget::mouseDoubleClickEvent(event);
 }
 
-void PresetItemWidget::updateButtonVisibility() {
+void PresetItemWidget::updateButtons() {
   const bool renaming = is_set(m_state, PresetItemState::Renaming);
   const bool unsaved  = is_set(m_state, PresetItemState::Unsaved);
 
@@ -225,6 +219,14 @@ void PresetItemWidget::updateButtonVisibility() {
   m_cancelButton->setVisible(renaming || unsaved);
   m_editButton->setVisible(!renaming && !unsaved);
   m_deleteButton->setVisible(!renaming && !unsaved);
+
+  if (renaming) {
+    m_saveButton->setToolTip(QString(tr("Rename") + " (%1)").arg(COMMIT_RENAME_KEYBIND_STR));
+    m_cancelButton->setToolTip(QString(tr("Cancel") + " (%1)").arg(ABORT_RENAME_KEYBIND_STR));
+  } else {
+    m_saveButton->setToolTip(QString(tr("Save") + " (%1)").arg(SAVE_CHANGES_KEYBIND.toString()));
+    m_cancelButton->setToolTip(QString(tr("Cancel") + " (%1)").arg(ABORT_CHANGES_KEYBIND.toString()));
+  }
 }
 
 void PresetItemWidget::setActive(bool isActive) {

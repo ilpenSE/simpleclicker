@@ -14,6 +14,7 @@
 #include "hotkey.hpp"
 #include "click.hpp"
 #include "locationpickeroverlay.hpp"
+#include "update.hpp"
 
 extern Logger *lg;
 extern PresetManager *presetsman;
@@ -22,6 +23,7 @@ extern ThemeManager *thememan;
 extern LanguageManager *langman;
 extern HotkeyManager *hotkeyman;
 extern ClickEngine *clickengine;
+extern UpdateManager *updateman;
 
 static PresetItemWidget *currentPresetWidget = nullptr;
 static bool presetChangeEventLock = false;
@@ -35,6 +37,12 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
   qobject_cast<QVBoxLayout *>(centralWidget()->layout())->insertWidget(0, m_notificationBar);
 
   lg->info("MainWindow initialized");
+
+  updateman->checkForUpdates();
+  connect(updateman, &UpdateManager::updateAvailable, this, [this](auto new_version){
+    lg->info("Update available: {} -> {}", APP_VERSION, new_version);
+    m_notificationBar->info(tr("Update available: %1").arg(new_version.toQString()), 10000);
+  });
 
   // Set up theme manager
   connect(thememan, &ThemeManager::themeChanged, this, &MainWindow::applyTheme);
