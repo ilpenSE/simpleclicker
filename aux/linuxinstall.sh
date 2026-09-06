@@ -36,7 +36,29 @@ else
   exit 1
 fi
 
-DESKTOP_DIR="$(xdg-user-dir DESKTOP 2>/dev/null || echo "$HOME/Desktop")"
+# pkexec gonna set environment for root
+# we have to find real home folder and user
+if [[ -n "$PKEXEC_UID" ]]; then
+  REAL_USER="$(getent passwd "$PKEXEC_UID" | cut -d: -f1)"
+elif [[ -n "$SUDO_USER" ]]; then
+  REAL_USER="$SUDO_USER"
+else
+  REAL_USER="$(logname 2>/dev/null || echo "$USER")"
+fi
+
+# Find home directory
+REAL_HOME="$(getent passwd "$REAL_USER" | cut -d: -f6)"
+if [[ -z "$REAL_USER" || -z "$REAL_HOME" ]]; then
+  error "Gerçek kullanıcı tespit edilemedi (PKEXEC_UID/SUDO_USER boş)"
+  exit 1
+fi
+info "Installing for user: %s (home: %s)" "$REAL_USER" "$REAL_HOME"
+
+# Find desktop directory
+DESKTOP_DIR="$(runuser -u "$REAL_USER" -- xdg-user-dir DESKTOP 2>/dev/null || echo "$REAL_HOME/Desktop")"
+info "Desktop directory: %s" "$DESKTOP_DIR"
+
+# Installation paths
 LIB_DIR="/usr/local/lib/simpleclicker"
 LOCAL_BIN_DIR="/usr/local/bin"
 APPLICATIONS_DIR="/usr/share/applications"
@@ -68,7 +90,11 @@ sudo cp -v $ROOT/SimpleClicker.desktop "$APPLICATIONS_DIR"
 sudo cp -v $ROOT/simpleclicker.png "$ICONS256_DIR"
 sudo chmod +x $APPLICATIONS_DIR/SimpleClicker.desktop
 sudo chmod +x $LOCAL_BIN_DIR/SimpleClicker
-ln -sf "/usr/share/applications/SimpleClicker.desktop" "$(xdg-user-dir DESKTOP)/SimpleClicker.desktop"
+
+# Symlink desktop entry in desktop folder
+mkdir -p "$DESKTOP_DIR"
+ln -sf "/usr/share/applications/SimpleClicker.desktop" "$DESKTOP_DIR/SimpleClicker.desktop"
+chown -h "$REAL_USER" "$DESKTOP_DIR/SimpleClicker.desktop" 2>/dev/null || true
 
 # Update caches
 if command -v update-desktop-database &> /dev/null; then

@@ -13,12 +13,14 @@ public:
 
   void checkForUpdates();
   Version newVersion() const { return m_newVersion; }
+  void downloadAndInstall(Version version);
 
 signals:
   void updateAvailable(Version new_version);
+  void downloadProgress(qint64 received, qint64 total);
+  void downloadFailed(const QString &error);
 
 private:
-  void fetchEverything();
   explicit UpdateManager(QObject *parent);
 
   Version m_newVersion{};

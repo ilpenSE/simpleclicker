@@ -7,6 +7,7 @@
 #include "language.hpp"
 #include "presetitemwidget.hpp"
 #include <QShortcut>
+#include <QProgressDialog>
 #include <QDesktopServices>
 #include <QUrl>
 #include "helpdialog.hpp"
@@ -42,6 +43,7 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
   connect(updateman, &UpdateManager::updateAvailable, this, [this](auto new_version){
     lg->info("Update available: {} -> {}", APP_VERSION, new_version);
     m_notificationBar->info(tr("Update available: %1").arg(new_version.toQString()), 10000);
+    autoUpdate(new_version);
   });
 
   // Set up theme manager
@@ -159,6 +161,23 @@ void MainWindow::showLocationPicker() {
     lg->info("Location picking cancelled");
   });
   picker->show();
+}
+
+void MainWindow::autoUpdate(Version new_version) {
+  updateman->downloadAndInstall(new_version);
+  auto *dialog = new QProgressDialog(tr("Update is being downloaded, new program will be opened"), tr("Cancel"), 0, 100, this);
+
+  connect(updateman, &UpdateManager::downloadFailed, this, [](const auto& error){
+    lg->error("Download failed: '{}'", error);
+  });
+
+  connect(updateman, &UpdateManager::downloadProgress, dialog, [dialog](qint64 received, qint64 total){
+    if (total > 0) {
+      int prog = received * 100 / total;
+      dialog->setValue(prog);
+      lg->info("Progress: {}", prog);
+    }
+  });
 }
 
 void MainWindow::startClicking() {

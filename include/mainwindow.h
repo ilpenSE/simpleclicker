@@ -28,6 +28,7 @@ private:
   void showLocationPicker();
   MouseButton getMouseButton() const;
   int getIntervalMs() const;
+  void autoUpdate(Version new_version);
 
   void savePreset(PresetItemWidget *itemWidget);
 
