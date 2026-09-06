@@ -49,7 +49,7 @@ fi
 # Find home directory
 REAL_HOME="$(getent passwd "$REAL_USER" | cut -d: -f6)"
 if [[ -z "$REAL_USER" || -z "$REAL_HOME" ]]; then
-  error "Gerçek kullanıcı tespit edilemedi (PKEXEC_UID/SUDO_USER boş)"
+  error "Could not detect real user (empty PKEXEC_UID/SUDO_USER)"
   exit 1
 fi
 info "Installing for user: %s (home: %s)" "$REAL_USER" "$REAL_HOME"

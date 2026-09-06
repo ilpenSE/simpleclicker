@@ -154,6 +154,31 @@
     <translation>Help</translation>
   </message>
 
+  <!-- Auto Updater -->
+  <message>
+    <source>New update available: %1</source>
+    <translation>New update available: %1</translation>
+  </message>
+  <message>
+    <source>Upgrade Now</source>
+    <translation>Upgrade Now</translation>
+  </message>
+  <message>
+    <source>Update is being downloaded, new program will be opened by itself</source>
+    <translation>Update is being downloaded, new program will be opened by itself</translation>
+  </message>
+  <message>
+    <source>Update failed!</source>
+    <translation>Update failed!</translation>
+  </message>
+  <message>
+    <source>Error</source>
+    <translation>Error</translation>
+  </message>
+  <message>
+    <source>Cancel</source>
+    <translation>Cancel</translation>
+  </message>
 </context>
 
 <context>

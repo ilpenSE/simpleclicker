@@ -154,6 +154,31 @@
     <translation>Yardım</translation>
   </message>
 
+  <!-- Auto Updater -->
+  <message>
+    <source>New update available: %1</source>
+    <translation>Yeni güncelleme mevcut: %1</translation>
+  </message>
+  <message>
+    <source>Upgrade Now</source>
+    <translation>Şimdi Yükselt</translation>
+  </message>
+  <message>
+    <source>Update is being downloaded, new program will be opened by itself</source>
+    <translation>Güncelleme indiriliyor, yeni uygulama kendiliğinden açılacak</translation>
+  </message>
+  <message>
+    <source>Update failed!</source>
+    <translation>Güncelleme başarısız oldu!</translation>
+  </message>
+  <message>
+    <source>Error</source>
+    <translation>Hata</translation>
+  </message>
+  <message>
+    <source>Cancel</source>
+    <translation>İptal Et</translation>
+  </message>
 </context>
 
 <context>

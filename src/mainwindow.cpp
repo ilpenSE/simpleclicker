@@ -42,8 +42,15 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
   updateman->checkForUpdates();
   connect(updateman, &UpdateManager::updateAvailable, this, [this](auto new_version){
     lg->info("Update available: {} -> {}", APP_VERSION, new_version);
-    m_notificationBar->info(tr("Update available: %1").arg(new_version.toQString()), 10000);
-    autoUpdate(new_version);
+
+    auto updateBtn = new QPushButton(tr("Upgrade Now"));
+    updateBtn->setStyleSheet("padding: 4px 8px;");
+    connect(updateBtn, &QPushButton::clicked, this, [this, new_version]() {
+      autoUpdate(new_version);
+    });
+
+    m_notificationBar->addAction(updateBtn);
+    m_notificationBar->info(tr("New update available: %1").arg(new_version.toQString()), 60*60*1000);
   });
 
   // Set up theme manager
@@ -165,17 +172,17 @@ void MainWindow::showLocationPicker() {
 
 void MainWindow::autoUpdate(Version new_version) {
   updateman->downloadAndInstall(new_version);
-  auto *dialog = new QProgressDialog(tr("Update is being downloaded, new program will be opened"), tr("Cancel"), 0, 100, this);
+  auto *dialog = new QProgressDialog(tr("Update is being downloaded, new program will be opened by itself"), tr("Cancel"), 0, 100, this);
 
-  connect(updateman, &UpdateManager::downloadFailed, this, [](const auto& error){
+  connect(updateman, &UpdateManager::downloadFailed, this, [this](const auto& error){
     lg->error("Download failed: '{}'", error);
+    QMessageBox::warning(this, tr("Error"), tr("Update failed!"));
   });
 
   connect(updateman, &UpdateManager::downloadProgress, dialog, [dialog](qint64 received, qint64 total){
     if (total > 0) {
       int prog = received * 100 / total;
       dialog->setValue(prog);
-      lg->info("Progress: {}", prog);
     }
   });
 }
@@ -331,7 +338,7 @@ void MainWindow::_changePresetConfigUi(bool is_locked) {
 }
 
 void MainWindow::applySettings() {
-  auto kbd = settingsman->get<keybind>().toString();
+  auto kbd = settingsman->get<setting::keybind>().toString();
   ui->startButton->setText(QString(tr("Start") + " (%1)").arg(kbd));
   ui->stopButton->setText(QString(tr("Stop") + " (%1)").arg(kbd));
 }
@@ -388,8 +395,8 @@ void MainWindow::applyTheme(Theme newTheme) {
 
 MainWindow::~MainWindow()
 {
-  settingsman->set<currentPreset>(currentPresetWidget ? currentPresetWidget->presetName() : "");
-  settingsman->set<version>(APP_VERSION);
+  settingsman->set<setting::currentPreset>(currentPresetWidget ? currentPresetWidget->presetName() : "");
+  settingsman->set<setting::version>(APP_VERSION);
 
   settingsman->save();
   presetsman->save();

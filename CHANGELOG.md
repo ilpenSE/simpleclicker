@@ -1,6 +1,6 @@
 # 1.2.0-beta (In-Development)
 
-- Added update checker
+- Added update checker and auto updater
 - Decreased font size to 10pt
 - Added version string parser support for rc (release candidates)
 - Fixed save/cancel button tooltips for preset items

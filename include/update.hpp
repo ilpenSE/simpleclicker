@@ -21,6 +21,7 @@ signals:
   void downloadFailed(const QString &error);
 
 private:
+  void install(const QString &scriptPath);
   explicit UpdateManager(QObject *parent);
 
   Version m_newVersion{};

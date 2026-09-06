@@ -55,9 +55,9 @@ constexpr int LAYOUT_SPACING = 6;
 } // namespace
 
 NotificationBar::NotificationBar(QWidget *parent) : QWidget(parent) {
-  auto layout = new QHBoxLayout(this);
-  layout->setContentsMargins(LAYOUT_LEFT_MARGIN, LAYOUT_TOP_MARGIN, LAYOUT_RIGHT_MARGIN, LAYOUT_BOT_MARGIN);
-  layout->setSpacing(LAYOUT_SPACING);
+  m_layout = new QHBoxLayout(this);
+  m_layout->setContentsMargins(LAYOUT_LEFT_MARGIN, LAYOUT_TOP_MARGIN, LAYOUT_RIGHT_MARGIN, LAYOUT_BOT_MARGIN);
+  m_layout->setSpacing(LAYOUT_SPACING);
 
   m_label = new QLabel(this);
   m_label->setWordWrap(true);
@@ -68,8 +68,8 @@ NotificationBar::NotificationBar(QWidget *parent) : QWidget(parent) {
   m_closeBtn->setCursor(Qt::PointingHandCursor);
   m_closeBtn->setFixedSize(22, 22);
 
-  layout->addWidget(m_label, 1);
-  layout->addWidget(m_closeBtn);
+  m_layout->addWidget(m_label, 1);
+  m_layout->addWidget(m_closeBtn);
 
   connect(m_closeBtn, &QPushButton::clicked, this, &NotificationBar::dismiss);
 
@@ -82,6 +82,25 @@ NotificationBar::NotificationBar(QWidget *parent) : QWidget(parent) {
 
   setMaximumHeight(0);
   setMinimumHeight(0);
+}
+
+void NotificationBar::addAction(QWidget *w) {
+  if (m_actions_count >= sizeof(m_actions)/sizeof(*m_actions)) return;
+
+  w->setParent(this);
+  int closeBtnIndex = m_layout->indexOf(m_closeBtn);
+  m_layout->insertWidget(closeBtnIndex, w);
+
+  m_actions[m_actions_count++] = w;
+}
+
+void NotificationBar::clearActions() {
+  for (size_t i = 0; i < m_actions_count; i++) {
+    auto w = m_actions[i];
+    m_layout->removeWidget(w);
+    w->deleteLater();
+  }
+  m_actions_count = 0;
 }
 
 void NotificationBar::show(const QString &message, NotificationLevel level, int timeoutMs) {
@@ -119,6 +138,7 @@ void NotificationBar::dismiss() {
   m_heightAnim->setStartValue(maximumHeight());
   m_heightAnim->setEndValue(0);
   m_heightAnim->start();
+  if (m_showing) clearActions();
   emit dismissed();
 }
 

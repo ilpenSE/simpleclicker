@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QHBoxLayout>
 #include <QWidget>
 #include <QLabel>
 #include <QPushButton>
@@ -18,6 +19,9 @@ class NotificationBar : public QWidget {
 
 public:
   explicit NotificationBar(QWidget *parent = nullptr);
+
+  void addAction(QWidget *w);
+  void clearActions();
 
   void show(const QString &message, NotificationLevel level, int timeoutMs = -1);
   void dismiss();
@@ -56,6 +60,10 @@ private:
   void startFlash(const QColor &base, const QColor &highlight, int loops);
   void stopFlash();
 
+  QWidget *m_actions[16] = {};
+  size_t m_actions_count = 0;
+
+  QHBoxLayout *m_layout;
   QLabel *m_label;
   QPushButton *m_closeBtn;
   QPointer<QPropertyAnimation> m_flashAnim = nullptr;

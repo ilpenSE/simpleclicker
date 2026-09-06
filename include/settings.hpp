@@ -12,14 +12,19 @@
   X(firstRun, bool, true) \
   X(version, Version, APP_VERSION)
 
-template <typename T>
-struct is_settings_field : std::false_type {};
-
+namespace setting {
 #define X(Name, Type, DefaultValue)                                            \
   struct Name {                                                                \
     Type value = DefaultValue;                                                 \
-  };                                                                           \
-  template <> struct is_settings_field<Name> : std::true_type {};
+  };
+SETTINGS_FIELDS
+#undef X
+} // namespace setting
+
+template <typename T>
+struct is_settings_field : std::false_type {};
+
+#define X(Name, Type, DefaultValue) template <> struct is_settings_field<setting::Name> : std::true_type {};
 SETTINGS_FIELDS
 #undef X
 
@@ -40,7 +45,7 @@ public:
   template <SettingsField TFieldName>
   auto get() {
 #define X(Name, Type, DefaultValue) \
-    if constexpr (std::same_as<TFieldName, Name>) return fromJsonValue<Type>(settings.value(#Name), DefaultValue);
+    if constexpr (std::same_as<TFieldName, setting::Name>) return fromJsonValue<Type>(settings.value(#Name), DefaultValue);
 SETTINGS_FIELDS
 #undef X
   }
@@ -48,7 +53,7 @@ SETTINGS_FIELDS
   template <SettingsField TFieldName>
   void set(const decltype(TFieldName::value)& val) {
 #define X(Name, Type, DefaultValue) \
-    if constexpr (std::same_as<TFieldName, Name>) settings[#Name] = toJsonValue(val);
+    if constexpr (std::same_as<TFieldName, setting::Name>) settings[#Name] = toJsonValue(val);
 SETTINGS_FIELDS
 #undef X
   }

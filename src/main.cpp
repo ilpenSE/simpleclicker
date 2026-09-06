@@ -39,6 +39,11 @@ int main(int argc, char *argv[]) {
   }
 #endif
 
+  // Force SSL backend to SChannel
+#if _WIN32
+  qputenv("QT_SSL_BACKEND", "schannel");
+#endif
+
   QApplication app(argc, argv);
   QCoreApplication::setOrganizationName("");
   QCoreApplication::setApplicationName("SimpleClicker");
@@ -80,7 +85,7 @@ int main(int argc, char *argv[]) {
   lg->info("Preset manager initialized");
 
   // Theme manager initialization
-  Theme initTheme = settingsman->get<theme>();
+  Theme initTheme = settingsman->get<setting::theme>();
   thememan = &ThemeManager::instance(":/styles/breeze.qss", initTheme);
   QObject::connect(thememan, &ThemeManager::themeChanged, &app,
                    [&app](Theme) { thememan->applyTheme(); });
@@ -96,22 +101,22 @@ int main(int argc, char *argv[]) {
 
   // Language manager initialization
   Language initLang;
-  if (settingsman->get<firstRun>()) {
+  if (settingsman->get<setting::firstRun>()) {
     Language sysLang = to_language(QLocale::system().language());
     lg->info("Detected system language: '{}', setting it", sysLang);
-    settingsman->set<language>(sysLang);
-    settingsman->set<firstRun>(false);
+    settingsman->set<setting::language>(sysLang);
+    settingsman->set<setting::firstRun>(false);
     initLang = sysLang;
-  } else initLang = settingsman->get<language>();
+  } else initLang = settingsman->get<setting::language>();
   langman = &LanguageManager::instance(initLang);
   lg->info("Language manager initialized with {} language", initLang);
 
   // Hotkey manager initialization
-  Hotkey hotkey = settingsman->get<keybind>();
+  Hotkey hotkey = settingsman->get<setting::keybind>();
   hotkeyman = &HotkeyManager::instance(hotkey);
   lg->info("Hotkey manager initialized");
 
-  auto current_preset = settingsman->get<currentPreset>();
+  auto current_preset = settingsman->get<setting::currentPreset>();
 
   // Click engine initialization
   clickengine = &ClickEngine::instance(presetsman->presets.value(current_preset));
