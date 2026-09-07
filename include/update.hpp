@@ -1,5 +1,7 @@
 #pragma once
 #include <QObject>
+#include <QFile>
+#include <QList>
 #include "common.hpp"
 #include <QNetworkAccessManager>
 
@@ -13,7 +15,9 @@ public:
 
   void checkForUpdates();
   Version newVersion() const { return m_newVersion; }
-  void downloadAndInstall(Version version);
+  bool downloadAndInstall(Version version);
+  bool checkAssetsHash(Version version);
+  void install();
 
 signals:
   void updateAvailable(Version new_version);
@@ -21,10 +25,13 @@ signals:
   void downloadFailed(const QString &error);
 
 private:
-  void install(const QString &scriptPath);
+  QString fetchReleaseHash(Version ver);
   explicit UpdateManager(QObject *parent);
+  ~UpdateManager();
 
-  Version m_newVersion{};
-  QNetworkAccessManager *m_netman;
   QList<Version> m_versions;
+  QString m_setupFilePath{};
+  QFile *m_setupFile;
+  QNetworkAccessManager *m_netman;
+  Version m_newVersion{};
 };

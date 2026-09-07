@@ -155,7 +155,7 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
 }
 
 void MainWindow::showLocationPicker() {
-  auto picker = new LocationPickerOverlay();
+  auto picker = new LocationPickerOverlay(this);
   connect(picker, &LocationPickerOverlay::locationPicked, this, [this](QPoint pos) {
     lg->info("Picked location: x: {}, y: {}", pos.x(), pos.y());
     ui->xEdit->setValue(pos.x());
@@ -171,6 +171,11 @@ void MainWindow::showLocationPicker() {
 }
 
 void MainWindow::autoUpdate(Version new_version) {
+  if (updateman->checkAssetsHash(new_version)) {
+    updateman->install();
+    return;
+  }
+
   updateman->downloadAndInstall(new_version);
   auto *dialog = new QProgressDialog(tr("Update is being downloaded, new program will be opened by itself"), tr("Cancel"), 0, 100, this);
 

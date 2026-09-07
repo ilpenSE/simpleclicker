@@ -1,4 +1,4 @@
-# 1.2.0-beta (In-Development)
+# 1.2.0-beta
 
 - Added update checker and auto updater
 - Decreased font size to 10pt
