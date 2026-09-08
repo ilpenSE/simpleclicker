@@ -83,7 +83,7 @@ info "Qt plugin path: %s" "$QT_PLUGIN_DIR"
 # And it's good idea to keep old one if new version of app is broken or something
 sudo mkdir -p "$LIB_DIR"
 if [ -f "$LIB_DIR/SimpleClicker-bin" ]; then
-  mv -f "$LIB_DIR/SimpleClicker-bin" "$LIB_DIR/SimpleClicker-bin.old"
+  sudo mv -f "$LIB_DIR/SimpleClicker-bin" "$LIB_DIR/SimpleClicker-bin.old"
 fi
 sudo cp -v $ROOT/SimpleClicker "$LIB_DIR/SimpleClicker-bin"
 sudo chmod +x "$LIB_DIR/SimpleClicker-bin"
