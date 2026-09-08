@@ -245,7 +245,7 @@ void UpdateManager::checkForUpdates() {
       auto name = jv.toString();
       auto ver = Version::from(name);
 
-      if (ver.channel == APP_VERSION.channel) {
+      if (ver.channel >= APP_VERSION.channel) {
         if (ver.major > APP_VERSION.major) update = true;
         if (ver.minor > APP_VERSION.minor) update = true;
         if (ver.patch > APP_VERSION.patch) update = true;

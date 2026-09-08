@@ -1,3 +1,7 @@
+# 1.2.1-beta
+
+- Fixed update checker logic it now compares channels
+
 # 1.2.0-beta
 
 - Added update checker and auto updater

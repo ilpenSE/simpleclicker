@@ -184,7 +184,7 @@ constexpr inline Location to_location(QPoint point) {
 }
 
 enum class VersionChannel : uint8_t {
-  Release, Beta, ReleaseCandidate
+  Beta = 0, ReleaseCandidate, Release,
 };
 
 struct Version {
@@ -237,7 +237,7 @@ struct Version {
   }
 };
 
-constexpr Version APP_VERSION = Version::from("1.2.0-beta");
+constexpr Version APP_VERSION = Version::from("1.2.1-beta");
 
 template <typename T>
 T fromJsonValue(const QJsonValue& jv, const T& def = T{}) {
