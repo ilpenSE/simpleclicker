@@ -1,9 +1,15 @@
 #!/bin/bash
 set -e
 
-clr_rst="\e[0m"
-clr_green="\e[0;32m"
-clr_red="\e[0;31m"
+clr_rst=""
+clr_green=""
+clr_red=""
+
+if [ -t 1 ]; then
+  clr_rst="\e[0m"
+  clr_green="\e[0;32m"
+  clr_red="\e[0;31m"
+fi
 
 function info() {
   local fmt="$1"
@@ -73,7 +79,12 @@ fi
 info "Qt plugin path: %s" "$QT_PLUGIN_DIR"
 
 # Actual binary
+# Rename old one because if it's exists, "cp" will fail with ETXTBSY (Text file busy) error if it's running.
+# And it's good idea to keep old one if new version of app is broken or something
 sudo mkdir -p "$LIB_DIR"
+if [ -f "$LIB_DIR/SimpleClicker-bin" ]; then
+  mv -f "$LIB_DIR/SimpleClicker-bin" "$LIB_DIR/SimpleClicker-bin.old"
+fi
 sudo cp -v $ROOT/SimpleClicker "$LIB_DIR/SimpleClicker-bin"
 sudo chmod +x "$LIB_DIR/SimpleClicker-bin"
 

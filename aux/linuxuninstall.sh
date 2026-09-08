@@ -2,9 +2,15 @@
 
 set -e
 
-clr_rst="\e[0m"
-clr_green="\e[0;32m"
-clr_red="\e[0;31m"
+clr_rst=""
+clr_green=""
+clr_red=""
+
+if [ -t 1 ]; then
+  clr_rst="\e[0m"
+  clr_green="\e[0;32m"
+  clr_red="\e[0;31m"
+fi
 
 function info() {
   local fmt="$1"
