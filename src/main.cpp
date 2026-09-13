@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QFontDatabase>
 #include <QFont>
+#include <QLockFile>
 
 #include "mainwindow.h"
 #include "logger.hpp"
@@ -25,6 +26,29 @@ HotkeyManager *hotkeyman;
 ClickEngine *clickengine;
 UpdateManager *updateman;
 X11 *x11inst;
+QLockFile *g_lockFile;
+
+// Check if any instance of program is running
+bool is_instance_running() {
+  QString lockPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/simpleclicker.lock";
+  g_lockFile = new QLockFile(lockPath);
+
+  if (!g_lockFile->tryLock(100)) {
+#ifdef __linux__
+    qint64 pid;
+    QString hostname, appname;
+    if (g_lockFile->getLockInfo(&pid, &hostname, &appname)) {
+      if (!QFile::exists(QString("/proc/%1").arg(pid))) {
+        g_lockFile->removeStaleLockFile();
+        if (!g_lockFile->tryLock(100)) return true;
+      } else return true;
+    } else return true;
+#else // Windows already locks file if process is alive
+    return true;
+#endif
+  }
+  return false;
+}
 
 int main(int argc, char *argv[]) {
 #ifdef __linux__
@@ -40,13 +64,17 @@ int main(int argc, char *argv[]) {
 #endif
 
   // Force SSL backend to SChannel
-#if _WIN32
+#ifdef _WIN32
   qputenv("QT_SSL_BACKEND", "schannel");
 #endif
 
   QApplication app(argc, argv);
   QCoreApplication::setOrganizationName("");
   QCoreApplication::setApplicationName("SimpleClicker");
+
+  if (is_instance_running()) {
+    panic("An instance of program is already running!");
+  }
 
 #ifdef __linux__
   x11inst = &X11::instance();
@@ -71,6 +99,7 @@ int main(int argc, char *argv[]) {
   lg = &Logger::instance(logs_dir);
   lg->info("Logger initialized");
 
+  // Update manager initialization
   updateman = &UpdateManager::instance();
   lg->info("Update manager initialized");
 

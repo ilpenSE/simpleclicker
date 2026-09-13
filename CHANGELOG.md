@@ -4,6 +4,7 @@
 - Constrainted hotkey edit and added more tight checks for keybind
 - Hotkey is no more triggered on help and settings dialog are opened
 - Added detailed help manual
+- Added lock file to prevent multiple instances of application and get rid of Linux's shitty ass driver sleep bugs
 
 # 1.2.1-beta
 

@@ -340,7 +340,7 @@ template <typename... Args>
 [[noreturn]]
 inline void panic(std::format_string<Args...> fmt, Args &&...args) {
   std::string s = std::format(fmt, std::forward<Args>(args)...);
-  fprintf(stderr, "\e[0;31mPROGRAM PANICKED!\e[0m\n");
+  fprintf(stderr, "\e[0;31mSIMPLE CLICKER PANICKED!\e[0m\n");
   fprintf(stderr, "\e[0;31mFATAL ERROR:\e[0m %.*s\n", (int)s.size(), s.c_str());
 
   QString title;
