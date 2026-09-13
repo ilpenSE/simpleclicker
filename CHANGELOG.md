@@ -3,6 +3,7 @@
 - Fixed start/stop enabled bug when changing preset
 - Constrainted hotkey edit and added more tight checks for keybind
 - Hotkey is no more triggered on help and settings dialog are opened
+- Added detailed help manual
 
 # 1.2.1-beta
 
