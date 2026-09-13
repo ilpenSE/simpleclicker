@@ -113,8 +113,16 @@ int main(int argc, char *argv[]) {
 
   // Hotkey manager initialization
   Hotkey hotkey = settingsman->get<setting::keybind>();
-  hotkeyman = &HotkeyManager::instance(hotkey);
+  hotkeyman = &HotkeyManager::instance();
   lg->info("Hotkey manager initialized");
+  if (!hotkeyman->set(hotkey)) {
+    auto default_kbd = settingsman->get_default<setting::keybind>();
+    lg->warning("Keybind in settings invalid, fallback to default one: {}", default_kbd);
+    if (!hotkeyman->set(default_kbd)) {
+      panic("Cannot set keybind to default one! Which is {}", default_kbd);
+    }
+    settingsman->set<setting::keybind>(default_kbd);
+  }
 
   auto current_preset = settingsman->get<setting::currentPreset>();
 

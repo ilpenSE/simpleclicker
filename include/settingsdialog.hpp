@@ -23,6 +23,7 @@ private:
   Language m_currentLang;
   Theme m_currentTheme;
   Hotkey m_currentHotkey;
+  Hotkey m_selectedHotkey;
 
   QComboBox *m_languageCombo;
   QComboBox *m_themeCombo;

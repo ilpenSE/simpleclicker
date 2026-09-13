@@ -43,6 +43,14 @@ public:
   void save();
 
   template <SettingsField TFieldName>
+  auto get_default() {
+#define X(Name, Type, DefaultValue) \
+    if constexpr (std::same_as<TFieldName, setting::Name>) return DefaultValue;
+SETTINGS_FIELDS
+#undef X
+  }
+
+  template <SettingsField TFieldName>
   auto get() {
 #define X(Name, Type, DefaultValue) \
     if constexpr (std::same_as<TFieldName, setting::Name>) return fromJsonValue<Type>(settings.value(#Name), DefaultValue);

@@ -8,8 +8,8 @@ class HotkeyManager : public QObject, public QAbstractNativeEventFilter {
   Q_OBJECT
 
 public:
-  static HotkeyManager& instance(const Hotkey& init_hotkey, QObject *parent = nullptr) {
-    static HotkeyManager inst(init_hotkey, parent);
+  static HotkeyManager& instance(QObject *parent = nullptr) {
+    static HotkeyManager inst(parent);
     return inst;
   }
   static bool isSupportedKey(Qt::Key key);
@@ -44,6 +44,6 @@ private:
 #endif
   bool m_registered = false;
 
-  explicit HotkeyManager(const Hotkey &init_hotkey, QObject *parent);
+  explicit HotkeyManager(QObject *parent);
   ~HotkeyManager() override;
 };

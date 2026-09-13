@@ -11,8 +11,8 @@
   </qresource>
 
   <qresource prefix="/docs">
-    <file alias="readme.md">README.md</file>
-    <file alias="readme.tr.md">README.tr.md</file>
+    <file alias="help.en.md">assets/docs/HELP.en.md</file>
+    <file alias="help.tr.md">assets/docs/HELP.tr.md</file>
   </qresource>
 
   <qresource prefix="/translations">

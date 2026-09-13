@@ -44,6 +44,21 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent) {
   layout->addRow(tr("Start/Stop Hotkey"), m_hotkeyEdit);
   outerLayout->addWidget(formContainer);
 
+  // Constraint hotkey edit
+  m_hotkeyEdit->setMaximumSequenceLength(1);
+  connect(m_hotkeyEdit, &QKeySequenceEdit::editingFinished, this, [this]() {
+    QKeySequence seq = m_hotkeyEdit->keySequence();
+    auto hk = Hotkey::from(seq);
+
+    // If given keybind is invalid/unsupported/reserved, rollback to old one
+    if (hk.key == 0 || !HotkeyManager::isSupportedKey(hk.key)
+        || hk == SAVE_CHANGES_KEYBIND || hk == ABORT_CHANGES_KEYBIND) {
+      m_notificationBar->error(tr("Keybind is invalid, try something else"));
+      lg->error("Cannot change hotkey ({}) because it's invalid", seq.toString());
+      m_hotkeyEdit->setKeySequence(m_selectedHotkey.toKeySequence());
+    }
+  });
+
   // Save/cancel buttons
   auto btnLayout = new QHBoxLayout();
   m_saveBtn = new QPushButton(tr("Save"), this);
@@ -74,11 +89,13 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent) {
   // Load hotkey
   m_currentHotkey = settingsman->get<setting::keybind>();
   m_hotkeyEdit->setKeySequence(m_currentHotkey.toKeySequence());
+  m_selectedHotkey = m_currentHotkey;
 }
 
 void SettingsDialog::onSave() {
   bool madeChanges = false;
 
+  // Hotkey
   auto selectedHotkey = Hotkey::from(m_hotkeyEdit->keySequence());
   if (selectedHotkey != m_currentHotkey) {
     if (selectedHotkey == SAVE_CHANGES_KEYBIND ||
@@ -90,11 +107,13 @@ void SettingsDialog::onSave() {
     } else {
       madeChanges = true;
       settingsman->set<setting::keybind>(selectedHotkey);
-      hotkeyman->unset();
       hotkeyman->set(selectedHotkey);
     }
+  } else {
+    hotkeyman->set(m_currentHotkey);
   }
 
+  // Language
   Language selectedLanguage = static_cast<Language>(m_languageCombo->currentData().toInt());
   if (selectedLanguage != m_currentLang) {
     madeChanges = true;
@@ -102,6 +121,7 @@ void SettingsDialog::onSave() {
     settingsman->set<setting::language>(selectedLanguage);
   }
 
+  // Theme
   Theme selectedTheme = static_cast<Theme>(m_themeCombo->currentData().toInt());
   if (selectedTheme != m_currentTheme) {
     madeChanges = true;

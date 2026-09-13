@@ -66,6 +66,7 @@ else()
     xcb
     xcb-keysyms
     xcb-xtest
+    xkbcommon
   )
 endif()
 

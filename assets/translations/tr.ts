@@ -237,8 +237,8 @@
     <translation>İptal Et</translation>
   </message>
   <message>
-    <source>%1 is reserved for program, please try something else</source>
-    <translation>%1 program tarafından kullanılıyor, lütfen başka bir kısayol deneyin</translation>
+    <source>Keybind is invalid, try something else</source>
+    <translation>Kısayol geçersiz, başka bir kısayol deneyin</translation>
   </message>
 </context>
 

@@ -1,3 +1,9 @@
+# 1.0-rc (In Development)
+
+- Fixed start/stop enabled bug when changing preset
+- Constrainted hotkey edit and added more tight checks for keybind
+- Hotkey is no more triggered on help and settings dialog are opened
+
 # 1.2.1-beta
 
 - Fixed update checker logic it now compares channels

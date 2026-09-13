@@ -15,10 +15,7 @@ HelpDialog::HelpDialog(QWidget *parent) : QDialog(parent) {
   resize(800, 600);
 
   auto lang = langman->language();
-  QString localizedReadme;
-  if (lang != Language::English) {
-    localizedReadme = QString(":/docs/readme.%1.md").arg(to_cstr(lang));
-  } else localizedReadme = ":/docs/readme.md";
+  QString localizedReadme = QString(":/docs/help.%1.md").arg(to_cstr(lang));
 
   m_layout = new QVBoxLayout(this);
 

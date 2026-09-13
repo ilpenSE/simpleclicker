@@ -216,8 +216,8 @@
     <translation>Cancel</translation>
   </message>
   <message>
-    <source>%1 is reserved for program, please try something else</source>
-    <translation>%1 is reserved for program, please try something else</translation>
+    <source>Keybind is invalid, try something else</source>
+    <translation>Keybind is invalid, try something else</translation>
   </message>
 
 </context>

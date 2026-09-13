@@ -3,29 +3,30 @@
 extern Logger *lg;
 extern X11 *x11inst;
 
-// TODO: Add support for Turkish keys
 bool HotkeyManager::isSupportedKey(Qt::Key key) {
-  if (key >= Qt::Key_F1 && key <= Qt::Key_F35) {
-    return true;
-  } else if (key >= Qt::Key_A && key <= Qt::Key_Z) {
-    return true;
-  } else if (key >= Qt::Key_0 && key <= Qt::Key_9) {
-    return true;
-  }
-  return false;
+  if (key >= Qt::Key_F1 && key <= Qt::Key_F35) return true;
+  // Pressable key check
+  return !QKeySequence(key).toString().isEmpty();
 }
 
 bool HotkeyManager::set(const Hotkey &hotkey) {
-  if (m_hotkey == hotkey) return true;
+  if (!isSupportedKey(hotkey.key) || hotkey.key == 0) return false;
+
+  if (m_registered && m_hotkey == hotkey) return true;
   if (m_registered) return false;
+
   if (!registerHotkey(hotkey)) return false;
   m_hotkey = hotkey;
+  m_registered = true;
   lg->info("Set hotkey: {}", hotkey);
   return true;
 }
 
 bool HotkeyManager::unset() {
-  if (!m_registered) return false;
+  if (!m_registered) {
+    lg->error("Could not unset hotkey because it's not registered");
+    return false;
+  }
   if (!unregisterHotkey()) return false;
   m_registered = false;
   lg->info("Unset hotkey: {}", m_hotkey);
@@ -45,40 +46,18 @@ static UINT toModifiers(const Hotkey &hotkey) {
 }
 
 static UINT toVirtualKey(Qt::Key key) {
-  // ASCII and 0-9 characters
-  if ((key >= Qt::Key_A && key <= Qt::Key_Z) ||
-      (key >= Qt::Key_0 && key <= Qt::Key_9)) {
-    return static_cast<DWORD>(key);
-  }
-
-  // Function keys
-  if (key >= Qt::Key_F1 && key <= Qt::Key_F12) {
+  if (key >= Qt::Key_F1 && key <= Qt::Key_F35) {
     return VK_F1 + (key - Qt::Key_F1);
   }
-
-  switch (key) {
-  case Qt::Key_Space:     return VK_SPACE;
-  case Qt::Key_Tab:       return VK_TAB;
-  case Qt::Key_Escape:    return VK_ESCAPE;
-  case Qt::Key_Backspace: return VK_BACK;
-  case Qt::Key_Delete:    return VK_DELETE;
-  case Qt::Key_Insert:    return VK_INSERT;
-  case Qt::Key_Home:      return VK_HOME;
-  case Qt::Key_End:       return VK_END;
-  case Qt::Key_PageUp:    return VK_PRIOR;
-  case Qt::Key_PageDown:  return VK_NEXT;
-  case Qt::Key_Up:        return VK_UP;
-  case Qt::Key_Down:      return VK_DOWN;
-  case Qt::Key_Left:      return VK_LEFT;
-  case Qt::Key_Right:     return VK_RIGHT;
-  default:                return 0;
-  }
+  wchar_t ch = static_cast<wchar_t>(key);
+  HKL layout = GetKeyboardLayout(0);
+  SHORT result = VkKeyScanExW(ch, layout);
+  if (result == -1) return 0;
+  return LOBYTE(result);
 }
 } // namespace
 
-HotkeyManager::HotkeyManager(const Hotkey &init_hotkey, QObject *parent)
-    : QObject(parent) {
-  set(init_hotkey);
+HotkeyManager::HotkeyManager(QObject *parent) : QObject(parent) {
   qApp->installNativeEventFilter(this);
 }
 
@@ -89,6 +68,7 @@ HotkeyManager::~HotkeyManager() {
 
 bool HotkeyManager::nativeEventFilter(const QByteArray &eventType,
                                       void *message, qintptr *result) {
+  if (!m_registered) return false;
   (void)eventType; (void)result;
   MSG *msg = static_cast<MSG *>(message);
   if (msg->message == WM_HOTKEY && msg->wParam == HOTKEY_ID) {
@@ -107,7 +87,6 @@ bool HotkeyManager::registerHotkey(const Hotkey& hotkey) {
     lg->error("Could not register hotkey: Error code {}", GetLastError());
     return false;
   }
-  m_registered = true;
   return true;
 }
 
@@ -117,13 +96,13 @@ bool HotkeyManager::unregisterHotkey() {
     lg->error("Could not unregister hotkey: Error code {}", GetLastError());
     return false;
   }
-  m_registered = false;
   return true;
 }
 
 #else // X11
 
 #include <xcb/xcb_keysyms.h>
+#include <xkbcommon/xkbcommon.h>
 
 namespace {
 constexpr quint16 ignoredMasks[] = { 0, XCB_MOD_MASK_LOCK, XCB_MOD_MASK_2,
@@ -133,12 +112,9 @@ xcb_keycode_t toKeycode(xcb_connection_t *connection, Qt::Key key) {
   quint32 keysym;
   if (key >= Qt::Key_F1 && key <= Qt::Key_F35) {
     keysym = 0xffbe + (key - Qt::Key_F1);
-  } else if (key >= Qt::Key_A && key <= Qt::Key_Z) {
-    keysym = 'a' + (key - Qt::Key_A);
-  } else if (key >= Qt::Key_0 && key <= Qt::Key_9) {
-    keysym = '0' + (key - Qt::Key_0);
   } else {
-    keysym = key;
+    keysym = xkb_utf32_to_keysym(static_cast<quint32>(key));
+    if (keysym == XKB_KEY_NoSymbol) return 0;
   }
 
   xcb_key_symbols_t *symbols = xcb_key_symbols_alloc(connection);
@@ -151,10 +127,9 @@ xcb_keycode_t toKeycode(xcb_connection_t *connection, Qt::Key key) {
 
 } // namespace
 
-HotkeyManager::HotkeyManager(const Hotkey& init_hotkey, QObject *parent) : QObject(parent)
+HotkeyManager::HotkeyManager(QObject *parent) : QObject(parent)
 {
   qApp->installNativeEventFilter(this);
-  set(init_hotkey);
 }
 
 HotkeyManager::~HotkeyManager() {
@@ -198,12 +173,12 @@ bool HotkeyManager::unregisterHotkey() {
   }
   xcb_flush(x11inst->connection);
 
-  m_registered = false;
   return true;
 }
 
 bool HotkeyManager::nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result) {
   if (eventType != "xcb_generic_event_t") return false;
+  if (!m_registered) return false;
 
   xcb_generic_event_t *event = static_cast<xcb_generic_event_t *>(message);
 

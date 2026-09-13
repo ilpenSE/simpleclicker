@@ -116,13 +116,15 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
 
   // Set up settings button
   connect(ui->settingsBtn, &QPushButton::clicked, this, [this]() {
+    hotkeyman->unset();
     SettingsDialog dlg(this);
     connect(&dlg, &SettingsDialog::settingsApplied, this, [this]() {
       applySettings();
       lg->info("Settings changed and applied.");
       m_notificationBar->success(tr("Settings has been applied successfully!"));
     });
-    dlg.exec();
+    int dres = dlg.exec();
+    hotkeyman->set(settingsman->get<setting::keybind>());
   });
 
   // Subscribe to start/stop buttons
@@ -140,8 +142,10 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
 
   // Show internal embedded readme to user with a dialog
   connect(ui->helpBtn, &QPushButton::clicked, this, [this]() {
+    hotkeyman->unset();
     HelpDialog dlg(this);
     dlg.exec();
+    hotkeyman->set(settingsman->get<setting::keybind>());
   });
 
   // Subscribe to stop events of click engine
@@ -338,8 +342,8 @@ void MainWindow::_changePresetConfigUi(bool is_locked) {
   for (auto it : {ui->clickOptionsBox, ui->clickIntervalBox, ui->repeatBox, ui->positionBox}) {
     it->setEnabled(!is_locked);
   }
-  ui->startButton->setEnabled(!is_locked);
-  ui->stopButton->setEnabled(!is_locked);
+  ui->startButton->setEnabled(!is_locked && !clickengine->running);
+  ui->stopButton->setEnabled(!is_locked && clickengine->running);
 }
 
 void MainWindow::applySettings() {
