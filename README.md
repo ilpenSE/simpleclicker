@@ -1,5 +1,12 @@
 # SimpleClicker - A Simple Auto Clicker Software
 
+![GitHub](https://img.shields.io/badge/ilpenSE-simpleclicker-blue?logo=github)
+![C++ Qt](https://img.shields.io/badge/C++%20Qt-41cd52)
+![Free Software](https://img.shields.io/badge/Free%20Software-30a5db)
+
+![Windows](https://img.shields.io/badge/windows-346af5?style=for-the-badge)
+![Linux](https://img.shields.io/badge/linux-ffc700?style=for-the-badge)
+
 - Made with Qt6.
 - It has presets that you can save, delete or change.
 - Everything on your local machine stored in `AppData` or `~/.local/share/` folder.
@@ -25,3 +32,13 @@
 5. Script will tell you packages to be downloaded
 6. When installation completes, you can now run SimpleClicker from command line or desktop
 7. Desktop entry shortcut'll automatically created as well
+
+## Help
+- [Click here for detailed help](./assets/docs/HELP.en.md)
+
+## About
+
+- Made by [ilpeN](https://github.com/ilpenSE).
+- Developed in C++ using Qt.
+- This app is simplified version and sequel of [Auto Clicker](https://github.com/ilpenSE/autoclicker).
+- License: GPL-3.0 only (GNU General Public License)
