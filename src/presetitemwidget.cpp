@@ -217,8 +217,8 @@ void PresetItemWidget::updateButtons() {
 
   m_saveButton->setVisible(renaming || unsaved);
   m_cancelButton->setVisible(renaming || unsaved);
-  m_editButton->setVisible(!renaming && !unsaved);
-  m_deleteButton->setVisible(!renaming && !unsaved);
+  m_editButton->setVisible(m_hovering && !renaming && !unsaved);
+  m_deleteButton->setVisible(m_hovering && !renaming && !unsaved);
 
   if (renaming) {
     m_saveButton->setToolTip(QString(tr("Rename") + " (%1)").arg(COMMIT_RENAME_KEYBIND_STR));

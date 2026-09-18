@@ -8,6 +8,7 @@
 - Cursor is pre-rendered when location picker is shown
 - There's a help message in location picker overlay now
 - Added validation for preset config
+- Minor visual bug fixes
 
 # 1.2.1-beta
 
