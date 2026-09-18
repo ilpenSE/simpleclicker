@@ -1,4 +1,4 @@
-# 1.0-rc (In Development)
+# 1.0-rc
 
 - Fixed start/stop enabled bug when changing preset
 - Constrainted hotkey edit and added more tight checks for keybind

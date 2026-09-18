@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+VERSION="1.0.0-rc"
 
 clr_rst=""
 clr_green=""
@@ -118,3 +119,4 @@ if command -v gtk-update-icon-cache &> /dev/null; then
 fi
 
 info "Installation complete!"
+info "Installed version: %s" "$VERSION"

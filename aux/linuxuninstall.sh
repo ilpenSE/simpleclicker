@@ -1,5 +1,5 @@
 #!/bin/bash
-
+VERSION="1.0.0-rc"
 set -e
 
 clr_rst=""
@@ -69,3 +69,4 @@ if command -v gtk-update-icon-cache &> /dev/null; then
 fi
 
 info "Uninstallation complete!"
+info "Uninstallated version: %s" "$VERSION"
