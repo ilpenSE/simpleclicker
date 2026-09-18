@@ -182,6 +182,14 @@
 </context>
 
 <context>
+  <name>LocationPickerOverlay</name>
+  <message>
+    <source>Click anywhere to pick a location, press ESC to cancel picking.</source>
+    <translation>Herhangi bir yere tıklayarak konum seçin, ESC'ye basarak seçimi iptal edin.</translation>
+  </message>
+</context>
+
+<context>
   <name>PresetItemWidget</name>
   <message>
     <source>Save</source>

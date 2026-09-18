@@ -182,6 +182,14 @@
 </context>
 
 <context>
+  <name>LocationPickerOverlay</name>
+  <message>
+    <source>Click anywhere to pick a location, press ESC to cancel picking.</source>
+    <translation>Click anywhere to pick a location, press ESC to cancel picking.</translation>
+  </message>
+</context>
+
+<context>
   <name>SettingsDialog</name>
   <message>
     <source>Settings</source>

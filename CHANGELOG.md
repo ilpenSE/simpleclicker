@@ -5,6 +5,8 @@
 - Hotkey is no more triggered on help and settings dialog are opened
 - Added detailed help manual
 - Added lock file to prevent multiple instances of application and get rid of Linux's shitty ass driver sleep bugs
+- Cursor is pre-rendered when location picker is shown
+- There's a help message in location picker overlay now
 
 # 1.2.1-beta
 

@@ -6,6 +6,14 @@
 #include <QKeyEvent>
 #include <QPainter>
 
+namespace {
+QRect crosshairBounds(const QPoint &localPos) {
+  // crosshair (30x30) + label
+  return QRect(localPos.x() - 60, localPos.y() - 30, 180, 60);
+}
+constexpr auto CROSSHAIR_SIZE = 15;
+} // namespace
+
 LocationPickerOverlay::LocationPickerOverlay(QWidget *parent)
     : QWidget(parent)
 {
@@ -19,6 +27,8 @@ LocationPickerOverlay::LocationPickerOverlay(QWidget *parent)
   for (auto *screen : QGuiApplication::screens())
     fullGeom = fullGeom.united(screen->geometry());
   setGeometry(fullGeom);
+
+  m_infoString = tr("Click anywhere to pick a location, press ESC to cancel picking.");
 }
 
 void LocationPickerOverlay::showEvent(QShowEvent *event) {
@@ -32,22 +42,38 @@ void LocationPickerOverlay::showEvent(QShowEvent *event) {
   m_backgroundCache.fill(Qt::transparent);
   QPainter bgPainter(&m_backgroundCache);
   bgPainter.fillRect(rect(), QColor(0, 0, 0, 120));
+
+  static const QFontMetrics fm(font());
+  static auto box_padding_size = QSize(20, 20);
+  const QSize box_size = fm.size(0, m_infoString) + box_padding_size;
+
+  QScreen *screen = qApp->screenAt(QCursor::pos());
+  if (!screen) screen = qApp->primaryScreen();
+  m_infoRect = QRect(QPoint(), box_size);
+  m_infoRect.moveCenter(screen->geometry().center() - geometry().topLeft());
+
+  updateCursor(QCursor::pos());
 }
 
-QRect crosshairBounds(const QPoint &localPos) {
-  // crosshair (30x30) + label
-  return QRect(localPos.x() - 60, localPos.y() - 30, 180, 60);
+void LocationPickerOverlay::updateCursor(const QPoint &globalPos) {
+  m_cursorPos = globalPos;
+  const QPoint local = m_cursorPos - geometry().topLeft();
+  const QRect newRect = crosshairBounds(local);
+
+  // Update info rect if it intersects with cross rect
+  auto dirty = m_lastCrosshairRect.united(newRect);
+  bool wasCovered = m_lastCrosshairRect.intersects(m_infoRect);
+  bool isCovered = newRect.intersects(m_infoRect);
+  if (isCovered != wasCovered) {
+    dirty = dirty.united(m_infoRect);
+  }
+
+  m_lastCrosshairRect = newRect;
+  update(dirty);
 }
 
 void LocationPickerOverlay::mouseMoveEvent(QMouseEvent *event) {
-  m_cursorPos = event->globalPosition().toPoint();
-  QPoint local = m_cursorPos - geometry().topLeft();
-
-  QRect newRect = crosshairBounds(local);
-  QRect dirty = m_lastCrosshairRect.united(newRect);
-  m_lastCrosshairRect = newRect;
-
-  update(dirty);
+  updateCursor(event->globalPosition().toPoint());
 }
 
 void LocationPickerOverlay::mousePressEvent(QMouseEvent *event) {
@@ -73,12 +99,30 @@ void LocationPickerOverlay::paintEvent(QPaintEvent *event) {
   QPainter p(this);
   p.setRenderHint(QPainter::Antialiasing);
   p.drawPixmap(event->rect(), m_backgroundCache, event->rect());
-  QPoint local = m_cursorPos - geometry().topLeft();
+  const QPoint local = m_cursorPos - geometry().topLeft();
+
+  // Draw if it needs to be updated (event->rect() = dirty)
+  if (event->rect().intersects(m_infoRect)) {
+    bool covered = crosshairBounds(local).intersects(m_infoRect);
+    p.setOpacity(covered ? 0.25 : 1.0);
+
+    // Info text's rectangle
+    p.setPen(Qt::NoPen);
+    p.setBrush(QColor(20, 20, 20, 210));
+    p.drawRoundedRect(m_infoRect, 8, 8);
+
+    // Info Text
+    p.setPen(Qt::white);
+    p.drawText(m_infoRect, Qt::AlignCenter, m_infoString);
+
+    p.setBrush(Qt::NoBrush);
+    p.setOpacity(1.0);
+  }
 
   // Crosshair
   p.setPen(QPen(Qt::white, 1));
-  p.drawLine(local.x() - 15, local.y(), local.x() + 15, local.y());
-  p.drawLine(local.x(), local.y() - 15, local.x(), local.y() + 15);
+  p.drawLine(local.x() - CROSSHAIR_SIZE, local.y(), local.x() + CROSSHAIR_SIZE, local.y());
+  p.drawLine(local.x(), local.y() - CROSSHAIR_SIZE, local.x(), local.y() + CROSSHAIR_SIZE);
 
   // Coordinate label
   QString label = QString("%1, %2").arg(m_cursorPos.x()).arg(m_cursorPos.y());
