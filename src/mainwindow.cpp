@@ -331,11 +331,18 @@ void MainWindow::savePreset(PresetItemWidget *itemWidget) {
     .repeatUntilStopped = ui->repeatUntilStoppedRadio->isChecked(),
     .currentLocation = ui->currentLocationRadio->isChecked(),
   };
+
+  std::string errm;
+  if (!newConfig.validate(&errm)) {
+    m_notificationBar->error(tr(errm.c_str()));
+    return;
+  }
+
   presetsman->presets[pname] = newConfig;
   itemWidget->config = newConfig;
   itemWidget->markSaved();
   clickengine->setPreset(newConfig);
-  m_notificationBar->success(QString(tr("Preset %1 has been saved successfully!")).arg(pname));
+  m_notificationBar->success(tr("Preset %1 has been saved successfully!").arg(pname));
 }
 
 void MainWindow::_changePresetConfigUi(bool is_locked) {

@@ -63,6 +63,22 @@
     <source>Start/Stop hotkey couldn't be registered please restart or reinstall the app</source>
     <translation>Başlat/Durdur kısayolu kaydedilemedi, lütfen uygulamayı yeniden başlatın veya indirin</translation>
   </message>
+  <message>
+    <source>Repeat count must be a positive value!</source>
+    <translation>Tekrar sayısı pozitif bir değer olmalı!</translation>
+  </message>
+  <message>
+    <source>Click interval must be a positive value!</source>
+    <translation>Tıklama aralığı pozitif bir değer olmalı!</translation>
+  </message>
+  <message>
+    <source>X dimension must be a positive value!</source>
+    <translation>X boyutu pozitif bir değer olmalı!</translation>
+  </message>
+  <message>
+    <source>Y dimension must be a positive value!</source>
+    <translation>Y boyutu pozitif bir değer olmalı!</translation>
+  </message>
 
   <!-- Click Interval -->
   <message>

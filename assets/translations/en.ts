@@ -63,6 +63,22 @@
     <source>Start/Stop hotkey couldn't be registered please restart or reinstall the app</source>
     <translation>Start/Stop hotkey couldn't be registered please restart or reinstall the app</translation>
   </message>
+  <message>
+    <source>Repeat count must be a positive value!</source>
+    <translation>Repeat count must be a positive value!</translation>
+  </message>
+  <message>
+    <source>Click interval must be a positive value!</source>
+    <translation>Click interval must be a positive value!</translation>
+  </message>
+  <message>
+    <source>X dimension must be a positive value!</source>
+    <translation>X dimension must be a positive value!</translation>
+  </message>
+  <message>
+    <source>Y dimension must be a positive value!</source>
+    <translation>Y dimension must be a positive value!</translation>
+  </message>
 
   <!-- Click Interval -->
   <message>

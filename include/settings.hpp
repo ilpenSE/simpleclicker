@@ -31,6 +31,14 @@ SETTINGS_FIELDS
 template <typename T>
 concept SettingsField = is_settings_field<T>::value;
 
+template <SettingsField TFieldName>
+auto get_default() {
+  #define X(Name, Type, DefaultValue) \
+  if constexpr (std::same_as<TFieldName, setting::Name>) return DefaultValue;
+  SETTINGS_FIELDS
+  #undef X
+}
+
 class SettingsManager {
 public:
   static SettingsManager& instance(const QString& file_path) {
@@ -41,14 +49,6 @@ public:
 
   bool load();
   void save();
-
-  template <SettingsField TFieldName>
-  auto get_default() {
-#define X(Name, Type, DefaultValue) \
-    if constexpr (std::same_as<TFieldName, setting::Name>) return DefaultValue;
-SETTINGS_FIELDS
-#undef X
-  }
 
   template <SettingsField TFieldName>
   auto get() {

@@ -7,6 +7,7 @@
 - Added lock file to prevent multiple instances of application and get rid of Linux's shitty ass driver sleep bugs
 - Cursor is pre-rendered when location picker is shown
 - There's a help message in location picker overlay now
+- Added validation for preset config
 
 # 1.2.1-beta
 

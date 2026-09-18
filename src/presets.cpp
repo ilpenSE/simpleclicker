@@ -49,6 +49,12 @@ bool PresetManager::load() {
 #define X(FieldName, T, DefaultValue) stConfig.FieldName = fromJsonValue<T>(joConfig.value(#FieldName), DefaultValue);
 PRESET_FIELDS
 #undef X
+
+    std::string errm;
+    if (!stConfig.validate(&errm, true)) {
+      lg->error("Preset config validation failed: '{}', fallback to defaults", errm);
+    }
+
     presets.insert(name, stConfig);
   }
 
@@ -68,4 +74,36 @@ void PresetManager::save() {
   m_file.seek(0);
   m_file.write(QJsonDocument(obj).toJson());
   lg->info("Presets saved to JSON!");
+}
+
+bool PresetConfig::validate(std::string *err, bool fix) {
+  // Repeat validating
+  if (repeat <= 0) {
+    if (err) *err = "Repeat count must be a positive value!";
+    if (fix) repeat = get_default<preset::repeat>();
+    return false;
+  }
+
+  // Interval validating
+  if (interval <= 0) {
+    if (err) *err = "Click interval must be a positive value!";
+    if (fix) interval = get_default<preset::interval>();
+    return false;
+  }
+
+  // Location validating
+  Location def_loc = get_default<preset::location>();
+  if (location.x < 0) {
+    if (err) *err = "X dimension must be a positive value!";
+    if (fix) location.x = def_loc.x;
+    return false;
+  }
+  if (location.y < 0) {
+    if (err) *err = "Y dimension must be a positive value!";
+    if (fix) location.y = def_loc.y;
+    return false;
+  }
+
+  if (err) *err = "<No Error>";
+  return true;
 }
