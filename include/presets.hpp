@@ -67,9 +67,7 @@ public:
   PresetManager& operator =(PresetManager&&) = delete;
 private:
   PresetManager(const QString& file_path);
-  ~PresetManager() {
-    m_file.close();
-  }
+  ~PresetManager() {}
 
-  QFile m_file{};
+  QString m_filePath{};
 };

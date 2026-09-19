@@ -1,3 +1,8 @@
+# 1.0
+
+- ... [Everything beta and rc of 1.0]
+- Fixed preset/settings JSON read/write issues
+
 # 1.0-rc
 
 - Fixed start/stop enabled bug when changing preset

@@ -5,20 +5,22 @@
 #include <QByteArray>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QSaveFile>
 
 #include "logger.hpp"
 extern Logger *lg;
 
-PresetManager::PresetManager(const QString& file_path)
-  : m_file(file_path)
-{
-  if (!m_file.open(QIODeviceBase::ReadWrite)) {
-    panic("Failed to open {}", file_path);
-  }
-}
+PresetManager::PresetManager(const QString& file_path) : m_filePath(file_path)
+{}
 
 bool PresetManager::load() {
-  QByteArray data = m_file.readAll();
+  QFile file(m_filePath);
+  if (!file.open(QIODevice::ReadOnly)) {
+    panic("Failed to read presets file: {}", file.errorString());
+  }
+  QByteArray data = file.readAll();
+  file.close();
+
   QJsonParseError err;
   auto doc = QJsonDocument::fromJson(data, &err);
   if (err.error != QJsonParseError::ParseError::NoError) {
@@ -70,9 +72,21 @@ void PresetManager::save() {
       #undef X
     };
   }
-  m_file.resize(0);
-  m_file.seek(0);
-  m_file.write(QJsonDocument(obj).toJson());
+
+  QSaveFile file(m_filePath);
+  if (!file.open(QIODevice::WriteOnly)) {
+    panic("Failed to open presets file: {}", file.errorString());
+  }
+
+  const QByteArray data = QJsonDocument(obj).toJson();
+  if (file.write(data) != data.size()) {
+    panic("Failed to write presets to the file: {}", file.errorString());
+  }
+
+  if (!file.commit()) {
+    panic("Failed to write presets to the file: {}", file.errorString());
+  }
+
   lg->info("Presets saved to JSON!");
 }
 

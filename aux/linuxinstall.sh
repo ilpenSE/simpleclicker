@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-VERSION="1.0.0-rc"
+VERSION="1.0.0"
 
 clr_rst=""
 clr_green=""

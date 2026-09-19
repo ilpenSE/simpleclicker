@@ -7,9 +7,8 @@
 ![Windows](https://img.shields.io/badge/windows-346af5?style=for-the-badge)
 ![Linux](https://img.shields.io/badge/linux-ffc700?style=for-the-badge)
 
-- Tüm ön ayarlar, uygulama ayarları ve kayıtları makinenizdeki `AppData` veya `~/.local/share` klasörlerinde tutulur
-- Not: Şu anda uygulama beta sürümündedir ve kararsız olabilir.
 - Şu anlık sadece x86-64 mimarisiyle Windows ve GNU/Linux destekleniyor
+- Tüm ön ayarlar, uygulama ayarları ve kayıtları makinenizdeki `AppData` veya `~/.local/share` klasörlerinde tutulur
 - Karşılaştığınız hataları uygulamayı geliştirmek için fikirlerinizi dilerseniz GitHub issues üzerinden aktarabilirsiniz
 
 ## Windows için Kurulum Rehberi

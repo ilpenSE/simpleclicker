@@ -135,7 +135,6 @@ HotkeyManager::HotkeyManager(QObject *parent) : QObject(parent)
 
 HotkeyManager::~HotkeyManager() {
   unset();
-  qApp->removeNativeEventFilter(this);
 }
 
 bool HotkeyManager::registerHotkey(const Hotkey& hotkey) {

@@ -168,7 +168,7 @@ int main(int argc, char *argv[]) {
 // This is a false-positive and it's considered as a bug so we suppress them in this function:
 #ifdef __SANITIZE_ADDRESS__
 extern "C" const char* __lsan_default_suppressions() {
-  return "leak:libwayland-client.so\n" "leak:libQt6WaylandClient\n";
+  return "leak:libwayland-client.so\n" "leak:libQt6WaylandClient\n" "leak:libcrypto\n";
 }
 #endif
 // Similar issues on GitHub:

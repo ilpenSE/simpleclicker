@@ -78,9 +78,7 @@ SETTINGS_FIELDS
   SettingsManager& operator =(SettingsManager&&) = delete;
 private:
   SettingsManager(const QString& file_path);
-  ~SettingsManager() {
-    m_file.close();
-  }
+  ~SettingsManager() {}
 
-  QFile m_file{};
+  QString m_filePath{};
 };
