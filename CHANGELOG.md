@@ -9,6 +9,7 @@
 - There's a help message in location picker overlay now
 - Added validation for preset config
 - Minor visual bug fixes
+- Fixed update check mechanism
 
 # 1.2.1-beta
 

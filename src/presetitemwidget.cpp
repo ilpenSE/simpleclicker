@@ -1,5 +1,6 @@
 #include "presetitemwidget.hpp"
 #include <QHBoxLayout>
+#include <QPainter>
 #include "common.hpp"
 #include "theme.hpp"
 #include "language.hpp"

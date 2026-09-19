@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "common.hpp"
 #include <QHBoxLayout>
+#include <QPainter>
 #include "theme.hpp"
 extern ThemeManager *thememan;
 

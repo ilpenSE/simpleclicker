@@ -11,11 +11,16 @@ void makeDynamicIconButton(QPushButton *btn, const QString &symbol) {
   });
 }
 
+namespace {
+constexpr QStringView kBeta = u"-beta";
+constexpr QStringView kRc   = u"-rc";
+}
+
 Version Version::from(QStringView sv) {
-  bool is_beta = sv.endsWith(u"-beta");
-  if (is_beta) sv.chop(5);
-  bool is_rc = sv.endsWith(u"-rc");
-  if (is_rc) sv.chop(2);
+  bool is_beta = sv.endsWith(kBeta);
+  if (is_beta) sv.chop(kBeta.size());
+  bool is_rc = sv.endsWith(kRc);
+  if (is_rc) sv.chop(kRc.size());
 
   Version res;
   res.channel = is_beta ? VersionChannel::Beta
@@ -29,7 +34,7 @@ Version Version::from(QStringView sv) {
 
     bool ok = false;
     int val = part.toInt(&ok);
-    if (!ok) return {};
+    if (!ok || val < 0 || val > 255) return {};
 
     if (i == 0) res.major = static_cast<uint8_t>(val);
     else if (i == 1) res.minor = static_cast<uint8_t>(val);

@@ -8,6 +8,7 @@
 #include <QProcess>
 #include <QStandardPaths>
 #include <QCryptographicHash>
+#include <QGuiApplication>
 #include "logger.hpp"
 extern Logger *lg;
 
@@ -240,21 +241,22 @@ void UpdateManager::checkForUpdates() {
     QByteArray responseData = reply->readAll();
     auto json = QJsonDocument::fromJson(responseData);
 
-    bool update = false;
+    std::optional<Version> latest{};
     for (const auto jv : json.object().value("versions").toArray()) {
       auto name = jv.toString();
       auto ver = Version::from(name);
-
-      if (ver.channel >= APP_VERSION.channel) {
-        if (ver.major > APP_VERSION.major) update = true;
-        if (ver.minor > APP_VERSION.minor) update = true;
-        if (ver.patch > APP_VERSION.patch) update = true;
-      }
-
-      if (update) {
-        emit updateAvailable(ver);
-        break;
-      }
+      lg->info("Fetch version: {}", name);
+      lg->info("Parsed version: {}", ver);
+      if (ver == Version{}) continue;
+      if (ver > APP_VERSION && (!latest || ver > *latest)) latest = ver;
     }
+
+    static_assert(Version::from(std::string_view("1.0.0-rc")).channel == VersionChannel::ReleaseCandidate);
+    static_assert(Version::from(std::string_view("1.0.0-rc")).major == 1);
+    static_assert(Version::from(std::string_view("1.0.0-rc")).minor == 0);
+    static_assert(Version::from(std::string_view("1.0.0-rc")).patch == 0);
+
+    if (latest) emit updateAvailable(*latest);
+    else lg->info("No updates available.");
   });
 }

@@ -6,15 +6,12 @@
 #include <QString>
 #include <format>
 #include <type_traits>
-#include <QSvgRenderer>
-#include <QPainter>
-#include <QColor>
-#include <QPixmap>
-#include <QGuiApplication>
 #include <QStyleHints>
 #include <QIcon>
 #include <QPushButton>
 #include <QMessageBox>
+#include <compare>
+#include <tuple>
 
 namespace {
 // string -> int converter only for version
@@ -86,8 +83,7 @@ struct Hotkey {
     hk.ctrl  = (combined & Qt::CTRL)  != 0;
     hk.shift = (combined & Qt::SHIFT) != 0;
     hk.alt   = (combined & Qt::ALT)   != 0;
-    hk.key = static_cast<Qt::Key>(combined &
-                                  ~(Qt::CTRL | Qt::SHIFT | Qt::ALT | Qt::META));
+    hk.key = static_cast<Qt::Key>(combined & ~(Qt::CTRL | Qt::SHIFT | Qt::ALT | Qt::META));
     return hk;
   }
 
@@ -234,6 +230,12 @@ struct Version {
       sv.remove_prefix(dot + 1);
     }
     return res;
+  }
+
+  constexpr bool operator==(const Version&) const = default;
+
+  constexpr auto operator<=>(const Version& o) const {
+    return std::tie(channel, major, minor, patch) <=> std::tie(o.channel, o.major, o.minor, o.patch);
   }
 };
 
