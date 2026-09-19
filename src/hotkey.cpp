@@ -1,5 +1,6 @@
 #include "hotkey.hpp"
 #include "logger.hpp"
+#include <QGuiApplication>
 extern Logger *lg;
 extern X11 *x11inst;
 
