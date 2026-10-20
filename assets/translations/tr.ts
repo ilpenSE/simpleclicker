@@ -123,6 +123,18 @@
     <source>Middle</source>
     <translation>Orta</translation>
   </message>
+  <message>
+    <source>Click Mode</source>
+    <translation>Tıklama Modu</translation>
+  </message>
+  <message>
+    <source>Click</source>
+    <translation>Tıkla</translation>
+  </message>
+  <message>
+    <source>Hold</source>
+    <translation>Basılı Tut</translation>
+  </message>
 
   <!-- Repeat -->
   <message>

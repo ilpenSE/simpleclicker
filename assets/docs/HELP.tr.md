@@ -32,6 +32,7 @@
 - `Tıklama Aralığı` tıklamalar arası ne kadar zaman olacağını belirler. Sıfırdan büyük olmalı.
 - `Tıklama Ayarları` fare tıklamalar hakkında detayları belirler.
 - `Fare Düğmesi` tıklanacak fare düğmesidir. Sol, Sağ ve Orta seçebilirsiniz.
+- `Tıklama Modu` farenin basılı tutulması ya da bas-çek yapılmasını belirler.
 - `Tekrar` tıklamanın ne kadar tekrar edeceğini belirler. Sıfırdan büyük olmalı. Sınır 1 milyondur.
 - `Durdurana Kadar Tekrar Et` seçildiğinde tıklayıcı, kısayol tuşuna basıp kapatılıncaya dek devam eder.
 - `Fare İşaretçisi Konumu` tıklamanın gerçekleştirileceği monitörünüzdeki kesin konumdur. Birden fazla monitörünüz varsa bu çalışmayabilir.

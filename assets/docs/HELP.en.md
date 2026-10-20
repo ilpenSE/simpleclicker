@@ -32,6 +32,7 @@
 - `Click Interval` determines how much time will be between clicks. This must be greater than 0.
 - `Click Options` determines detail about mouse clicks.
 - `Mouse Button` is the mouse button to click. You can choose Left, Right and Middle.
+- `Click Mode` decides to press then release or holding the mouse.
 - `Repeat` determines how many times that click repeats. This must be greater than 0. Limit is 1 million.
 - When `Repeat Until Stopped` is selected, it continues clicking until you press hotkey to stop it.
 - `Mouse Cursor Position` is the absolute location in your monitor where to perform a click. If you have multiple monitors this may not work.

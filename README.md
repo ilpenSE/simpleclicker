@@ -1,4 +1,4 @@
-# SimpleClicker - A Simple Auto Clicker Software
+# SimpleClicker - A Straightforward Auto-Clicker (?)
 
 ![GitHub](https://img.shields.io/badge/ilpenSE-simpleclicker-blue?logo=github)
 ![C++ Qt](https://img.shields.io/badge/C++%20Qt-41cd52)

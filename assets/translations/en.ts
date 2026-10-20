@@ -123,6 +123,18 @@
     <source>Middle</source>
     <translation>Middle</translation>
   </message>
+  <message>
+    <source>Click Mode</source>
+    <translation>Click Mode</translation>
+  </message>
+  <message>
+    <source>Click</source>
+    <translation>Click</translation>
+  </message>
+  <message>
+    <source>Hold</source>
+    <translation>Hold</translation>
+  </message>
 
   <!-- Repeat -->
   <message>
