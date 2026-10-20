@@ -27,6 +27,8 @@
       <property name="childrenCollapsible">
        <bool>false</bool>
       </property>
+
+      <!-- LEFT PANEL -->
       <widget class="QWidget" name="leftPanelWidget" native="true">
        <property name="minimumSize">
         <size>
@@ -121,6 +123,8 @@
         </item>
        </layout>
       </widget>
+
+      <!-- RIGHT PANEL -->
       <widget class="QWidget" name="rightPanelWidget" native="true">
        <property name="minimumSize">
         <size>
@@ -132,6 +136,8 @@
         <property name="spacing">
          <number>10</number>
         </property>
+
+        <!-- Click interval group -->
         <item>
          <widget class="QGroupBox" name="clickIntervalBox">
           <property name="title">
@@ -213,12 +219,16 @@
           </layout>
          </widget>
         </item>
+
+        <!-- Click Options group -->
         <item>
          <widget class="QGroupBox" name="clickOptionsBox">
           <property name="title">
            <string>Click Options</string>
           </property>
-          <layout class="QHBoxLayout" name="clickOptionsHLayout">
+          <layout class="QHBoxLayout" name="clickOptionsLayout" stretch="1,1">
+
+            <!-- Mouse button -->
            <item>
             <layout class="QVBoxLayout" name="mouseBtnPanel">
              <item>
@@ -249,9 +259,39 @@
              </item>
             </layout>
            </item>
+
+           <!-- Click mode -->
+           <item>
+            <layout class="QVBoxLayout" name="clickModePanel">
+             <item>
+              <widget class="QLabel" name="clickModeLabel">
+               <property name="text">
+                <string>Click Mode</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="clickModeCombo">
+               <item>
+                <property name="text">
+                 <string>Click</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Hold</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+            </layout>
+           </item>
+
           </layout>
          </widget>
         </item>
+
+        <!-- Repeat group -->
         <item>
          <widget class="QGroupBox" name="repeatBox">
           <property name="title">
@@ -309,6 +349,8 @@
           </layout>
          </widget>
         </item>
+
+        <!-- Mouse cursor position group -->
         <item>
          <widget class="QGroupBox" name="positionBox">
           <property name="title">
@@ -383,6 +425,8 @@
           </layout>
          </widget>
         </item>
+
+        <!-- Spacer -->
         <item>
          <spacer name="verticalSpacer">
           <property name="orientation">
@@ -396,6 +440,8 @@
           </property>
          </spacer>
         </item>
+
+        <!-- Buttons -->
         <item>
          <layout class="QVBoxLayout" name="controlPanel">
           <item>
