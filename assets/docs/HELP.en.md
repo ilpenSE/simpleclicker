@@ -43,7 +43,7 @@
 ## Settings
 - Press `Settings` button on the bottom of window to open settings window.
 - You can change theme, language and global hotkey here.
-- There's only 2 supported languages: English and Turkish.
+- There's only 4 supported languages: English, Turkish, German and French.
 - And 2 themes: Dark and Light.
 - To change hotkey, press that text box and press a key or key combination from your keyboard
 - Then click save to save settings and cancel to cancel any changes

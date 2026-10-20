@@ -89,7 +89,9 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
   for (auto it : { ui->repeatCountRadio, ui->currentLocationRadio }) {
     connect(it, &QRadioButton::toggled, this, markUnsaved);
   }
-  connect(ui->mouseBtnCombo, &QComboBox::currentIndexChanged, this, markUnsaved);
+  for (auto it : { ui->mouseBtnCombo, ui->clickModeCombo }) {
+    connect(it, &QComboBox::currentIndexChanged, this, markUnsaved);
+  }
 
   // Set up addPreset button
   makeDynamicIconButton(ui->addPresetBtn, "add.svg");
@@ -271,7 +273,7 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
       // if current's gonna be deleted, set active preset to something else
       setActivePreset(idx <= 0 ? nullptr : list.item(idx - 1));
     }
-    m_notificationBar->success(QString(tr("Removed preset '%1'.")).arg(itemWidget->presetName()));
+    m_notificationBar->success(QString(tr("Removed preset '%1' successfully.")).arg(itemWidget->presetName()));
 
     list.removeItemWidget(item);
     delete list.takeItem(idx);
@@ -329,6 +331,7 @@ void MainWindow::savePreset(PresetItemWidget *itemWidget) {
     .repeat = ui->repeatEdit->value(),
     .mouseButton = getMouseButton(),
     .repeatUntilStopped = ui->repeatUntilStoppedRadio->isChecked(),
+    .clickMode = getClickMode(),
     .currentLocation = ui->currentLocationRadio->isChecked(),
   };
 
@@ -368,6 +371,7 @@ void MainWindow::applyPreset(const PresetConfig& config) {
   ui->millisEdit->setValue(interval % 1000);
 
   ui->mouseBtnCombo->setCurrentIndex(static_cast<int>(config.mouseButton));
+  ui->clickModeCombo->setCurrentIndex(static_cast<int>(config.clickMode));
   ui->repeatEdit->setValue(config.repeat);
   ui->repeatUntilStoppedRadio->setChecked(config.repeatUntilStopped);
   ui->repeatCountRadio->setChecked(!config.repeatUntilStopped);
@@ -378,6 +382,12 @@ void MainWindow::applyPreset(const PresetConfig& config) {
 
   clickengine->setPreset(config);
   presetChangeEventLock = false;
+}
+
+ClickMode MainWindow::getClickMode() const {
+  int idx = ui->clickModeCombo->currentIndex();
+  if (idx == -1) return {};
+  return static_cast<ClickMode>(idx);
 }
 
 MouseButton MainWindow::getMouseButton() const {

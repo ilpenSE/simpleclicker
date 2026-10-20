@@ -13,6 +13,7 @@
   X(repeat, int, 1) \
   X(mouseButton, MouseButton, MouseButton::Left) \
   X(repeatUntilStopped, bool, true) \
+  X(clickMode, ClickMode, ClickMode::Click) \
   X(currentLocation, bool, true)
 
 namespace preset {

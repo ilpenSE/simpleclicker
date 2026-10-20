@@ -27,6 +27,7 @@ public slots:
 private:
   void showLocationPicker();
   MouseButton getMouseButton() const;
+  ClickMode getClickMode() const;
   int getIntervalMs() const;
   void autoUpdate(Version new_version);
 

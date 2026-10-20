@@ -52,7 +52,7 @@
     <translation>Create a new preset</translation>
   </message>
   <message>
-    <source>Removed preset '%1'.</source>
+    <source>Removed preset '%1' successfully.</source>
     <translation>Removed preset '%1' successfully.</translation>
   </message>
   <message>
@@ -291,7 +291,7 @@
   </message>
   <message>
     <source>Help content couldn't be loaded</source>
-    <translation># &lt;Help content couldn't be loaded, try reinstalling app&gt;</translation>
+    <translation># &lt;Help content couldn't be loaded, try reinstalling the app&gt;</translation>
   </message>
 </context>
 

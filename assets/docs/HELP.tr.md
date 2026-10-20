@@ -43,7 +43,7 @@
 ## Ayarlar
 - Pencerenin altındaki `Ayarlar` butonuna basarak ayarlar menüsünü açabilirsiniz.
 - Tema, dil ve kısayol tuşunu değiştirebilirsiniz.
-- Sadece 2 tane dil destekleniyor: İngilizce ve Türkçe.
+- Sadece 4 tane dil destekleniyor: İngilizce, Türkçe, Almanca ve Fransızca.
 - Ve 2 tema: Koyu ve Açık
 - Kısayol tuşunu değiştirmek için o yazı kutusuna tıklayın ve klaveyinzden bir tuşa ya da tuş kombinasyona basın
 - Sonra kaydete basarak ayarları kaydedebilir ve iptale basarak değişiklikleri iptal edebilirsiniz.

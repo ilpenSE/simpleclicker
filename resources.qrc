@@ -13,11 +13,15 @@
   <qresource prefix="/docs">
     <file alias="help.en.md">assets/docs/HELP.en.md</file>
     <file alias="help.tr.md">assets/docs/HELP.tr.md</file>
+    <file alias="help.fr.md">assets/docs/HELP.fr.md</file>
+    <file alias="help.de.md">assets/docs/HELP.de.md</file>
   </qresource>
 
   <qresource prefix="/translations">
     <file alias="tr.qm">assets/translations/tr.qm</file>
     <file alias="en.qm">assets/translations/en.qm</file>
+    <file alias="de.qm">assets/translations/de.qm</file>
+    <file alias="fr.qm">assets/translations/fr.qm</file>
   </qresource>
 
   <qresource prefix="/styles">

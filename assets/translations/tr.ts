@@ -52,7 +52,7 @@
     <translation>Yeni bir ön ayar oluştur</translation>
   </message>
   <message>
-    <source>Removed preset '%1'.</source>
+    <source>Removed preset '%1' successfully.</source>
     <translation>'%1' ön ayarı başarıyla silindi.</translation>
   </message>
   <message>

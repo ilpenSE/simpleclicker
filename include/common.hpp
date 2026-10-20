@@ -95,15 +95,37 @@ constexpr auto ABORT_CHANGES_KEYBIND = Hotkey{.key=Qt::Key_K, .ctrl=true};
 
 enum class Theme : int { Dark = 0, Light, Count };
 
-enum class Language : int { English = 0, Turkish, Count };
+enum class Language : int { English = 0, Turkish, German, French, Count };
 
 enum class MouseButton : int {
   Left = 0, Right, Middle, Count,
 };
 
+enum class ClickMode : int {
+  Click = 0, Hold, Count,
+};
+
 struct Location {
   int x, y;
 };
+
+constexpr const char *to_cstr(ClickMode mode) {
+  switch (mode) {
+  case ClickMode::Click: return "click";
+  case ClickMode::Hold: return "hold";
+  default: return nullptr;
+  }
+}
+
+constexpr ClickMode to_click_mode(std::string_view sv) {
+  if (sv == "hold") return ClickMode::Hold;
+  return ClickMode::Click;
+}
+
+inline ClickMode to_click_mode(QStringView sv) {
+  if (sv == "hold") return ClickMode::Hold;
+  return ClickMode::Click;
+}
 
 constexpr const char *to_cstr(Theme theme) {
   switch (theme) {
@@ -129,6 +151,8 @@ constexpr const char *to_cstr(Language lang) {
   switch (lang) {
   case Language::English: return "en";
   case Language::Turkish: return "tr";
+  case Language::German: return "de";
+  case Language::French: return "fr";
   default: return nullptr;
   }
 }
@@ -136,18 +160,24 @@ constexpr const char *to_cstr(Language lang) {
 constexpr Language to_language(std::string_view sv) {
   if (sv == "en") return Language::English;
   if (sv == "tr") return Language::Turkish;
+  if (sv == "de") return Language::German;
+  if (sv == "fr") return Language::French;
   return Language::English;
 }
 
 inline Language to_language(const QString &qstr) {
   if (qstr == "en") return Language::English;
   if (qstr == "tr") return Language::Turkish;
+  if (qstr == "de") return Language::German;
+  if (qstr == "fr") return Language::French;
   return Language::English;
 }
 
 inline Language to_language(QLocale::Language locale_lang) {
   switch (locale_lang) {
   case QLocale::Turkish: return Language::Turkish;
+  case QLocale::French: return Language::French;
+  case QLocale::German: return Language::German;
   default: return Language::English;
   }
 }
@@ -255,6 +285,9 @@ T fromJsonValue(const QJsonValue& jv, const T& def = T{}) {
   else if constexpr (std::is_same_v<T, MouseButton>) {
     return to_mouse_button(jv.toString(to_cstr(def)));
   }
+  else if constexpr (std::is_same_v<T, ClickMode>) {
+    return to_click_mode(jv.toString(to_cstr(def)));
+  }
   else if constexpr (std::is_same_v<T, Theme>) {
     return to_theme(jv.toString(to_cstr(def)));
   }
@@ -275,6 +308,7 @@ QJsonValue toJsonValue(const T& v) {
   if constexpr (std::is_same_v<T, int64_t>) return QJsonValue(static_cast<qint64>(v));
   else if constexpr (std::is_same_v<T, Location>) return QJsonValue(QJsonArray{v.x, v.y});
   else if constexpr (std::is_same_v<T, MouseButton>) return QJsonValue(to_cstr(v));
+  else if constexpr (std::is_same_v<T, ClickMode>) return QJsonValue(to_cstr(v));
   else if constexpr (std::is_same_v<T, Theme>) return QJsonValue(to_cstr(v));
   else if constexpr (std::is_same_v<T, Language>) return QJsonValue(to_cstr(v));
   else if constexpr (std::is_same_v<T, Hotkey>) return QJsonValue(v.toString());
