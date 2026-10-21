@@ -80,26 +80,30 @@
     <translation>Y boyutu pozitif bir değer olmalı!</translation>
   </message>
 
+  <!-- General time units -->
+  <message>
+    <source>milliseconds</source>
+    <translation>milisaniye</translation>
+  </message>
+  <message>
+    <source>seconds</source>
+    <translation>saniye</translation>
+  </message>
+  <message>
+    <source>minutes</source>
+    <translation>dakika</translation>
+  </message>
+
   <!-- Click Interval -->
   <message>
     <source>Click Interval</source>
     <translation>Tıklama Aralığı</translation>
   </message>
+
+  <!-- Hold time -->
   <message>
-    <source>Hours</source>
-    <translation>Saat</translation>
-  </message>
-  <message>
-    <source>Minutes</source>
-    <translation>Dakika</translation>
-  </message>
-  <message>
-    <source>Seconds</source>
-    <translation>Saniye</translation>
-  </message>
-  <message>
-    <source>Milliseconds</source>
-    <translation>Milisaniye</translation>
+    <source>Hold Time</source>
+    <translation>Basılı Tutma Süresi</translation>
   </message>
 
   <!-- Click Options -->

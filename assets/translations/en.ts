@@ -80,26 +80,30 @@
     <translation>Y dimension must be a positive value!</translation>
   </message>
 
+  <!-- General time units -->
+  <message>
+    <source>milliseconds</source>
+    <translation>milliseconds</translation>
+  </message>
+  <message>
+    <source>seconds</source>
+    <translation>seconds</translation>
+  </message>
+  <message>
+    <source>minutes</source>
+    <translation>minutes</translation>
+  </message>
+
   <!-- Click Interval -->
   <message>
     <source>Click Interval</source>
     <translation>Click Interval</translation>
   </message>
+
+  <!-- Hold time -->
   <message>
-    <source>Hours</source>
-    <translation>Hours</translation>
-  </message>
-  <message>
-    <source>Minutes</source>
-    <translation>Minutes</translation>
-  </message>
-  <message>
-    <source>Seconds</source>
-    <translation>Seconds</translation>
-  </message>
-  <message>
-    <source>Milliseconds</source>
-    <translation>Milliseconds</translation>
+    <source>Hold Time</source>
+    <translation>Hold Time</translation>
   </message>
 
   <!-- Click Options -->

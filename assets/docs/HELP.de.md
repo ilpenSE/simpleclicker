@@ -30,6 +30,7 @@
 ## Einstellungen der Voreinstellung
 - Du kannst die Einstellungen in der Oberfläche rechts neben den Voreinstellungen ändern.
 - `Klickintervall` legt fest, wie viel Zeit zwischen den Klicks vergeht. Der Wert muss größer als 0 sein.
+- `Haltedauer` legt fest, wie lange eine Maustaste gedrückt gehalten wird. Dieser Wert muss größer als 0 sein.
 - `Klickoptionen` legt die Details der Mausklicks fest.
 - `Maustaste` ist die Maustaste, die geklickt wird. Du kannst Links, Rechts und Mitte wählen.
 - `Klickmodus` legt fest, ob die Maustaste gedrückt und wieder losgelassen oder gehalten wird.
@@ -43,8 +44,8 @@
 ## Einstellungen
 - Klicke unten im Fenster auf die Schaltfläche `Einstellungen`, um das Einstellungsfenster zu öffnen.
 - Hier kannst du Design, Sprache und das globale Tastenkürzel ändern.
-- Es werden nur 4 Sprachen unterstützt: Englisch, Türkisch, Deutsch und Französisch.
-- Und 2 Designs: Dunkel und Hell.
+- Unterstützt Sprachen: Englisch, Türkisch, Deutsch und Französisch.
+- Unterstützte Designs: Dunkel und Hell.
 - Um das Tastenkürzel zu ändern, klicke auf das Textfeld und drücke eine Taste oder Tastenkombination auf deiner Tastatur.
 - Klicke dann auf Speichern, um die Einstellungen zu speichern, oder auf Abbrechen, um Änderungen zu verwerfen.
 
@@ -68,4 +69,4 @@
 - Entwickelt von [ilpeN](https://github.com/ilpenSE).
 - In C++ mit Qt entwickelt.
 - Diese App ist eine vereinfachte Version und der Nachfolger von [Auto Clicker](https://github.com/ilpenSE/autoclicker).
-- Lizenz: ausschließlich GPL-3.0 (GNU General Public License)
+- Lizenz: ausschließlich AGPL-3.0 (GNU Affero General Public License)

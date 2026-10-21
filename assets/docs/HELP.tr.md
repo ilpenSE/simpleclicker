@@ -25,15 +25,16 @@
 ### Ön Ayar Yönetimi
 - Bir ön ayarı silmek için önce fareyi o özel ön ayarın butonuna getirdikten sonra bir çöp kutusu butonu çıkmalı. Ona basarak ön ayarı silebilirsiniz.
 - Bir ön ayarı yeniden adlandırmak için yine fareyi o özel ön ayara getirdikten sonra bir kalem butonu çıkmalı. Ona basınca bir yazı girdi kutusu çıkmalı. Oraya istediğiniz yeni ismi yazdıktan sonra `ENTER`a veya kaydet butonuna basarak isimlendirmeyi kaydedebilirsiniz. Ya da `ESC` veya iptal butonuna basarak isilendirmeyi iptal edebilirsiniz.
-- Yeniden adlandırma yaparken hala ön ayarın ayarlarını değiştirebilirsiniz. Ama yeniden adlandırmayı kaydettiğinizde ön ayarı da kaydeder. Ve aynı şey isimlendirmeyi iptal ettiğinizde de geçerli. (değişiklikleri iptal eder)w
+- Yeniden adlandırma yaparken hala ön ayarın ayarlarını değiştirebilirsiniz. Ama yeniden adlandırmayı kaydettiğinizde ön ayarı da kaydeder. Ve aynı şey isimlendirmeyi iptal ettiğinizde de geçerli. (Değişiklikleri iptal eder)
 
 ## Ön Ayar Ayarları
 - Ön ayarların sağında gördüğünüz arayüzden aşağıdaki ayarları yapabilirsiniz.
 - `Tıklama Aralığı` tıklamalar arası ne kadar zaman olacağını belirler. Sıfırdan büyük olmalı.
+- `Basılı Tutma Süresi` bir fare düğmesine basılı tutulurkenki zamanı belirler. Sıfırdan büyük olmalı.
 - `Tıklama Ayarları` fare tıklamalar hakkında detayları belirler.
 - `Fare Düğmesi` tıklanacak fare düğmesidir. Sol, Sağ ve Orta seçebilirsiniz.
 - `Tıklama Modu` farenin basılı tutulması ya da bas-çek yapılmasını belirler.
-- `Tekrar` tıklamanın ne kadar tekrar edeceğini belirler. Sıfırdan büyük olmalı. Sınır 1 milyondur.
+- `Tekrar` tıklamanın ne kadar tekrar edeceğini belirler. Sıfırdan büyük olmalı. Sınır bir milyondur.
 - `Durdurana Kadar Tekrar Et` seçildiğinde tıklayıcı, kısayol tuşuna basıp kapatılıncaya dek devam eder.
 - `Fare İşaretçisi Konumu` tıklamanın gerçekleştirileceği monitörünüzdeki kesin konumdur. Birden fazla monitörünüz varsa bu çalışmayabilir.
 - `Mevcut`'u seçerseniz X ve Y değerlerinin bir önemi kalmaz çünkü işaretçiniz nerdeyse oraya tıklama yapar.
@@ -43,8 +44,8 @@
 ## Ayarlar
 - Pencerenin altındaki `Ayarlar` butonuna basarak ayarlar menüsünü açabilirsiniz.
 - Tema, dil ve kısayol tuşunu değiştirebilirsiniz.
-- Sadece 4 tane dil destekleniyor: İngilizce, Türkçe, Almanca ve Fransızca.
-- Ve 2 tema: Koyu ve Açık
+- Desteklenen diller: İngilizce, Türkçe, Almanca ve Fransızca.
+- Desteklenen temalar: Koyu ve Açık
 - Kısayol tuşunu değiştirmek için o yazı kutusuna tıklayın ve klaveyinzden bir tuşa ya da tuş kombinasyona basın
 - Sonra kaydete basarak ayarları kaydedebilir ve iptale basarak değişiklikleri iptal edebilirsiniz.
 
@@ -68,4 +69,4 @@
 - [ilpeN](https://github.com/ilpenSE) tarafından yapıldı.
 - Qt kullanılarak C++'ta geliştirildi.
 - Bu uygulama, [Auto Clicker](https://github.com/ilpenSE/autoclicker)'ın devamı ve basitleştirilmiş halidir.
-- Lisans: Sadece GPL-3.0 (GNU General Public License)
+- Lisans: Sadece AGPL-3.0 (GNU Affero General Public License)

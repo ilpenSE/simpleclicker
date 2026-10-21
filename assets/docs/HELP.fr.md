@@ -30,6 +30,7 @@
 ## Paramètres du préréglage
 - Vous pouvez modifier les paramètres dans l'interface située à droite des préréglages.
 - `Intervalle de clic` détermine le temps écoulé entre les clics. Cette valeur doit être supérieure à 0.
+- `Durée de maintien` détermine combien de temps un bouton de la souris reste enfoncé. Cette valeur doit être supérieure à 0.
 - `Options de clic` détermine les détails des clics de souris.
 - `Bouton de la souris` est le bouton de souris utilisé pour cliquer. Vous pouvez choisir Gauche, Droite et Milieu.
 - `Mode de clic` détermine s'il faut appuyer puis relâcher, ou maintenir le bouton de la souris enfoncé.
@@ -43,8 +44,8 @@
 ## Paramètres
 - Cliquez sur le bouton `Paramètres` en bas de la fenêtre pour ouvrir la fenêtre des paramètres.
 - Vous pouvez y modifier le thème, la langue et le raccourci global.
-- Seules 4 langues sont prises en charge : anglais, turc, allemand et français.
-- Et 2 thèmes : sombre et clair.
+- Langues prises en charge : anglais, turc, allemand et français.
+- Thèmes prises en charge : sombre et clair.
 - Pour modifier le raccourci, cliquez sur ce champ de texte puis appuyez sur une touche ou une combinaison de touches de votre clavier.
 - Cliquez ensuite sur Enregistrer pour sauvegarder les paramètres, ou sur Annuler pour abandonner les modifications.
 
@@ -68,4 +69,4 @@
 - Créé par [ilpeN](https://github.com/ilpenSE).
 - Développé en C++ avec Qt.
 - Cette application est une version simplifiée et la suite de [Auto Clicker](https://github.com/ilpenSE/autoclicker).
-- Licence : GPL-3.0 uniquement (GNU General Public License)
+- Licence : AGPL-3.0 uniquement (GNU Affero General Public License)
