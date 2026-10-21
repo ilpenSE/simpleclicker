@@ -37,9 +37,8 @@ void ClickEngine::click() {
 
   nativeMousePress(m_preset.mouseButton, m_loc);
   m_pressed = true;
-  int holdTime = 5*1000; // 5 sec, hard-coded
 
-  int delay = m_preset.clickMode == ClickMode::Hold ? holdTime : CLICK_DELAY_MS;
+  int delay = m_preset.clickMode == ClickMode::Hold ? m_preset.holdTime : CLICK_DELAY_MS;
   m_holdTimer.start(delay);
 }
 

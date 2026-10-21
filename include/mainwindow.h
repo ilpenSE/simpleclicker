@@ -13,6 +13,8 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+enum class Unit { Millis = 0, Secs, Mins };
+
 class MainWindow : public QMainWindow
 {
   Q_OBJECT

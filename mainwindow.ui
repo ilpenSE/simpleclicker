@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>700</width>
-    <height>555</height>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -137,87 +137,142 @@
          <number>10</number>
         </property>
 
-        <!-- Click interval group -->
+        <!-- Click interval -->
         <item>
-         <widget class="QGroupBox" name="clickIntervalBox">
-          <property name="title">
-           <string>Click Interval</string>
-          </property>
-          <layout class="QHBoxLayout" name="clickIntervalHLayout">
-           <item>
-            <layout class="QVBoxLayout" name="hoursPanel">
-             <item>
-              <widget class="QLabel" name="hoursLabel">
-               <property name="text">
-                <string>Hours</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="hoursEdit">
-               <property name="maximum">
-                <number>60</number>
-               </property>
-              </widget>
-             </item>
+          <widget class="QGroupBox" name="clickIntervalBox">
+            <property name="title">
+              <string>Click Interval</string>
+            </property>
+
+            <layout class="QVBoxLayout" name="clickIntervalLayout">
+              <item>
+                <layout class="QHBoxLayout" name="clickPanel">
+                  <item>
+                    <widget class="QDoubleSpinBox" name="clickIntervalEdit">
+                      <property name="sizePolicy">
+                        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                        </sizepolicy>
+                      </property>
+                      <property name="maximum">
+                        <number>2147483647</number>
+                      </property>
+                    </widget>
+                  </item>
+
+                  <item>
+                    <widget class="QComboBox" name="clickIntervalUnitCombo">
+                      <property name="sizeAdjustPolicy">
+                        <enum>QComboBox::AdjustToContents</enum>
+                      </property>
+                      <property name="sizePolicy">
+                        <sizepolicy hsizetype="Maximum" vsizetype="Fixed"/>
+                      </property>
+                      <item>
+                        <property name="text">
+                          <string>milliseconds</string>
+                        </property>
+                      </item>
+                      <item>
+                        <property name="text">
+                          <string>seconds</string>
+                        </property>
+                      </item>
+                      <item>
+                        <property name="text">
+                          <string>minutes</string>
+                        </property>
+                      </item>
+                    </widget>
+                  </item>
+
+                  <item>
+                    <spacer name="clickIntervalSpacer">
+                      <property name="orientation">
+                        <enum>Qt::Orientation::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                        <size>
+                          <width>40</width>
+                          <height>20</height>
+                        </size>
+                      </property>
+                    </spacer>
+                  </item>
+                </layout>
+              </item>
             </layout>
-           </item>
-           <item>
-            <layout class="QVBoxLayout" name="minutesPanel">
-             <item>
-              <widget class="QLabel" name="minutesLabel">
-               <property name="text">
-                <string>Minutes</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="minutesEdit">
-               <property name="maximum">
-                <number>59</number>
-               </property>
-              </widget>
-             </item>
+          </widget>
+        </item>
+
+        <!-- Hold Time -->
+        <item>
+          <widget class="QGroupBox" name="holdTimeBox">
+            <property name="title">
+              <string>Hold Time</string>
+            </property>
+
+            <layout class="QVBoxLayout" name="holdTimeLayout">
+              <item>
+                <layout class="QHBoxLayout" name="holdTimePanel">
+                  <item>
+                    <widget class="QDoubleSpinBox" name="holdTimeEdit">
+                      <property name="sizePolicy">
+                        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                        </sizepolicy>
+                      </property>
+                      <property name="maximum">
+                        <number>2147483647</number>
+                      </property>
+                    </widget>
+                  </item>
+
+                  <item>
+                    <widget class="QComboBox" name="holdTimeUnitCombo">
+                      <property name="sizeAdjustPolicy">
+                        <enum>QComboBox::AdjustToContents</enum>
+                      </property>
+                      <property name="sizePolicy">
+                        <sizepolicy hsizetype="Maximum" vsizetype="Fixed"/>
+                      </property>
+                      <item>
+                        <property name="text">
+                          <string>milliseconds</string>
+                        </property>
+                      </item>
+                      <item>
+                        <property name="text">
+                          <string>seconds</string>
+                        </property>
+                      </item>
+                      <item>
+                        <property name="text">
+                          <string>minutes</string>
+                        </property>
+                      </item>
+                    </widget>
+                  </item>
+
+                  <item>
+                    <spacer name="holdTimeSpacer">
+                      <property name="orientation">
+                        <enum>Qt::Orientation::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                        <size>
+                          <width>40</width>
+                          <height>20</height>
+                        </size>
+                      </property>
+                    </spacer>
+                  </item>
+                </layout>
+              </item>
             </layout>
-           </item>
-           <item>
-            <layout class="QVBoxLayout" name="secondsPanel">
-             <item>
-              <widget class="QLabel" name="secondsLabel">
-               <property name="text">
-                <string>Seconds</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="secondsEdit">
-               <property name="maximum">
-                <number>59</number>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QVBoxLayout" name="millisPanel">
-             <item>
-              <widget class="QLabel" name="millisLabel">
-               <property name="text">
-                <string>Milliseconds</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="millisEdit">
-               <property name="maximum">
-                <number>999</number>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
+          </widget>
         </item>
 
         <!-- Click Options group -->
