@@ -60,5 +60,5 @@ private:
   void log_internal(LogLevel level, std::string_view sv);
   QFile m_file{};
   QTextStream m_stream{};
-  QDateTime m_creationTime{};
+  QString m_archivedName{};
 };

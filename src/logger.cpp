@@ -17,13 +17,11 @@ constexpr const char *levelColor(LogLevel level) {
 Logger::Logger(const QDir& logs_dir)
   : m_file(logs_dir.filePath("latest.log")),
     m_stream(&m_file),
-    m_creationTime(QDateTime::currentDateTime())
+    m_archivedName(logs_dir.filePath(QDateTime::currentDateTime().toString("dd-MM-yyyy-hh-mm-ss") + ".log"))
 {}
 
 Logger::~Logger() {
-  const QString archived = m_file.fileName().section('/', 0, -2) + "/" +
-                           m_creationTime.toString("dd-MM-yyyy-hh-mm-ss") + ".log";
-  m_file.copy(m_file.fileName(), archived);
+  m_file.copy(m_file.fileName(), m_archivedName);
   m_file.close();
 }
 

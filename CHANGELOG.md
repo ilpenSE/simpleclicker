@@ -1,3 +1,9 @@
+# 1.1
+
+- Added hold mode and hold time
+- Added German and French languages
+- Fixed ".log" file issue in logs folder
+
 # 1.0
 
 - ... [Everything beta and rc of 1.0]
