@@ -52,7 +52,7 @@
     <translation>Create a new preset</translation>
   </message>
   <message>
-    <source>Removed preset '%1'.</source>
+    <source>Removed preset '%1' successfully.</source>
     <translation>Removed preset '%1' successfully.</translation>
   </message>
   <message>
@@ -80,26 +80,30 @@
     <translation>Y dimension must be a positive value!</translation>
   </message>
 
+  <!-- General time units -->
+  <message>
+    <source>milliseconds</source>
+    <translation>milliseconds</translation>
+  </message>
+  <message>
+    <source>seconds</source>
+    <translation>seconds</translation>
+  </message>
+  <message>
+    <source>minutes</source>
+    <translation>minutes</translation>
+  </message>
+
   <!-- Click Interval -->
   <message>
     <source>Click Interval</source>
     <translation>Click Interval</translation>
   </message>
+
+  <!-- Hold time -->
   <message>
-    <source>Hours</source>
-    <translation>Hours</translation>
-  </message>
-  <message>
-    <source>Minutes</source>
-    <translation>Minutes</translation>
-  </message>
-  <message>
-    <source>Seconds</source>
-    <translation>Seconds</translation>
-  </message>
-  <message>
-    <source>Milliseconds</source>
-    <translation>Milliseconds</translation>
+    <source>Hold Time</source>
+    <translation>Hold Time</translation>
   </message>
 
   <!-- Click Options -->
@@ -122,6 +126,18 @@
   <message>
     <source>Middle</source>
     <translation>Middle</translation>
+  </message>
+  <message>
+    <source>Click Mode</source>
+    <translation>Click Mode</translation>
+  </message>
+  <message>
+    <source>Click</source>
+    <translation>Click</translation>
+  </message>
+  <message>
+    <source>Hold</source>
+    <translation>Hold</translation>
   </message>
 
   <!-- Repeat -->
@@ -279,7 +295,7 @@
   </message>
   <message>
     <source>Help content couldn't be loaded</source>
-    <translation># &lt;Help content couldn't be loaded, try reinstalling app&gt;</translation>
+    <translation># &lt;Help content couldn't be loaded, try reinstalling the app&gt;</translation>
   </message>
 </context>
 

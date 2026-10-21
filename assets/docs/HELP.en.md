@@ -30,8 +30,10 @@
 ## Preset Settings
 - You can change settings in interface that's right to the presets.
 - `Click Interval` determines how much time will be between clicks. This must be greater than 0.
+- `Hold Time` determines how long a mouse button is held down
 - `Click Options` determines detail about mouse clicks.
 - `Mouse Button` is the mouse button to click. You can choose Left, Right and Middle.
+- `Click Mode` decides to press then release or holding the mouse.
 - `Repeat` determines how many times that click repeats. This must be greater than 0. Limit is 1 million.
 - When `Repeat Until Stopped` is selected, it continues clicking until you press hotkey to stop it.
 - `Mouse Cursor Position` is the absolute location in your monitor where to perform a click. If you have multiple monitors this may not work.
@@ -42,8 +44,8 @@
 ## Settings
 - Press `Settings` button on the bottom of window to open settings window.
 - You can change theme, language and global hotkey here.
-- There's only 2 supported languages: English and Turkish.
-- And 2 themes: Dark and Light.
+- Supported languages: English, Turkish, German and French.
+- Supported themes: Dark and Light.
 - To change hotkey, press that text box and press a key or key combination from your keyboard
 - Then click save to save settings and cancel to cancel any changes
 
@@ -67,4 +69,4 @@
 - Made by [ilpeN](https://github.com/ilpenSE).
 - Developed in C++ using Qt.
 - This app is simplified version and sequel of [Auto Clicker](https://github.com/ilpenSE/autoclicker).
-- License: GPL-3.0 only (GNU General Public License)
+- License: AGPL-3.0 only (GNU Affero General Public License)

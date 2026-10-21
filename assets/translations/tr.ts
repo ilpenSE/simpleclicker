@@ -52,7 +52,7 @@
     <translation>Yeni bir ön ayar oluştur</translation>
   </message>
   <message>
-    <source>Removed preset '%1'.</source>
+    <source>Removed preset '%1' successfully.</source>
     <translation>'%1' ön ayarı başarıyla silindi.</translation>
   </message>
   <message>
@@ -80,26 +80,30 @@
     <translation>Y boyutu pozitif bir değer olmalı!</translation>
   </message>
 
+  <!-- General time units -->
+  <message>
+    <source>milliseconds</source>
+    <translation>milisaniye</translation>
+  </message>
+  <message>
+    <source>seconds</source>
+    <translation>saniye</translation>
+  </message>
+  <message>
+    <source>minutes</source>
+    <translation>dakika</translation>
+  </message>
+
   <!-- Click Interval -->
   <message>
     <source>Click Interval</source>
     <translation>Tıklama Aralığı</translation>
   </message>
+
+  <!-- Hold time -->
   <message>
-    <source>Hours</source>
-    <translation>Saat</translation>
-  </message>
-  <message>
-    <source>Minutes</source>
-    <translation>Dakika</translation>
-  </message>
-  <message>
-    <source>Seconds</source>
-    <translation>Saniye</translation>
-  </message>
-  <message>
-    <source>Milliseconds</source>
-    <translation>Milisaniye</translation>
+    <source>Hold Time</source>
+    <translation>Basılı Tutma Süresi</translation>
   </message>
 
   <!-- Click Options -->
@@ -122,6 +126,18 @@
   <message>
     <source>Middle</source>
     <translation>Orta</translation>
+  </message>
+  <message>
+    <source>Click Mode</source>
+    <translation>Tıklama Modu</translation>
+  </message>
+  <message>
+    <source>Click</source>
+    <translation>Tıkla</translation>
+  </message>
+  <message>
+    <source>Hold</source>
+    <translation>Basılı Tut</translation>
   </message>
 
   <!-- Repeat -->

@@ -33,6 +33,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent) {
   m_languageCombo = new QComboBox(this);
   m_languageCombo->addItem("English", static_cast<int>(Language::English));
   m_languageCombo->addItem("Türkçe", static_cast<int>(Language::Turkish));
+  m_languageCombo->addItem("Deutsch", static_cast<int>(Language::German));
+  m_languageCombo->addItem("Français", static_cast<int>(Language::French));
   layout->addRow(tr("Language"), m_languageCombo);
 
   m_themeCombo = new QComboBox(this);

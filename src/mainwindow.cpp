@@ -26,9 +26,30 @@ extern HotkeyManager *hotkeyman;
 extern ClickEngine *clickengine;
 extern UpdateManager *updateman;
 
-static PresetItemWidget *currentPresetWidget = nullptr;
-static bool presetChangeEventLock = false;
-static bool uiConstructed = false;
+namespace {
+PresetItemWidget *currentPresetWidget = nullptr;
+bool presetChangeEventLock = false;
+bool uiConstructed = false;
+int currentClickIntervalMs = 0;
+int currentHoldTimeMs = 0;
+
+constexpr std::pair<int, Unit> getEffectiveUnitFromMs(int ms) {
+  auto deduced_unit = Unit::Millis;
+  double deduced_value = ms;
+
+  if (ms >= 1000*60) {
+    // minutes
+    deduced_value = (double)ms/(1000*60);
+    deduced_unit = Unit::Mins;
+  } else if (ms >= 1000) {
+    // seconds
+    deduced_value = (double)ms/1000;
+    deduced_unit = Unit::Secs;
+  }
+
+  return {deduced_value, deduced_unit};
+}
+} // namespace
 
 MainWindow::MainWindow(QString initPreset, QWidget *parent)
   : QMainWindow(parent) , m_currentPreset(initPreset), ui(new Ui::MainWindow)
@@ -82,14 +103,39 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
 
   // Connect to preset config changes on UI
   auto markUnsaved = [](){ if (currentPresetWidget && !presetChangeEventLock && uiConstructed) currentPresetWidget->markUnsaved(); };
-  for (auto it : { ui->hoursEdit, ui->minutesEdit, ui->secondsEdit, ui->millisEdit,
-                   ui->repeatEdit, ui->xEdit, ui->yEdit }) {
+  for (auto it : { ui->repeatEdit, ui->xEdit, ui->yEdit }) {
     connect(it, &QSpinBox::valueChanged, this, markUnsaved);
   }
+
   for (auto it : { ui->repeatCountRadio, ui->currentLocationRadio }) {
     connect(it, &QRadioButton::toggled, this, markUnsaved);
   }
-  connect(ui->mouseBtnCombo, &QComboBox::currentIndexChanged, this, markUnsaved);
+
+  for (auto it : { ui->holdTimeEdit, ui->clickIntervalEdit }) {
+    connect(it, &QDoubleSpinBox::valueChanged, this, markUnsaved);
+  }
+
+  for (auto it : { ui->mouseBtnCombo, ui->clickModeCombo }) {
+    connect(it, &QComboBox::currentIndexChanged, this, markUnsaved);
+  }
+
+  // Synchronize global variables
+  connect(ui->clickIntervalEdit, &QDoubleSpinBox::valueChanged, this, [this](){
+    double curr_val = ui->clickIntervalEdit->value();
+    switch (static_cast<Unit>(ui->clickIntervalUnitCombo->currentIndex())) {
+    case Unit::Mins: currentClickIntervalMs = curr_val*1000*60; break;
+    case Unit::Secs: currentClickIntervalMs = curr_val*1000; break;
+    default: currentClickIntervalMs = curr_val; break;
+    }
+  });
+  connect(ui->holdTimeEdit, &QDoubleSpinBox::valueChanged, this, [this](){
+    double curr_val = ui->holdTimeEdit->value();
+    switch (static_cast<Unit>(ui->holdTimeUnitCombo->currentIndex())) {
+    case Unit::Mins: currentHoldTimeMs = curr_val*1000*60; break;
+    case Unit::Secs: currentHoldTimeMs = curr_val*1000; break;
+    default: currentHoldTimeMs = curr_val; break;
+    }
+  });
 
   // Set up addPreset button
   makeDynamicIconButton(ui->addPresetBtn, "add.svg");
@@ -125,6 +171,26 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
     });
     int dres = dlg.exec();
     hotkeyman->set(settingsman->get<setting::keybind>());
+  });
+
+  // Subscribe to unit combos
+  connect(ui->clickIntervalUnitCombo, &QComboBox::currentIndexChanged, this, [this](int idx){
+    double val;
+    switch ((Unit)idx) {
+    case Unit::Secs: val = (double)currentClickIntervalMs/1000.0; break;
+    case Unit::Mins: val = (double)currentClickIntervalMs/(1000*60); break;
+    default: val = (double)currentClickIntervalMs;
+    }
+    ui->clickIntervalEdit->setValue(val);
+  });
+  connect(ui->holdTimeUnitCombo, &QComboBox::currentIndexChanged, this, [this](int idx){
+    double val;
+    switch ((Unit)idx) {
+    case Unit::Secs: val = (double)currentHoldTimeMs/1000.0; break;
+    case Unit::Mins: val = (double)currentHoldTimeMs/(1000*60); break;
+    default: val = (double)currentHoldTimeMs;
+    }
+    ui->holdTimeEdit->setValue(val);
   });
 
   // Subscribe to start/stop buttons
@@ -271,7 +337,7 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
       // if current's gonna be deleted, set active preset to something else
       setActivePreset(idx <= 0 ? nullptr : list.item(idx - 1));
     }
-    m_notificationBar->success(QString(tr("Removed preset '%1'.")).arg(itemWidget->presetName()));
+    m_notificationBar->success(QString(tr("Removed preset '%1' successfully.")).arg(itemWidget->presetName()));
 
     list.removeItemWidget(item);
     delete list.takeItem(idx);
@@ -325,10 +391,12 @@ void MainWindow::savePreset(PresetItemWidget *itemWidget) {
   lg->info("Saving preset: '{}'", pname);
   PresetConfig newConfig = {
     .location = Location{ui->xEdit->value(), ui->yEdit->value()},
-    .interval = getIntervalMs(),
+    .interval = currentClickIntervalMs,
+    .holdTime = currentHoldTimeMs,
     .repeat = ui->repeatEdit->value(),
     .mouseButton = getMouseButton(),
     .repeatUntilStopped = ui->repeatUntilStoppedRadio->isChecked(),
+    .clickMode = getClickMode(),
     .currentLocation = ui->currentLocationRadio->isChecked(),
   };
 
@@ -346,7 +414,7 @@ void MainWindow::savePreset(PresetItemWidget *itemWidget) {
 }
 
 void MainWindow::_changePresetConfigUi(bool is_locked) {
-  for (auto it : {ui->clickOptionsBox, ui->clickIntervalBox, ui->repeatBox, ui->positionBox}) {
+  for (auto it : {ui->clickOptionsBox, ui->clickIntervalBox, ui->holdTimeBox, ui->repeatBox, ui->positionBox}) {
     it->setEnabled(!is_locked);
   }
   ui->startButton->setEnabled(!is_locked && !clickengine->running);
@@ -361,13 +429,21 @@ void MainWindow::applySettings() {
 
 void MainWindow::applyPreset(const PresetConfig& config) {
   presetChangeEventLock = true;
-  size_t interval = config.interval;
-  ui->hoursEdit->setValue(interval / 60 / 60 / 1000);
-  ui->minutesEdit->setValue(interval / 60 / 1000);
-  ui->secondsEdit->setValue(interval / 1000);
-  ui->millisEdit->setValue(interval % 1000);
+
+  // Click interval
+  currentClickIntervalMs = config.interval;
+  auto [ef_interval, ef_interval_unit] = getEffectiveUnitFromMs(config.interval);
+  ui->clickIntervalEdit->setValue(ef_interval);
+  ui->clickIntervalUnitCombo->setCurrentIndex((int)ef_interval_unit);
+
+  // Hold Time
+  currentHoldTimeMs = config.holdTime;
+  auto [ef_hold_time, ef_hold_unit] = getEffectiveUnitFromMs(config.holdTime);
+  ui->holdTimeEdit->setValue(ef_hold_time);
+  ui->holdTimeUnitCombo->setCurrentIndex((int)ef_hold_unit);
 
   ui->mouseBtnCombo->setCurrentIndex(static_cast<int>(config.mouseButton));
+  ui->clickModeCombo->setCurrentIndex(static_cast<int>(config.clickMode));
   ui->repeatEdit->setValue(config.repeat);
   ui->repeatUntilStoppedRadio->setChecked(config.repeatUntilStopped);
   ui->repeatCountRadio->setChecked(!config.repeatUntilStopped);
@@ -380,6 +456,12 @@ void MainWindow::applyPreset(const PresetConfig& config) {
   presetChangeEventLock = false;
 }
 
+ClickMode MainWindow::getClickMode() const {
+  int idx = ui->clickModeCombo->currentIndex();
+  if (idx == -1) return {};
+  return static_cast<ClickMode>(idx);
+}
+
 MouseButton MainWindow::getMouseButton() const {
   int idx = ui->mouseBtnCombo->currentIndex();
   if (idx == -1) return {};
@@ -387,12 +469,12 @@ MouseButton MainWindow::getMouseButton() const {
 }
 
 int MainWindow::getIntervalMs() const {
-  int res = 0;
-  res += ui->hoursEdit->value() * 60 * 60 * 1000;
-  res += ui->minutesEdit->value() * 60 * 1000;
-  res += ui->secondsEdit->value() * 1000;
-  res += ui->millisEdit->value();
-  return res;
+  int val = (int)ui->clickIntervalEdit->value();
+  switch ((Unit)ui->clickIntervalUnitCombo->currentIndex()) {
+  case Unit::Secs: return val*1000;
+  case Unit::Mins: return val*1000*60;
+  default: return val;
+  }
 }
 
 QString MainWindow::generateUniquePresetName() const {

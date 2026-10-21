@@ -10,9 +10,11 @@
 #define PRESET_FIELDS \
   X(location, Location, (Location{0, 0})) \
   X(interval, int, 100) \
+  X(holdTime, int, 100) \
   X(repeat, int, 1) \
   X(mouseButton, MouseButton, MouseButton::Left) \
   X(repeatUntilStopped, bool, true) \
+  X(clickMode, ClickMode, ClickMode::Click) \
   X(currentLocation, bool, true)
 
 namespace preset {

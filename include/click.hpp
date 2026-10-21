@@ -30,10 +30,26 @@ signals:
 private:
   PresetConfig m_preset{};
   QTimer m_timer{};
+  QTimer m_holdTimer{};
   int m_reps = 0;
+  bool m_pressed = false;
+  Location m_loc{};
 
   void click();
-  void nativeMouseClick(Location location, bool current_loc, MouseButton mouseButton) const;
+  void release();
+
+  void nativeMousePress(MouseButton mouseButton, Location loc) const;
+  void nativeMouseRelease(MouseButton mouseButton, Location loc) const;
+  void nativeMouseHover(Location location) const;
+
+  Location getEffectiveLocation() const {
+    Location loc;
+    if (m_preset.currentLocation) {
+      QPoint p = QCursor::pos();
+      return {.x = p.x(), .y = p.y()};
+    }
+    return m_preset.location;
+  }
 
   ClickEngine(PresetConfig config, QObject *parent);
   ~ClickEngine() override;

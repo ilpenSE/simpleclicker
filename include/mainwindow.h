@@ -13,6 +13,8 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+enum class Unit { Millis = 0, Secs, Mins };
+
 class MainWindow : public QMainWindow
 {
   Q_OBJECT
@@ -27,6 +29,7 @@ public slots:
 private:
   void showLocationPicker();
   MouseButton getMouseButton() const;
+  ClickMode getClickMode() const;
   int getIntervalMs() const;
   void autoUpdate(Version new_version);
 

@@ -1,4 +1,4 @@
-# SimpleClicker - A Simple Auto Clicker Software
+# SimpleClicker - A Simple Auto-Clicker
 
 ![GitHub](https://img.shields.io/badge/ilpenSE-simpleclicker-blue?logo=github)
 ![C++ Qt](https://img.shields.io/badge/C++%20Qt-41cd52)
@@ -7,25 +7,30 @@
 ![Windows](https://img.shields.io/badge/windows-346af5?style=for-the-badge)
 ![Linux](https://img.shields.io/badge/linux-ffc700?style=for-the-badge)
 
+[Bu belgenin Türkçesi var](./README.tr.md)
+
+[Ce document en français](./README.fr.md)
+
+[Dieses Dokument auf Deutsch](./README.de.md)
+
 - It only supports Windows and GNU/Linux with x86-64 architecture for now
-- It has presets that you can save, delete or change.
-- Everything on your local machine stored in `AppData` or `~/.local/share/` folder.
+- Everything is stored on your own machine and in `AppData` or `~/.local/share/` folder
 - You can report errors you have crossed or ideas of yours to enhance application via GitHub issues if you want
 
 ## Installation Guide for Windows
 
-1. Install and Run SimpleClicker.exe below.
+1. Run `SimpleClicker.exe` you downloaded.
 2. Hit Next, accept the license, next then install it.
 3. The desktop shortcut automatically created
 
 ## Installation Guide for GNU/Linux (Arch/Debian/Fedora based)
 
-1. Unpack tarball you downloaded.
-2. Run install.sh bash script
-3. This script needs root access (sudo) enter your password there
-4. It downloads necessary dependencies, copies binary, desktop entry and icon
-5. Script will tell you packages to be downloaded
-6. When installation completes, you can now run SimpleClicker from command line or desktop
+1. Unpack the file (one that ends with `.tar.gz`) you downloaded.
+2. Run file named `install.sh`
+3. This script needs `root` access (`sudo`) enter your password there
+4. It downloads necessary dependencies, copies the binary, desktop entry and icon
+5. Installer will tell you which packages to download
+6. When installation completes, you can now run the app from command line or desktop
 7. Desktop entry shortcut'll automatically created as well
 
 ## Help
@@ -36,4 +41,4 @@
 - Made by [ilpeN](https://github.com/ilpenSE).
 - Developed in C++ using Qt.
 - This app is simplified version and sequel of [Auto Clicker](https://github.com/ilpenSE/autoclicker).
-- License: GPL-3.0 only (GNU General Public License)
+- License: AGPL-3.0 only (GNU Affero General Public License)
