@@ -17,6 +17,10 @@
 - Alles wird auf deinem eigenen Rechner im Ordner `AppData` bzw. `~/.local/share/` gespeichert
 - Aufgetretene Fehler oder eigene Verbesserungsvorschläge kannst du gerne über GitHub Issues melden
 
+<img width="700" height="666" alt="main_de_linux" src="https://github.com/user-attachments/assets/08a30ddf-77ea-4d13-80c6-6a03652e812d" />
+
+<img width="701" height="667" alt="main_de_linux_light" src="https://github.com/user-attachments/assets/9fd068f8-3405-4f5b-95b8-b496a9247917" />
+
 ## Installationsanleitung für Windows
 
 1. Führe die heruntergeladene Datei `SimpleClicker.exe` aus.
