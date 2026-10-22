@@ -280,6 +280,11 @@
     <source>Keybind is invalid, try something else</source>
     <translation>Kısayol geçersiz, başka bir kısayol deneyin</translation>
   </message>
+  <message>
+    <source>Build date, commit, compiler with version and Qt version</source>
+    <translation>Build tarihi, commit, derleyiciyle sürümü ve Qt sürümü</translation>
+  </message>
+
 </context>
 
 <context>

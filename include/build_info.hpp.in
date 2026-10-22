@@ -1,0 +1,6 @@
+#pragma once
+
+#define SC_GIT_HASH "@GIT_HASH@"
+#define SC_BUILD_TIME "@BUILD_TIME@"
+#define SC_COMPILER_VERSION "@COMPILER_VERSION@"
+#define SC_QT_VERSION "@QT_VERSION_STRING@"

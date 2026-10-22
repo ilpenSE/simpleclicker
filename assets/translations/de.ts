@@ -259,7 +259,10 @@
     <source>Keybind is invalid, try something else</source>
     <translation>Die Tastenkombination ist ungültig, versuche eine andere</translation>
   </message>
-
+  <message>
+    <source>Build date, commit, compiler with version and Qt version</source>
+    <translation>Build-Datum, Commit, Compiler mit Version und Qt-Version</translation>
+  </message>
 </context>
 
 <context>

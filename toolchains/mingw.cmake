@@ -1,19 +1,19 @@
 # toolchains/mingw.cmake
 
+set(MY_TOOL_PATH $ENV{HOME}/Qt/Tools/mingw1310_64/bin)
+set(MY_QT_PATH $ENV{HOME}/Qt/6.10.3/mingw_64)
+set(MY_QT_HOST_PATH $ENV{HOME}/Qt/6.10.3/gcc_64)
+
 set(CMAKE_SYSTEM_NAME Windows)
-set(CMAKE_C_COMPILER x86_64-w64-mingw32-gcc)
-set(CMAKE_CXX_COMPILER x86_64-w64-mingw32-g++)
+set(CMAKE_C_COMPILER ${MY_TOOL_PATH}/x86_64-w64-mingw32-gcc.exe)
+set(CMAKE_CXX_COMPILER ${MY_TOOL_PATH}/x86_64-w64-mingw32-g++.exe)
+set(CMAKE_RC_COMPILER ${MY_TOOL_PATH}/windres.exe)
+
+set(CMAKE_FIND_ROOT_PATH ${MY_QT_PATH})
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
-# Change these variables depending on your system
-# pip install aqtinstall
-# aqt install-qt linux desktop 6.10.3 gcc_64
-# aqt install-qt windows desktop 6.10.3 mingw_64
-set(CMAKE_FIND_ROOT_PATH /home/ilpen/Qt/6.10.3/mingw_64)
-set(CMAKE_PREFIX_PATH /home/ilpen/Qt/6.10.3/mingw_64)
-set(QT_HOST_PATH /home/ilpen/Qt/6.10.3/gcc_64)
-
-# cmake -B build -DCMAKE_TOOLCHAIN_FILE=toolchains/mingw.cmake
+set(CMAKE_PREFIX_PATH ${MY_QT_PATH})
+set(QT_HOST_PATH ${MY_QT_HOST_PATH})

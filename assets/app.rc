@@ -1,0 +1,36 @@
+#include <windows.h>
+
+IDI_ICON1 ICON "icons/app.ico"
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,1,1,0
+ PRODUCTVERSION 1,1,1,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS VS_FF_DEBUG
+#else
+ FILEFLAGS 0
+#endif
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VFT_APP
+ FILESUBTYPE VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName",      "ilpeN\0"
+            VALUE "FileDescription",  "SimpleClicker\0"
+            VALUE "FileVersion",      "1.1.1.0\0"
+            VALUE "InternalName",     "SimpleClicker\0"
+            VALUE "OriginalFilename", "SimpleClicker.exe\0"
+            VALUE "ProductName",      "SimpleClicker\0"
+            VALUE "ProductVersion",   "1.1.1.0\0"
+        END
+    END
+
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 1200
+    END
+END

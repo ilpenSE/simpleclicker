@@ -5,6 +5,7 @@
 ![Free Software](https://img.shields.io/badge/Free%20Software-30a5db)
 
 ![Windows](https://img.shields.io/badge/windows-346af5?style=for-the-badge)
+![Linux](https://img.shields.io/badge/linux-ffc700?style=for-the-badge)
 
 [This document in English](./README.md)
 
@@ -12,15 +13,21 @@
 
 [Ce document en français](./README.fr.md)
 
-- Unterstützt vorerst nur Windows
-- Alles wird auf deinem eigenen Rechner im Ordner `AppData` gespeichert
+- Unterstützt vorerst nur Windows und GNU/Linux mit x86-64-Architektur
+- Alles wird auf deinem eigenen Rechner im Ordner `AppData` bzw. `~/.local/share/` gespeichert
 - Aufgetretene Fehler oder eigene Verbesserungsvorschläge kannst du gerne über GitHub Issues melden
 
-## Installationsanleitung
+## Installationsanleitung für Windows
 
 1. Führe die heruntergeladene Datei `SimpleClicker.exe` aus.
 2. Klicke auf Weiter, akzeptiere die Lizenz, klicke erneut auf Weiter und installiere die Anwendung.
 3. Die Desktop-Verknüpfung wird automatisch erstellt.
+
+## Installationsanleitung für GNU/Linux
+
+1. Installiere `SimpleClicker-x86_64.AppImage` an einem beliebigen Ort.
+2. Mache die Datei mit `chmod +x SimpleClicker-x86_64.AppImage` ausführbar.
+3. Starte die Anwendung.
 
 ## Hilfe
 - [Hier klicken für ausführliche Hilfe](./assets/docs/HELP.de.md)
@@ -29,5 +36,4 @@
 
 - Entwickelt von [ilpeN](https://github.com/ilpenSE).
 - In C++ mit Qt entwickelt.
-- Diese Anwendung ist eine vereinfachte Version und der Nachfolger von [Auto Clicker](https://github.com/ilpenSE/autoclicker).
 - Lizenz: AGPL-3.0 only (GNU Affero General Public License)

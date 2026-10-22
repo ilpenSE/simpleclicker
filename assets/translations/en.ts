@@ -259,6 +259,10 @@
     <source>Keybind is invalid, try something else</source>
     <translation>Keybind is invalid, try something else</translation>
   </message>
+  <message>
+    <source>Build date, commit, compiler with version and Qt version</source>
+    <translation>Build date, commit, compiler with version and Qt version</translation>
+  </message>
 
 </context>
 

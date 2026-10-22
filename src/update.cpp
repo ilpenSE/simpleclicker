@@ -26,8 +26,8 @@ QString sha256file(QFile &file) {
 #define ASSET_EXTENSION ".exe"
 constexpr auto ASSET_NAME = "SimpleClicker" ASSET_EXTENSION;
 #else
-#define ASSET_EXTENSION ".tar.gz"
-constexpr auto ASSET_NAME = "gnu-linux-x86-64" ASSET_EXTENSION;
+#define ASSET_EXTENSION ".AppImage"
+constexpr auto ASSET_NAME = "SimpleClicker-x86-64" ASSET_EXTENSION;
 #endif
 
 } // namespace
@@ -116,7 +116,7 @@ bool UpdateManager::checkAssetsHash(Version version) {
 }
 
 // https://github.com/ilpenSE/simpleclicker/releases/download/v1.1.0-beta/SimpleClicker.exe
-// https://github.com/ilpenSE/simpleclicker/releases/download/v1.1.0-beta/gnu-linux-x86-64.tar.gz
+// https://github.com/ilpenSE/simpleclicker/releases/download/v1.1.0-beta/SimpleClicker-x86-64.AppImage
 bool UpdateManager::downloadAndInstall(Version version) {
   // Open file again in write only mode for remote asset
   if (!m_setupFile->open(QIODevice::WriteOnly)) {
@@ -180,49 +180,42 @@ void UpdateManager::install() {
   }
 
 #else // Linux
-  QProcess process;
-
-  // Unpack the tarball downloaded
-  process.start("tar", {"-xzf", m_setupFilePath, "-C", "/tmp/"});
-  if (!process.waitForStarted()) {
-    emit downloadFailed("Could not create tar process");
-    return;
-  }
-  if (!process.waitForFinished(-1)) {
-    emit downloadFailed("Tar process exited abnormally: " + process.errorString());
+  // Get some information on environment
+  const auto appImagePath = std::getenv("APPIMAGE"); // AppImage file's path
+  const auto homePath = std::getenv("HOME");
+  if (!homePath || !(*homePath)) {
+    emit downloadFailed("Failed to get 'HOME' env variable, please set it before you ran program or you may be using some weird environment");
     return;
   }
 
-  // Start install script
-  process.start("pkexec", {"/tmp/simpleclicker/install.sh", "/tmp/simpleclicker/"});
-  if (!process.waitForStarted()) {
-    emit downloadFailed("Could not create install script process");
-    return;
-  }
-  if (!process.waitForFinished(-1)) {
-    emit downloadFailed("Install script exited abnormally: " + process.errorString());
-    return;
-  }
-  lg->info("Install script's stdout:\n{}", QString(process.readAllStandardOutput()));
-  lg->info("Install script's stderr:\n{}", QString(process.readAllStandardError()));
+  auto backupPath = std::string(homePath) + "/" + ASSET_NAME + ".bak";
+  lg->info("Detected AppImage path = {}", appImagePath);
+  lg->info("Backup path = {}", backupPath);
 
-  const int exitCode = process.exitCode();
-  // User doesn't authorized, graceful fail
-  if (exitCode == 127 || exitCode == 126) return;
-
-  // Real error
-  if (exitCode != 0) {
-    emit downloadFailed(QString("Install script failed with exit code %1").arg(exitCode));
+  if (!appImagePath || !(*appImagePath)) {
+    emit downloadFailed("Failed to locate .AppImage file");
     return;
   }
 
-  // Open upgraded program
-  qint64 pid;
-  process.setProgram("/usr/local/bin/SimpleClicker");
-  if (!process.startDetached(&pid)) {
-    lg->error("Could not open new program");
+  // Update .AppImage files
+  if (std::rename(appImagePath, backupPath.c_str()) != 0) {
+    lg->error("Rename '{}' -> '{}' failed: {}", appImagePath, backupPath, strerror(errno));
+    emit downloadFailed(QString("Rename '%1' -> '%2' failed: %3").arg(appImagePath).arg(backupPath).arg(strerror(errno)));
     return;
   }
+
+  if (std::rename(m_setupFilePath.toUtf8().constData(), appImagePath) != 0) {
+    lg->error("Rename '{}' -> '{}' failed: {}", m_setupFilePath, appImagePath, strerror(errno));
+    emit downloadFailed(QString("Rename '%1' -> '%2' failed: %3").arg(m_setupFilePath).arg(appImagePath).arg(strerror(errno)));
+    return;
+  }
+
+  // Wait until this process dies and then run the new program
+  QString command = QString("while kill -0 %1 2>/dev/null; do sleep 0.1; done; "
+                              "chmod +x \"%2\"; exec \"%2\"").arg(QCoreApplication::applicationPid())
+    .arg(QString::fromLocal8Bit(appImagePath));
+
+  QProcess::startDetached("/bin/sh", {"-c", command});
 #endif
 
   qApp->quit();

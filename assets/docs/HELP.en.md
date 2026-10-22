@@ -61,12 +61,11 @@
 - Program'll let you know when there's a new update on program start.
 - A notification'll appear like `New update available`. Press `Upgrade Now` to update the application.
 - This update process is fully-automatic. It only asks you administrator permissions in Windows and root privileges in Linux.
-- NOTE: This priveleges are necessary to install the application. If you wonder to see all installation process and operations happening behind the scenes, project is open-source. Go to `aux` folder located in project root. There're either Windows ISS script and Linux install/uninstall scripts there.
+- NOTE: This priveleges are necessary to install the application. If you wonder to see all installation process and operations happening behind the scenes, project is open-source.
 - Application'll be opened when upgrade process is finished.
 
 # About
 
 - Made by [ilpeN](https://github.com/ilpenSE).
 - Developed in C++ using Qt.
-- This app is simplified version and sequel of [Auto Clicker](https://github.com/ilpenSE/autoclicker).
 - License: AGPL-3.0 only (GNU Affero General Public License)

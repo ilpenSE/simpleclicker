@@ -6,6 +6,7 @@
 #include "settings.hpp"
 #include "language.hpp"
 #include "hotkey.hpp"
+#include "build_info.hpp"
 
 extern ThemeManager *thememan;
 extern SettingsManager *settingsman;
@@ -74,6 +75,14 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent) {
   btnLayout->addWidget(m_saveBtn);
   btnLayout->addWidget(m_cancelBtn);
   outerLayout->addLayout(btnLayout);
+
+  auto infoLayout = new QHBoxLayout();
+  infoLayout->setContentsMargins(10,0,10,10);
+  auto infoLabel = new QLabel(SC_BUILD_TIME ", commit " SC_GIT_HASH ", " SC_COMPILER_VERSION ", Qt " SC_QT_VERSION);
+  infoLabel->setEnabled(false);
+  infoLabel->setToolTip(tr("Build date, commit, compiler with version and Qt version"));
+  infoLayout->addWidget(infoLabel);
+  outerLayout->addLayout(infoLayout);
 
   connect(m_saveBtn, &QPushButton::clicked, this, &SettingsDialog::onSave);
   connect(m_cancelBtn, &QPushButton::clicked, this, &QDialog::reject);

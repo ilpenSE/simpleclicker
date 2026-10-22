@@ -61,12 +61,11 @@
 - Yeni bir güncelleme geldiğinde uygulama başlangıcında haberdar edilirsiniz.
 - Yukarda `Yeni güncelleme var` gibi bir bildirim gelecek ve sağında bulunan `Şimdi Yükselt`'e basarak uygulamayı güncelleyebilirsiniz.
 - Bu güncelleme tamamen otomatiktir, sizden sadece Windows'ta yönetici izinleri ve Linux'ta root yetkisi istenir.
-- NOT: Bu yetkiler uygulamayı indirmek için de gereklidir. Eğer tüm kurulum sürecini arkada yapılan işlemleri görmek isterseniz proje açık kaynaktır, proje kök dizininde bulunan `aux` klasöründe hem Windows ISS script'i hem de Linux install/uninstall script'leri var.
+- NOT: Bu yetkiler uygulamayı indirmek için de gereklidir. Eğer tüm kurulum sürecini arkada yapılan işlemleri görmek isterseniz proje açık kaynaktır.
 - Güncelleme bitince yeni uygulama otomatik olarak açılır.
 
 # Hakkında
 
 - [ilpeN](https://github.com/ilpenSE) tarafından yapıldı.
 - Qt kullanılarak C++'ta geliştirildi.
-- Bu uygulama, [Auto Clicker](https://github.com/ilpenSE/autoclicker)'ın devamı ve basitleştirilmiş halidir.
 - Lisans: Sadece AGPL-3.0 (GNU Affero General Public License)
