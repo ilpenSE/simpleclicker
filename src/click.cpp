@@ -1,10 +1,9 @@
 #include "click.hpp"
 #include "common.hpp"
 #include "logger.hpp"
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
+#include "x11.hpp"
 extern Logger *lg;
+extern X11 *x11inst;
 namespace {
 constexpr auto CLICK_DELAY_MS = 1;
 }
@@ -69,6 +68,10 @@ void ClickEngine::stop() {
   }
 }
 
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
 namespace {
 static DWORD to_win32(MouseButton button, bool isPress) {
   switch (button) {
@@ -95,3 +98,39 @@ void ClickEngine::nativeMouseRelease(MouseButton mouseButton, Location loc) cons
   input.mi.dwFlags = to_win32(mouseButton, false) | MOUSEEVENTF_ABSOLUTE;
   SendInput(1, &input, sizeof(input));
 }
+
+#else // X11
+#include <unistd.h>
+#include <xcb/xtest.h>
+
+namespace {
+int to_xcb(MouseButton mouseButton) {
+  switch (mouseButton) {
+  case MouseButton::Right: return 3;
+  case MouseButton::Middle: return 2;
+  default: return 1;
+  }
+}
+} // namespace
+
+void ClickEngine::nativeMouseHover(Location loc) const {
+  xcb_test_fake_input(x11inst->connection, XCB_MOTION_NOTIFY, 0,
+                      XCB_CURRENT_TIME, x11inst->rootWindow, loc.x, loc.y, 0);
+  xcb_flush(x11inst->connection);
+}
+
+void ClickEngine::nativeMousePress(MouseButton mouseButton, Location loc) const {
+  int msbtnId = to_xcb(mouseButton);
+  xcb_test_fake_input(x11inst->connection, XCB_BUTTON_PRESS, msbtnId,
+                      XCB_CURRENT_TIME, x11inst->rootWindow, loc.x, loc.y, 0);
+  xcb_flush(x11inst->connection);
+}
+
+void ClickEngine::nativeMouseRelease(MouseButton mouseButton, Location loc) const {
+  int msbtnId = to_xcb(mouseButton);
+  xcb_test_fake_input(x11inst->connection, XCB_BUTTON_RELEASE, msbtnId,
+                      XCB_CURRENT_TIME, x11inst->rootWindow, loc.x, loc.y, 0);
+  xcb_flush(x11inst->connection);
+}
+
+#endif

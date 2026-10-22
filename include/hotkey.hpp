@@ -2,6 +2,7 @@
 #include <QObject>
 #include "common.hpp"
 #include <QAbstractNativeEventFilter>
+#include "x11.hpp"
 
 class HotkeyManager : public QObject, public QAbstractNativeEventFilter {
   Q_OBJECT
@@ -33,7 +34,14 @@ private:
   bool registerHotkey(const Hotkey& hotkey);
   bool unregisterHotkey();
 
+#ifdef _WIN32
   static constexpr int HOTKEY_ID = 1;
+#else // Linux X11
+  xcb_keycode_t m_keycode = 0;
+  quint16 m_modifiers = 0;
+  X11 *m_x11inst;
+
+#endif
   bool m_registered = false;
 
   explicit HotkeyManager(QObject *parent);
