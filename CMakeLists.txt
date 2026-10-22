@@ -8,7 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # build/compile_commands.json
 
 project(SimpleClicker LANGUAGES CXX)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets Svg Network)
+find_package(Qt6 6.10.3 EXACT REQUIRED COMPONENTS Core Widgets Svg Network)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
