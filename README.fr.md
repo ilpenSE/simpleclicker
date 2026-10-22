@@ -23,15 +23,11 @@
 2. Cliquez sur Suivant, acceptez la licence, cliquez à nouveau sur Suivant, puis installez.
 3. Le raccourci sur le bureau est créé automatiquement.
 
-## Guide d'installation pour GNU/Linux (basé sur Arch/Debian/Fedora)
+## Guide d'installation pour GNU/Linux
 
-1. Décompressez le fichier (celui qui se termine par `.tar.gz`) que vous avez téléchargé.
-2. Exécutez le fichier nommé `install.sh`.
-3. Ce script nécessite un accès `root` (`sudo`), saisissez-y votre mot de passe.
-4. Il télécharge les dépendances nécessaires, puis copie le binaire, l'entrée de bureau et l'icône.
-5. L'installateur vous indiquera quels paquets installer.
-6. Une fois l'installation terminée, vous pouvez lancer l'application depuis la ligne de commande ou le bureau.
-7. Le raccourci d'entrée de bureau est également créé automatiquement.
+1. Placez `SimpleClicker-x86_64.AppImage` dans le répertoire de votre choix.
+2. Rendez le fichier exécutable en exécutant `chmod +x SimpleClicker-x86_64.AppImage`.
+3. Lancez l’application.
 
 ## Aide
 - [Cliquez ici pour l'aide détaillée](./assets/docs/HELP.fr.md)
@@ -40,5 +36,4 @@
 
 - Créé par [ilpeN](https://github.com/ilpenSE).
 - Développé en C++ avec Qt.
-- Cette application est une version simplifiée et la suite de [Auto Clicker](https://github.com/ilpenSE/autoclicker).
 - Licence : AGPL-3.0 only (GNU Affero General Public License)

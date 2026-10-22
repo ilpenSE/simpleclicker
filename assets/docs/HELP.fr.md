@@ -61,12 +61,11 @@
 - Le programme vous informe au démarrage lorsqu'une nouvelle mise à jour est disponible.
 - Une notification du type `Nouvelle mise à jour disponible` apparaît. Cliquez sur `Mettre à jour maintenant` pour mettre à jour l'application.
 - Ce processus de mise à jour est entièrement automatique. Il demande uniquement les droits d'administrateur sous Windows et les privilèges root sous Linux.
-- REMARQUE : ces privilèges sont nécessaires pour installer l'application. Si vous souhaitez voir tout le processus d'installation et les opérations effectuées en arrière-plan, le projet est open source. Rendez-vous dans le dossier `aux` à la racine du projet. Vous y trouverez le script Windows ISS ainsi que les scripts d'installation/désinstallation pour Linux.
+- REMARQUE : ces privilèges sont nécessaires pour installer l'application. Si vous souhaitez voir tout le processus d'installation et les opérations effectuées en arrière-plan, le projet est open source.
 - L'application s'ouvrira à la fin de la mise à jour.
 
 # À propos
 
 - Créé par [ilpeN](https://github.com/ilpenSE).
 - Développé en C++ avec Qt.
-- Cette application est une version simplifiée et la suite de [Auto Clicker](https://github.com/ilpenSE/autoclicker).
 - Licence : AGPL-3.0 uniquement (GNU Affero General Public License)

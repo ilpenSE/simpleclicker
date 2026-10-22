@@ -212,7 +212,7 @@ void UpdateManager::install() {
 
   // Wait until this process dies and then run the new program
   QString command = QString("while kill -0 %1 2>/dev/null; do sleep 0.1; done; "
-                              "exec \"%2\"").arg(QCoreApplication::applicationPid())
+                              "chmod +x \"%2\"; exec \"%2\"").arg(QCoreApplication::applicationPid())
     .arg(QString::fromLocal8Bit(appImagePath));
 
   QProcess::startDetached("/bin/sh", {"-c", command});

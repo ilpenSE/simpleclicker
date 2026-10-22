@@ -23,15 +23,11 @@
 2. Sonrakine basın, lisansı kabul edin sonraki ve kurun
 3. Masaüstü kısayolu otomatik olarak oluşturulacaktır
 
-## GNU/Linux için Kurulum Rehberi (Arch/Debian/Fedora tabanlılar)
+## GNU/Linux için Kurulum Rehberi
 
-1. İndirdiğiniz paketi (`.tar.gz` ile biten dosya) açın
-2. `install.sh` isimli dosyayı çalıştırın
-3. Bu script `root` yetkileri (`sudo`) kullandığından şifrenizi girin
-4. Gerekli paketleri indirip masaüstü girdisini, ikili dosyayı ve simgeyi kopyalar
-5. Kurucu hangi paketleri indireceğini söyler
-6. Kurulum bitince komut satırından ya da masaüstünden uygulamayı çalıştırabilirsiniz
-7. Masaüstü kısayolu yine otomatik olarak oluşturulacaktır
+1. `SimpleClicker-x86_64.AppImage` dosyasını istediğiniz herhangi bir yere indirin.
+2. `chmod +x SimpleClicker-x86_64.AppImage` ile dosyayı çalıştırılabilir yapın.
+3. Çalıştırın.
 
 ## Yardım
 - [Buraya tıklayarak detaylı yardım alabilirsiniz](./assets/docs/HELP.tr.md)
@@ -40,5 +36,4 @@
 
 - [ilpeN](https://github.com/ilpenSE) tarafından yapıldı.
 - Qt kullanılarak C++'ta geliştirildi.
-- Bu uygulama, [Auto Clicker](https://github.com/ilpenSE/autoclicker)'ın devamı ve basitleştirilmiş halidir.
 - Lisans: Sadece AGPL-3.0 (GNU Affero General Public License)

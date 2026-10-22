@@ -61,12 +61,11 @@
 - Das Programm informiert dich beim Start, wenn ein neues Update verfügbar ist.
 - Es erscheint eine Benachrichtigung wie `Neues Update verfügbar`. Klicke auf `Jetzt aktualisieren`, um die Anwendung zu aktualisieren.
 - Dieser Update-Vorgang läuft vollautomatisch ab. Er fragt lediglich unter Windows nach Administratorrechten und unter Linux nach Root-Rechten.
-- HINWEIS: Diese Berechtigungen sind zur Installation der Anwendung notwendig. Wenn du alle Installationsschritte und Vorgänge im Hintergrund nachvollziehen möchtest: Das Projekt ist Open Source. Gehe zum Ordner `aux` im Projektstamm. Dort findest du sowohl das Windows-ISS-Skript als auch die Linux-Install-/Uninstall-Skripte.
+- HINWEIS: Diese Berechtigungen sind zur Installation der Anwendung notwendig. Wenn du alle Installationsschritte und Vorgänge im Hintergrund nachvollziehen möchtest: Das Projekt ist Open Source.
 - Die Anwendung wird nach Abschluss des Updates automatisch geöffnet.
 
 # Über
 
 - Entwickelt von [ilpeN](https://github.com/ilpenSE).
 - In C++ mit Qt entwickelt.
-- Diese App ist eine vereinfachte Version und der Nachfolger von [Auto Clicker](https://github.com/ilpenSE/autoclicker).
 - Lizenz: ausschließlich AGPL-3.0 (GNU Affero General Public License)

@@ -23,15 +23,11 @@
 2. Hit Next, accept the license, next then install it.
 3. The desktop shortcut automatically created
 
-## Installation Guide for GNU/Linux (Arch/Debian/Fedora based)
+## Installation Guide for GNU/Linux
 
-1. Unpack the file (one that ends with `.tar.gz`) you downloaded.
-2. Run file named `install.sh`
-3. This script needs `root` access (`sudo`) enter your password there
-4. It downloads necessary dependencies, copies the binary, desktop entry and icon
-5. Installer will tell you which packages to download
-6. When installation completes, you can now run the app from command line or desktop
-7. Desktop entry shortcut'll automatically created as well
+1. Install `SimpleClicker-x86_64.AppImage` to anywhere you like.
+2. Make it executable by running `chmod +x SimpleClicker-x86_64.AppImage`
+3. Run it.
 
 ## Help
 - [Click here for detailed help](./assets/docs/HELP.en.md)
@@ -40,5 +36,4 @@
 
 - Made by [ilpeN](https://github.com/ilpenSE).
 - Developed in C++ using Qt.
-- This app is simplified version and sequel of [Auto Clicker](https://github.com/ilpenSE/autoclicker).
 - License: AGPL-3.0 only (GNU Affero General Public License)

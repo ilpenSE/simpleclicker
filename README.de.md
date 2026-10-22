@@ -23,15 +23,11 @@
 2. Klicke auf Weiter, akzeptiere die Lizenz, klicke erneut auf Weiter und installiere die Anwendung.
 3. Die Desktop-Verknüpfung wird automatisch erstellt.
 
-## Installationsanleitung für GNU/Linux (Arch-/Debian-/Fedora-basiert)
+## Installationsanleitung für GNU/Linux
 
-1. Entpacke die heruntergeladene Datei (die auf `.tar.gz` endet).
-2. Führe die Datei `install.sh` aus.
-3. Das Skript benötigt `root`-Rechte (`sudo`), gib dort dein Passwort ein.
-4. Es lädt die notwendigen Abhängigkeiten herunter und kopiert die Binärdatei, den Desktop-Eintrag und das Icon.
-5. Der Installer teilt dir mit, welche Pakete installiert werden müssen.
-6. Nach Abschluss der Installation kannst du die Anwendung über die Kommandozeile oder vom Desktop aus starten.
-7. Die Desktop-Verknüpfung wird ebenfalls automatisch erstellt.
+1. Installiere `SimpleClicker-x86_64.AppImage` an einem beliebigen Ort.
+2. Mache die Datei mit `chmod +x SimpleClicker-x86_64.AppImage` ausführbar.
+3. Starte die Anwendung.
 
 ## Hilfe
 - [Hier klicken für ausführliche Hilfe](./assets/docs/HELP.de.md)
@@ -40,5 +36,4 @@
 
 - Entwickelt von [ilpeN](https://github.com/ilpenSE).
 - In C++ mit Qt entwickelt.
-- Diese Anwendung ist eine vereinfachte Version und der Nachfolger von [Auto Clicker](https://github.com/ilpenSE/autoclicker).
 - Lizenz: AGPL-3.0 only (GNU Affero General Public License)
