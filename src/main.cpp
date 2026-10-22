@@ -51,7 +51,8 @@ bool is_instance_running() {
   return false;
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
 #ifdef __linux__
   // Force X11 (XCB) to global hotkeys work
   if (qEnvironmentVariableIsEmpty("QT_QPA_PLATFORM")) {

@@ -1,3 +1,10 @@
+# 1.1.1
+
+- Fixed permission denied crash on Windows
+- Removed tarball approach on Linux, moved to AppImage
+- Updated auto-updater for Linux
+- WARNING: Auto-updater for Linux is changed, if you have a older version than 1.1, you manually install
+
 # 1.1
 
 - Added hold mode and hold time
