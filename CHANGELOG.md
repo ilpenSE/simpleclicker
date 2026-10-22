@@ -1,5 +1,6 @@
 # 1.1.1
 
+- Added detailed information about build on settings dialog
 - Fixed permission denied crash on Windows
 - Removed tarball approach on Linux, moved to AppImage
 - Updated auto-updater for Linux

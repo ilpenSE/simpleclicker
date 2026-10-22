@@ -9,6 +9,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # build/compile_commands.json
 project(SimpleClicker LANGUAGES CXX)
 
 find_package(Qt6 6.10.3 EXACT REQUIRED COMPONENTS Core Widgets Svg Network)
+include(toolchains/build_info.cmake)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -71,6 +72,7 @@ else()
 endif()
 
 target_include_directories(SimpleClicker PUBLIC include)
+target_include_directories(SimpleClicker PRIVATE "${CMAKE_BINARY_DIR}/generated")
 
 target_link_libraries(SimpleClicker PRIVATE
   Qt::Core
