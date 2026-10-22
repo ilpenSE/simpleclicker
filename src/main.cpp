@@ -15,7 +15,6 @@
 #include "language.hpp"
 #include "hotkey.hpp"
 #include "click.hpp"
-#include "x11.hpp"
 #include "update.hpp"
 
 Logger *lg;
@@ -26,49 +25,18 @@ LanguageManager *langman;
 HotkeyManager *hotkeyman;
 ClickEngine *clickengine;
 UpdateManager *updateman;
-X11 *x11inst;
 QLockFile *g_lockFile;
 
 // Check if any instance of program is running
 bool is_instance_running() {
   QString lockPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/simpleclicker.lock";
   g_lockFile = new QLockFile(lockPath);
-
-  if (!g_lockFile->tryLock(100)) {
-#ifdef __linux__
-    qint64 pid;
-    QString hostname, appname;
-    if (g_lockFile->getLockInfo(&pid, &hostname, &appname)) {
-      if (!QFile::exists(QString("/proc/%1").arg(pid))) {
-        g_lockFile->removeStaleLockFile();
-        if (!g_lockFile->tryLock(100)) return true;
-      } else return true;
-    } else return true;
-#else // Windows already locks file if process is alive
-    return true;
-#endif
-  }
-  return false;
+  return !g_lockFile->tryLock(100);
 }
 
 int main(int argc, char *argv[]) {
-#ifdef __linux__
-  // Force X11 (XCB) to global hotkeys work
-  if (qEnvironmentVariableIsEmpty("QT_QPA_PLATFORM")) {
-    qputenv("QT_QPA_PLATFORM", "xcb");
-  } else {
-    QByteArray qpaPlatform = qgetenv("QT_QPA_PLATFORM");
-    if (qpaPlatform != "xcb") {
-      panic("Only X11 (XCB) is supported, try setting QT_QPA_PLATFORM=xcb environment variable or don't set it");
-    }
-  }
-#endif
-
   // Force SSL backend to SChannel
-#ifdef _WIN32
   qputenv("QT_SSL_BACKEND", "schannel");
-#endif
-
   QApplication app(argc, argv);
   QCoreApplication::setOrganizationName("");
   QCoreApplication::setApplicationName("SimpleClicker");
@@ -76,10 +44,6 @@ int main(int argc, char *argv[]) {
   if (is_instance_running()) {
     panic("An instance of program is already running!");
   }
-
-#ifdef __linux__
-  x11inst = &X11::instance();
-#endif
 
   QString appdata_path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
   QDir appdata_dir(appdata_path);

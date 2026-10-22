@@ -2,7 +2,9 @@
 #include "logger.hpp"
 #include <QGuiApplication>
 extern Logger *lg;
-extern X11 *x11inst;
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 bool HotkeyManager::isSupportedKey(Qt::Key key) {
   if (key >= Qt::Key_F1 && key <= Qt::Key_F35) return true;
@@ -34,9 +36,6 @@ bool HotkeyManager::unset() {
   return true;
 }
 
-#ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 namespace {
 static UINT toModifiers(const Hotkey &hotkey) {
   UINT mods = 0;
@@ -99,100 +98,3 @@ bool HotkeyManager::unregisterHotkey() {
   }
   return true;
 }
-
-#else // X11
-
-#include <xcb/xcb_keysyms.h>
-#include <xkbcommon/xkbcommon.h>
-
-namespace {
-constexpr quint16 ignoredMasks[] = { 0, XCB_MOD_MASK_LOCK, XCB_MOD_MASK_2,
-                                     XCB_MOD_MASK_LOCK | XCB_MOD_MASK_2 };
-
-xcb_keycode_t toKeycode(xcb_connection_t *connection, Qt::Key key) {
-  quint32 keysym;
-  if (key >= Qt::Key_F1 && key <= Qt::Key_F35) {
-    keysym = 0xffbe + (key - Qt::Key_F1);
-  } else {
-    keysym = xkb_utf32_to_keysym(static_cast<quint32>(key));
-    if (keysym == XKB_KEY_NoSymbol) return 0;
-  }
-
-  xcb_key_symbols_t *symbols = xcb_key_symbols_alloc(connection);
-  xcb_keycode_t *keycodes = xcb_key_symbols_get_keycode(symbols, keysym);
-  xcb_keycode_t kc = keycodes ? keycodes[0] : 0;
-  free(keycodes);
-  xcb_key_symbols_free(symbols);
-  return kc;
-}
-
-} // namespace
-
-HotkeyManager::HotkeyManager(QObject *parent) : QObject(parent)
-{
-  qApp->installNativeEventFilter(this);
-}
-
-HotkeyManager::~HotkeyManager() {
-  unset();
-}
-
-bool HotkeyManager::registerHotkey(const Hotkey& hotkey) {
-  if (!x11inst->connection) return false;
-  m_keycode = toKeycode(x11inst->connection, hotkey.key);
-  if (m_keycode == 0) return false;
-
-  quint16 mods = 0;
-  if (hotkey.ctrl)  mods |= XCB_MOD_MASK_CONTROL;
-  if (hotkey.alt)   mods |= XCB_MOD_MASK_1;
-  if (hotkey.shift) mods |= XCB_MOD_MASK_SHIFT;
-  m_modifiers = mods;
-
-  for (quint16 ignored : ignoredMasks) {
-    auto cookie = xcb_grab_key_checked(x11inst->connection, 0, x11inst->rootWindow,
-                                       mods | ignored, m_keycode,
-                                       XCB_GRAB_MODE_ASYNC, XCB_GRAB_MODE_ASYNC);
-    xcb_generic_error_t *err = xcb_request_check(x11inst->connection, cookie);
-    if (err) {
-      free(err);
-      unregisterHotkey();
-      emit hotkeyRegistrationFailed("This keybind probably in already use by another program");
-      return false;
-    }
-  }
-  xcb_flush(x11inst->connection);
-
-  return true;
-}
-
-bool HotkeyManager::unregisterHotkey() {
-  if (!x11inst->connection || m_keycode == 0) return false;
-
-  for (unsigned int ignored : ignoredMasks) {
-    xcb_ungrab_key(x11inst->connection, m_keycode, x11inst->rootWindow, m_modifiers | ignored);
-  }
-  xcb_flush(x11inst->connection);
-
-  return true;
-}
-
-bool HotkeyManager::nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result) {
-  if (eventType != "xcb_generic_event_t") return false;
-  if (!m_registered) return false;
-
-  xcb_generic_event_t *event = static_cast<xcb_generic_event_t *>(message);
-
-  if ((event->response_type & ~0x80) == XCB_KEY_PRESS) {
-    auto *keyEvent = reinterpret_cast<xcb_key_press_event_t *>(event);
-    quint16 mods = keyEvent->state & (XCB_MOD_MASK_SHIFT | XCB_MOD_MASK_CONTROL | XCB_MOD_MASK_1);
-
-    if (keyEvent->detail == m_keycode && mods == m_modifiers) {
-        emit hotkeyPressed();
-        return true;
-    }
-
-  }
-  return false;
-}
-
-#endif // _WIN32
