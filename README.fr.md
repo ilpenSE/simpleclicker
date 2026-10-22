@@ -5,7 +5,6 @@
 ![Free Software](https://img.shields.io/badge/Free%20Software-30a5db)
 
 ![Windows](https://img.shields.io/badge/windows-346af5?style=for-the-badge)
-![Linux](https://img.shields.io/badge/linux-ffc700?style=for-the-badge)
 
 [This document in English](./README.md)
 
@@ -13,25 +12,15 @@
 
 [Dieses Dokument auf Deutsch](./README.de.md)
 
-- Prend en charge uniquement Windows et GNU/Linux avec l'architecture x86-64 pour le moment
-- Tout est stocké sur votre propre machine, dans le dossier `AppData` ou `~/.local/share/`
+- Prend en charge uniquement Windows
+- Tout est stocké sur votre propre machine, dans le dossier `AppData`
 - Vous pouvez signaler les erreurs rencontrées ou vos idées d'amélioration via les issues GitHub si vous le souhaitez
 
-## Guide d'installation pour Windows
+## Guide d'installation
 
 1. Exécutez le fichier `SimpleClicker.exe` que vous avez téléchargé.
 2. Cliquez sur Suivant, acceptez la licence, cliquez à nouveau sur Suivant, puis installez.
 3. Le raccourci sur le bureau est créé automatiquement.
-
-## Guide d'installation pour GNU/Linux (basé sur Arch/Debian/Fedora)
-
-1. Décompressez le fichier (celui qui se termine par `.tar.gz`) que vous avez téléchargé.
-2. Exécutez le fichier nommé `install.sh`.
-3. Ce script nécessite un accès `root` (`sudo`), saisissez-y votre mot de passe.
-4. Il télécharge les dépendances nécessaires, puis copie le binaire, l'entrée de bureau et l'icône.
-5. L'installateur vous indiquera quels paquets installer.
-6. Une fois l'installation terminée, vous pouvez lancer l'application depuis la ligne de commande ou le bureau.
-7. Le raccourci d'entrée de bureau est également créé automatiquement.
 
 ## Aide
 - [Cliquez ici pour l'aide détaillée](./assets/docs/HELP.fr.md)

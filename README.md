@@ -1,3 +1,6 @@
+# ABANDONED PROJECT !!! GTFO ALSO DO NOT FUCKING USE STINKY ASS QT !!!
+
+
 # SimpleClicker - A Simple Auto-Clicker
 
 ![GitHub](https://img.shields.io/badge/ilpenSE-simpleclicker-blue?logo=github)
@@ -5,7 +8,6 @@
 ![Free Software](https://img.shields.io/badge/Free%20Software-30a5db)
 
 ![Windows](https://img.shields.io/badge/windows-346af5?style=for-the-badge)
-![Linux](https://img.shields.io/badge/linux-ffc700?style=for-the-badge)
 
 [Bu belgenin Türkçesi var](./README.tr.md)
 
@@ -13,25 +15,15 @@
 
 [Dieses Dokument auf Deutsch](./README.de.md)
 
-- It only supports Windows and GNU/Linux with x86-64 architecture for now
-- Everything is stored on your own machine and in `AppData` or `~/.local/share/` folder
+- It only supports Windows.
+- Everything is stored on your own machine and in `AppData` folder
 - You can report errors you have crossed or ideas of yours to enhance application via GitHub issues if you want
 
-## Installation Guide for Windows
+## Installation
 
 1. Run `SimpleClicker.exe` you downloaded.
 2. Hit Next, accept the license, next then install it.
 3. The desktop shortcut automatically created
-
-## Installation Guide for GNU/Linux (Arch/Debian/Fedora based)
-
-1. Unpack the file (one that ends with `.tar.gz`) you downloaded.
-2. Run file named `install.sh`
-3. This script needs `root` access (`sudo`) enter your password there
-4. It downloads necessary dependencies, copies the binary, desktop entry and icon
-5. Installer will tell you which packages to download
-6. When installation completes, you can now run the app from command line or desktop
-7. Desktop entry shortcut'll automatically created as well
 
 ## Help
 - [Click here for detailed help](./assets/docs/HELP.en.md)
