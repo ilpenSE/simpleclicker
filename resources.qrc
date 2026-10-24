@@ -9,6 +9,10 @@
     <file alias="down.svg">assets/icons/down.svg</file>
     <file alias="up.svg">assets/icons/up.svg</file>
     <file alias="help.svg">assets/icons/help.svg</file>
+    <file alias="error.svg">assets/icons/error.svg</file>
+    <file alias="warning.svg">assets/icons/warning.svg</file>
+    <file alias="info.svg">assets/icons/info.svg</file>
+    <file alias="success.svg">assets/icons/success.svg</file>
   </qresource>
 
   <qresource prefix="/docs">
@@ -17,13 +21,6 @@
     <file alias="help.fr.md">assets/docs/HELP.fr.md</file>
     <file alias="help.de.md">assets/docs/HELP.de.md</file>
   </qresource>
-
-<!--   <qresource prefix="/translations"> -->
-<!--     <file alias="tr.qm">assets/translations/tr.qm</file> -->
-<!--     <file alias="en.qm">assets/translations/en.qm</file> -->
-<!--     <file alias="de.qm">assets/translations/de.qm</file> -->
-<!--     <file alias="fr.qm">assets/translations/fr.qm</file> -->
-<!--   </qresource> -->
 
   <qresource prefix="/styles">
     <file alias="breeze.qss">assets/styles/breeze.qss</file>

@@ -36,4 +36,5 @@
 
 - Entwickelt von [ilpeN](https://github.com/ilpenSE).
 - In C++ mit Qt entwickelt.
+- Symbole: [Feather Icons](https://feathericons.com/)
 - Lizenz: AGPL-3.0 only (GNU Affero General Public License)

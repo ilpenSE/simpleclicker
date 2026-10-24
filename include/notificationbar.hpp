@@ -60,10 +60,11 @@ private:
   void startFlash(const QColor &base, const QColor &highlight, int loops);
   void stopFlash();
 
-  QWidget *m_actions[16] = {};
+  QWidget *m_actions[8] = {};
   size_t m_actions_count = 0;
 
   QHBoxLayout *m_layout;
+  QLabel *m_iconLabel;
   QLabel *m_label;
   QPushButton *m_closeBtn;
   QPointer<QPropertyAnimation> m_flashAnim = nullptr;

@@ -330,8 +330,7 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
   }
 
   // Delete an item from preset
-  connect(itemWidget, &PresetItemWidget::deleteRequested, this,
-          [this, &list, item, itemWidget]() {
+  connect(itemWidget, &PresetItemWidget::deleteRequested, this, [this, &list, item, itemWidget]() {
     if (!itemWidget->isEnabled()) return;
     lg->info("Removing preset: '{}'", itemWidget->presetName());
     presetsman->presets.remove(itemWidget->presetName());
@@ -371,14 +370,12 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
   });
 
   // Save preset
-  connect(itemWidget, &PresetItemWidget::saveRequested, this,
-          [this, itemWidget]() {
+  connect(itemWidget, &PresetItemWidget::saveRequested, this, [this, itemWidget]() {
     savePreset(itemWidget);
   });
 
   // Double clicked, set current preset to this
-  connect(itemWidget, &PresetItemWidget::doubleClicked, this,
-          [this, item, itemWidget]() {
+  connect(itemWidget, &PresetItemWidget::doubleClicked, this, [this, item, itemWidget]() {
     if (!itemWidget->isEnabled()) return;
     setActivePreset(item);
     m_notificationBar->success(QString(tr("Set active preset to %1")).arg(itemWidget->presetName()));
