@@ -27,7 +27,7 @@ QString sha256file(QFile &file) {
 constexpr auto ASSET_NAME = "SimpleClicker" ASSET_EXTENSION;
 #else
 #define ASSET_EXTENSION ".AppImage"
-constexpr auto ASSET_NAME = "SimpleClicker-x86-64" ASSET_EXTENSION;
+constexpr auto ASSET_NAME = "SimpleClicker-x86_64" ASSET_EXTENSION;
 #endif
 
 } // namespace

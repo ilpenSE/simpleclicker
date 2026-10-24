@@ -3,8 +3,8 @@
 IDI_ICON1 ICON "icons/app.ico"
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,1,2,0
- PRODUCTVERSION 1,1,2,0
+ FILEVERSION 1,1,3,0
+ PRODUCTVERSION 1,1,3,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS VS_FF_DEBUG
@@ -21,11 +21,11 @@ BEGIN
         BEGIN
             VALUE "CompanyName",      "ilpeN\0"
             VALUE "FileDescription",  "SimpleClicker\0"
-            VALUE "FileVersion",      "1.1.2.0\0"
+            VALUE "FileVersion",      "1.1.3.0\0"
             VALUE "InternalName",     "SimpleClicker\0"
             VALUE "OriginalFilename", "SimpleClicker.exe\0"
             VALUE "ProductName",      "SimpleClicker\0"
-            VALUE "ProductVersion",   "1.1.2.0\0"
+            VALUE "ProductVersion",   "1.1.3.0\0"
         END
     END
 
