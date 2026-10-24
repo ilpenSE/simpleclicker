@@ -60,7 +60,8 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
 
   int leftPanelWidth = settingsman->get<setting::leftPanelWidth>();
   QTimer::singleShot(0, this, [this, leftPanelWidth]{
-    ui->mainPanel->setSizes({leftPanelWidth, ui->verticalLayout->geometry().width()-leftPanelWidth});
+    int total = ui->mainPanel->width();
+    ui->mainPanel->setSizes({leftPanelWidth, total - leftPanelWidth - ui->mainPanel->handleWidth()});
   });
 
   lg->info("MainWindow initialized");
@@ -500,7 +501,7 @@ MainWindow::~MainWindow()
 {
   settingsman->set<setting::currentPreset>(currentPresetWidget ? currentPresetWidget->presetName() : "");
   settingsman->set<setting::version>(APP_VERSION);
-  settingsman->set<setting::leftPanelWidth>(ui->leftPanelWidget->geometry().width());
+  settingsman->set<setting::leftPanelWidth>(ui->mainPanel->sizes().first());
 
   settingsman->save();
   presetsman->save();
