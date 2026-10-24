@@ -3,7 +3,7 @@
 ; Non-commercial use only
 
 #define MyAppName "Simple Clicker"
-#define MyAppVersion "1.1.2"
+#define MyAppVersion "1.1.3"
 #define MyAppPublisher "ilpeN"
 #define MyAppExeName "SimpleClicker.exe"
 #define MyAppAssocName MyAppName + ""
