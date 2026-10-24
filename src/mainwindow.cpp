@@ -58,6 +58,11 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
   m_notificationBar = new NotificationBar(this);
   qobject_cast<QVBoxLayout *>(centralWidget()->layout())->insertWidget(0, m_notificationBar);
 
+  int leftPanelWidth = settingsman->get<setting::leftPanelWidth>();
+  QTimer::singleShot(0, this, [this, leftPanelWidth]{
+    ui->mainPanel->setSizes({leftPanelWidth, ui->verticalLayout->geometry().width()-leftPanelWidth});
+  });
+
   lg->info("MainWindow initialized");
 
   updateman->checkForUpdates();
@@ -495,6 +500,7 @@ MainWindow::~MainWindow()
 {
   settingsman->set<setting::currentPreset>(currentPresetWidget ? currentPresetWidget->presetName() : "");
   settingsman->set<setting::version>(APP_VERSION);
+  settingsman->set<setting::leftPanelWidth>(ui->leftPanelWidget->geometry().width());
 
   settingsman->save();
   presetsman->save();
