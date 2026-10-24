@@ -17,6 +17,10 @@
 - Her şey kendi makinenizde, `AppData` veya `~/.local/share` klasörlerinde tutulur
 - Karşılaştığınız hataları uygulamayı geliştirmek için fikirlerinizi dilerseniz GitHub issues üzerinden aktarabilirsiniz
 
+<img width="698" height="667" alt="main_tr_linux" src="https://github.com/user-attachments/assets/c04bcf10-22a5-4564-98c3-5ff0c217b520" />
+
+<img width="700" height="663" alt="main_tr_linux_light" src="https://github.com/user-attachments/assets/b64b505e-00b7-46cd-8fbd-754a22c9812d" />
+
 ## Windows için Kurulum Rehberi
 
 1. İndirdiğiniz `SimpleClicker.exe`'yi çalıştırın
