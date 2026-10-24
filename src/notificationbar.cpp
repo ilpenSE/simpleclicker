@@ -47,6 +47,15 @@ QColor levelHighlightColor(NotificationLevel level) {
   }
 }
 
+QString levelIcon(NotificationLevel level) {
+  switch (level) {
+  case NotificationLevel::Success: return "success.svg";
+  case NotificationLevel::Error: return "error.svg";
+  case NotificationLevel::Warning: return "warning.svg";
+  default: return "info.svg";
+  }
+}
+
 constexpr int LAYOUT_LEFT_MARGIN = 12;
 constexpr int LAYOUT_RIGHT_MARGIN = 8;
 constexpr int LAYOUT_TOP_MARGIN = 6;
@@ -60,6 +69,9 @@ NotificationBar::NotificationBar(QWidget *parent) : QWidget(parent) {
   m_layout->setContentsMargins(LAYOUT_LEFT_MARGIN, LAYOUT_TOP_MARGIN, LAYOUT_RIGHT_MARGIN, LAYOUT_BOT_MARGIN);
   m_layout->setSpacing(LAYOUT_SPACING);
 
+  m_iconLabel = new QLabel(this);
+  m_iconLabel->setScaledContents(true);
+
   m_label = new QLabel(this);
   m_label->setWordWrap(true);
 
@@ -69,6 +81,7 @@ NotificationBar::NotificationBar(QWidget *parent) : QWidget(parent) {
   m_closeBtn->setCursor(Qt::PointingHandCursor);
   m_closeBtn->setFixedSize(22, 22);
 
+  m_layout->addWidget(m_iconLabel);
   m_layout->addWidget(m_label, 1);
   m_layout->addWidget(m_closeBtn);
 
@@ -111,6 +124,7 @@ void NotificationBar::show(const QString &message, NotificationLevel level, int 
   m_label->setText(message);
   const int targetHeight = computeRequiredHeight(message);
 
+  makeDynamicIconLabel(m_iconLabel, levelIcon(level));
   const QColor base = levelBaseColor(level);
   const QColor highlight = levelHighlightColor(level);
   setBgColor(base);
@@ -184,5 +198,5 @@ int NotificationBar::computeRequiredHeight(const QString &text) const {
   const int verticalPadding = LAYOUT_TOP_MARGIN + LAYOUT_BOT_MARGIN;
   int required = bounds.height() + verticalPadding;
 
-  return std::clamp(required, static_cast<int>(MIN_BAR_HEIGHT), static_cast<int>(MAX_BAR_HEIGHT));
+  return std::clamp(required, MIN_BAR_HEIGHT, MAX_BAR_HEIGHT);
 }

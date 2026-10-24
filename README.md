@@ -36,4 +36,5 @@
 
 - Made by [ilpeN](https://github.com/ilpenSE).
 - Developed in C++ using Qt.
+- Icons: [Feather Icons](https://feathericons.com/)
 - License: AGPL-3.0 only (GNU Affero General Public License)

@@ -149,6 +149,9 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
     m_notificationBar->success(QString(tr("Created new preset called %1, you can rename it now")).arg(newPresetName));
   });
 
+  makeDynamicIconLabel(ui->ciHelpLabel, "help.svg");
+  makeDynamicIconLabel(ui->htHelpLabel, "help.svg");
+
   // If there's no current preset, block the preset config UI
   if (!currentPresetWidget) {
     blockPresetConfigUi();
@@ -327,8 +330,7 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
   }
 
   // Delete an item from preset
-  connect(itemWidget, &PresetItemWidget::deleteRequested, this,
-          [this, &list, item, itemWidget]() {
+  connect(itemWidget, &PresetItemWidget::deleteRequested, this, [this, &list, item, itemWidget]() {
     if (!itemWidget->isEnabled()) return;
     lg->info("Removing preset: '{}'", itemWidget->presetName());
     presetsman->presets.remove(itemWidget->presetName());
@@ -368,14 +370,12 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
   });
 
   // Save preset
-  connect(itemWidget, &PresetItemWidget::saveRequested, this,
-          [this, itemWidget]() {
+  connect(itemWidget, &PresetItemWidget::saveRequested, this, [this, itemWidget]() {
     savePreset(itemWidget);
   });
 
   // Double clicked, set current preset to this
-  connect(itemWidget, &PresetItemWidget::doubleClicked, this,
-          [this, item, itemWidget]() {
+  connect(itemWidget, &PresetItemWidget::doubleClicked, this, [this, item, itemWidget]() {
     if (!itemWidget->isEnabled()) return;
     setActivePreset(item);
     m_notificationBar->success(QString(tr("Set active preset to %1")).arg(itemWidget->presetName()));

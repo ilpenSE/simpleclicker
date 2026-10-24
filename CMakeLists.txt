@@ -8,7 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # build/compile_commands.json
 
 project(SimpleClicker LANGUAGES CXX)
 
-find_package(Qt6 6.10.3 EXACT REQUIRED COMPONENTS Core Widgets Svg Network)
+find_package(Qt6 6.10.3 EXACT REQUIRED COMPONENTS Core Widgets Svg Network LinguistTools)
 include(toolchains/build_info.cmake)
 
 set(CMAKE_AUTOMOC ON)
@@ -43,6 +43,16 @@ qt_add_executable(SimpleClicker
 )
 
 qt_add_resources(APP_RESOURCES resources.qrc)
+
+qt_add_translations(SimpleClicker
+  TS_FILES
+  assets/translations/en.ts
+  assets/translations/tr.ts
+  assets/translations/fr.ts
+  assets/translations/de.ts
+  RESOURCE_PREFIX "/translations"
+)
+
 target_sources(SimpleClicker PRIVATE ${APP_RESOURCES})
 
 set_target_properties(SimpleClicker PROPERTIES

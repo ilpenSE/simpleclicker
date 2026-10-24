@@ -2,6 +2,15 @@
 #include "theme.hpp"
 extern ThemeManager *thememan;
 
+void makeDynamicIconLabel(QLabel *label, const QString &symbol, QSize size) {
+  auto apply = [label, symbol, size]() {
+    label->setPixmap(thememan->icon(symbol).pixmap(size));
+  };
+  label->setFixedSize(size);
+  apply();
+  QObject::connect(thememan, &ThemeManager::themeChanged, label, apply);
+}
+
 void makeDynamicIconButton(QPushButton *btn, const QString &symbol) {
   btn->setIcon(thememan->icon(symbol));
   if (btn->text() == "") btn->setStyleSheet(R"(QPushButton { background-color: none; border: none; }

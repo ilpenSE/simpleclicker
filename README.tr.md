@@ -36,4 +36,5 @@
 
 - [ilpeN](https://github.com/ilpenSE) tarafından yapıldı.
 - Qt kullanılarak C++'ta geliştirildi.
+- İkonlar: [Feather Icons](https://feathericons.com/)
 - Lisans: Sadece AGPL-3.0 (GNU Affero General Public License)

@@ -1,3 +1,9 @@
+# 1.1.2
+
+- Added icons for notifications based on their level
+- Minor improvements about UI
+- Added information labels for time units
+
 # 1.1.1
 
 - Added detailed information about build on settings dialog

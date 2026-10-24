@@ -106,6 +106,11 @@
     <translation>Durée de maintien</translation>
   </message>
 
+  <message>
+    <source>1 minute = 60 seconds&#10;1 second = 1000 milliseconds</source>
+    <translation>1 minute = 60 secondes&#10;1 seconde = 1000 millisecondes</translation>
+  </message>
+
   <!-- Click Options -->
   <message>
     <source>Click Options</source>

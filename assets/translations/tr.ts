@@ -106,6 +106,11 @@
     <translation>Basılı Tutma Süresi</translation>
   </message>
 
+  <message>
+    <source>1 minute = 60 seconds&#10;1 second = 1000 milliseconds</source>
+    <translation>1 dakika = 60 saniye&#10;1 saniye = 1000 milisaniye</translation>
+  </message>
+
   <!-- Click Options -->
   <message>
     <source>Click Options</source>

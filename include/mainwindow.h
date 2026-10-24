@@ -31,8 +31,8 @@ private:
   MouseButton getMouseButton() const;
   ClickMode getClickMode() const;
   int getIntervalMs() const;
-  void autoUpdate(Version new_version);
 
+  void autoUpdate(Version new_version);
   void savePreset(PresetItemWidget *itemWidget);
 
   void applySettings();

@@ -65,7 +65,9 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent) {
   // Save/cancel buttons
   auto btnLayout = new QHBoxLayout();
   m_saveBtn = new QPushButton(tr("Save"), this);
+  m_saveBtn->setCursor(Qt::PointingHandCursor);
   m_cancelBtn = new QPushButton(tr("Cancel"), this);
+  m_cancelBtn->setCursor(Qt::PointingHandCursor);
   makeDynamicIconButton(m_saveBtn, "save.svg");
   makeDynamicIconButton(m_cancelBtn, "cancel.svg");
 

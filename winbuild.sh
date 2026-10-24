@@ -31,6 +31,7 @@ export WINEPATH='Z:\home\ilpen\Qt\Tools\mingw1310_64\bin'
 export WINEDEBUG=-all
 export WINEDLLOVERRIDES='mscoree,mshtml='
 
+rm -rf $BUILD_FOLDER
 cmake -B $BUILD_FOLDER -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_TOOLCHAIN_FILE=toolchains/mingw.cmake
 cd $BUILD_FOLDER
 make -j$(nproc)

@@ -31,6 +31,7 @@ HelpDialog::HelpDialog(QWidget *parent) : QDialog(parent) {
   }
 
   m_closeBtn = new QPushButton(tr("Close"), this);
+  m_closeBtn->setCursor(Qt::PointingHandCursor);
   makeDynamicIconButton(m_closeBtn, "cancel.svg");
 
   connect(m_closeBtn, &QPushButton::clicked, this, &QDialog::accept);
