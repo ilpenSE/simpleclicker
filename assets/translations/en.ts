@@ -106,6 +106,11 @@
     <translation>Hold Time</translation>
   </message>
 
+  <message>
+    <source>1 minute = 60 seconds&#10;1 second = 1000 milliseconds</source>
+    <translation>1 minute = 60 seconds&#10;1 second = 1000 milliseconds</translation>
+  </message>
+
   <!-- Click Options -->
   <message>
     <source>Click Options</source>

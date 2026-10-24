@@ -12,6 +12,7 @@
 #include <QMessageBox>
 #include <compare>
 #include <tuple>
+#include <QLabel>
 
 namespace {
 // string -> int converter only for version
@@ -371,6 +372,7 @@ struct std::formatter<Version> : std::formatter<std::string> {
 };
 
 extern void makeDynamicIconButton(QPushButton *btn, const QString& symbol);
+extern void makeDynamicIconLabel(QLabel *btn, const QString& symbol, QSize size = QSize(18, 18));
 
 template <typename... Args>
 [[noreturn]]

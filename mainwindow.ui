@@ -188,6 +188,17 @@
                   </item>
 
                   <item>
+                    <widget class="QLabel" name="ciHelpLabel">
+                      <property name="toolTip">
+                        <string>1 minute = 60 seconds&#10;1 second = 1000 milliseconds</string>
+                      </property>
+                      <property name="scaledContents">
+                        <bool>true</bool>
+                      </property>
+                    </widget>
+                  </item>
+
+                  <item>
                     <spacer name="clickIntervalSpacer">
                       <property name="orientation">
                         <enum>Qt::Orientation::Horizontal</enum>
@@ -253,6 +264,17 @@
                           <string>minutes</string>
                         </property>
                       </item>
+                    </widget>
+                  </item>
+
+                  <item>
+                    <widget class="QLabel" name="htHelpLabel">
+                      <property name="toolTip">
+                        <string>1 minute = 60 seconds&#10;1 second = 1000 milliseconds</string>
+                      </property>
+                      <property name="scaledContents">
+                        <bool>true</bool>
+                      </property>
                     </widget>
                   </item>
 

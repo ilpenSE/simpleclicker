@@ -149,6 +149,9 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
     m_notificationBar->success(QString(tr("Created new preset called %1, you can rename it now")).arg(newPresetName));
   });
 
+  makeDynamicIconLabel(ui->ciHelpLabel, "help.svg");
+  makeDynamicIconLabel(ui->htHelpLabel, "help.svg");
+
   // If there's no current preset, block the preset config UI
   if (!currentPresetWidget) {
     blockPresetConfigUi();

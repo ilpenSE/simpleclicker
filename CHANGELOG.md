@@ -1,3 +1,7 @@
+# 1.1.2
+
+- Added information labels for time units
+
 # 1.1.1
 
 - Added detailed information about build on settings dialog
