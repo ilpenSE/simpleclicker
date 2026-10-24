@@ -1,3 +1,7 @@
+# 1.2
+
+- Added setting "leftPanelWidth" to save latest left/right panel orientation
+
 # 1.1.2
 
 - Added icons for notifications based on their level
