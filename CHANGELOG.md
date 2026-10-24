@@ -1,3 +1,7 @@
+# 1.1.3
+
+- Fixed minor but critical bug in auto-updater
+
 # 1.1.2
 
 - Added icons for notifications based on their level
