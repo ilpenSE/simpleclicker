@@ -33,7 +33,7 @@ bool uiConstructed = false;
 int currentClickIntervalMs = 0;
 int currentHoldTimeMs = 0;
 
-constexpr std::pair<int, Unit> getEffectiveUnitFromMs(int ms) {
+constexpr std::pair<double, Unit> getEffectiveUnitFromMs(int ms) {
   auto deduced_unit = Unit::Millis;
   double deduced_value = ms;
 
@@ -205,6 +205,7 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
     case Unit::Mins: val = (double)currentClickIntervalMs/(1000*60); break;
     default: val = (double)currentClickIntervalMs;
     }
+    QSignalBlocker blocker(ui->clickIntervalEdit);
     ui->clickIntervalEdit->setValue(val);
   });
   connect(ui->holdTimeUnitCombo, &QComboBox::currentIndexChanged, this, [this](int idx){
@@ -214,6 +215,7 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
     case Unit::Mins: val = (double)currentHoldTimeMs/(1000*60); break;
     default: val = (double)currentHoldTimeMs;
     }
+    QSignalBlocker blocker(ui->holdTimeEdit);
     ui->holdTimeEdit->setValue(val);
   });
 
@@ -458,6 +460,8 @@ void MainWindow::applySettings() {
 
 void MainWindow::applyPreset(const PresetConfig& config) {
   presetChangeEventLock = true;
+  QSignalBlocker b1(ui->clickIntervalEdit), b2(ui->clickIntervalUnitCombo),
+    b3(ui->holdTimeEdit), b4(ui->holdTimeUnitCombo);
 
   // Click interval
   currentClickIntervalMs = config.interval;
