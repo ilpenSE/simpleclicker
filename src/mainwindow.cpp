@@ -159,6 +159,17 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
     m_notificationBar->success(QString(tr("Created new preset called %1, you can rename it now")).arg(newPresetName));
   });
 
+  // Set up import button
+  makeDynamicIconButton(ui->importBtn, "import.svg");
+  connect(ui->importBtn, &QPushButton::clicked, this, [this](){
+    lg->info("TODO: import a preset");
+  });
+
+  makeDynamicIconButton(ui->exportBtn, "export.svg");
+  connect(ui->exportBtn, &QPushButton::clicked, this, [this](){
+    lg->info("TODO: export all presets");
+  });
+
   makeDynamicIconLabel(ui->ciHelpLabel, "help.svg");
   makeDynamicIconLabel(ui->htHelpLabel, "help.svg");
 
@@ -344,6 +355,12 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
   // Delete an item from preset
   connect(itemWidget, &PresetItemWidget::deleteRequested, this, [this, &list, item, itemWidget]() {
     if (!itemWidget->isEnabled()) return;
+
+    if (QMessageBox::question(this, "Simple Clicker", tr("Are you sure to remove this preset?"),
+                              QMessageBox::Yes|QMessageBox::No) != QMessageBox::Yes) {
+      return;
+    }
+
     lg->info("Removing preset: '{}'", itemWidget->presetName());
     presetsman->presets.remove(itemWidget->presetName());
     int idx = list.row(item);

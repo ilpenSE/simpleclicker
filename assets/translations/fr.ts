@@ -83,6 +83,10 @@
     <source>Y dimension must be a positive value!</source>
     <translation>La dimension Y doit être une valeur positive !</translation>
   </message>
+  <message>
+    <source>Are you sure to remove this preset?</source>
+    <translation>Voulez-vous vraiment supprimer ce préréglage ?</translation>
+  </message>
 
   <!-- General time units -->
   <message>

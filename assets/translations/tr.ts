@@ -83,6 +83,10 @@
     <source>Y dimension must be a positive value!</source>
     <translation>Y boyutu pozitif bir değer olmalı!</translation>
   </message>
+  <message>
+    <source>Are you sure to remove this preset?</source>
+    <translation>Bu ön ayarı silmek istediğinizden emin misiniz?</translation>
+  </message>
 
   <!-- General time units -->
   <message>

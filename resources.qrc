@@ -13,6 +13,8 @@
     <file alias="warning.svg">assets/icons/warning.svg</file>
     <file alias="info.svg">assets/icons/info.svg</file>
     <file alias="success.svg">assets/icons/success.svg</file>
+    <file alias="import.svg">assets/icons/import.svg</file>
+    <file alias="export.svg">assets/icons/export.svg</file>
   </qresource>
 
   <qresource prefix="/docs">
