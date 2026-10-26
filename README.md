@@ -13,7 +13,6 @@
 
 [Dieses Dokument auf Deutsch](./README.de.md)
 
-- It only supports Windows and GNU/Linux with x86-64 architecture for now
 - Everything is stored on your own machine and in `AppData` or `~/.local/share/` folder
 - You can report errors you have crossed or ideas of yours to enhance application via GitHub issues if you want
 
@@ -32,6 +31,9 @@
 1. Install `SimpleClicker-x86_64.AppImage` to anywhere you like.
 2. Make it executable by running `chmod +x SimpleClicker-x86_64.AppImage`
 3. Run it.
+- NOTE: In order to program to function, necessary libraries need to be installed and some system libraries need to be up to date.
+(Missing libraries should be shown at output when you run app through console)
+(Ubuntu >=22.04, Debian >=12, Fedora >=35, Linux Mint >=21 and most modern Arch-based distros (CachyOS, Garuda Linux, SteamOS, EndeavourOS, Manjaro Linux vb.) is needed for glibc >= 2.34)
 
 ## Help
 - [Click here for detailed help](./assets/docs/HELP.en.md)

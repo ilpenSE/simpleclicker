@@ -13,7 +13,6 @@
 
 [Ce document en français](./README.fr.md)
 
-- Unterstützt vorerst nur Windows und GNU/Linux mit x86-64-Architektur
 - Alles wird auf deinem eigenen Rechner im Ordner `AppData` bzw. `~/.local/share/` gespeichert
 - Aufgetretene Fehler oder eigene Verbesserungsvorschläge kannst du gerne über GitHub Issues melden
 
@@ -32,6 +31,9 @@
 1. Installiere `SimpleClicker-x86_64.AppImage` an einem beliebigen Ort.
 2. Mache die Datei mit `chmod +x SimpleClicker-x86_64.AppImage` ausführbar.
 3. Starte die Anwendung.
+- HINWEIS: Damit das Programm funktioniert, müssen die erforderlichen Bibliotheken installiert und einige Systembibliotheken auf dem neuesten Stand sein.
+(Fehlende Bibliotheken werden in der Ausgabe angezeigt, wenn Sie die Anwendung über die Konsole starten.)
+(Da glibc >= 2.34 benötigt wird, sind Ubuntu >= 22.04, Debian >= 12, Fedora >= 35, Linux Mint >= 21 und die meisten modernen Arch-basierten Distributionen (CachyOS, Garuda Linux, SteamOS, EndeavourOS, Manjaro Linux usw.) erforderlich.)
 
 ## Hilfe
 - [Hier klicken für ausführliche Hilfe](./assets/docs/HELP.de.md)

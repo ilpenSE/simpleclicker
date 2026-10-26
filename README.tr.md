@@ -13,7 +13,6 @@
 
 [Dieses Dokument auf Deutsch](./README.de.md)
 
-- Şu anlık sadece x86-64 mimarisiyle Windows ve GNU/Linux destekleniyor
 - Her şey kendi makinenizde, `AppData` veya `~/.local/share` klasörlerinde tutulur
 - Karşılaştığınız hataları uygulamayı geliştirmek için fikirlerinizi dilerseniz GitHub issues üzerinden aktarabilirsiniz
 
@@ -32,6 +31,9 @@
 1. `SimpleClicker-x86_64.AppImage` dosyasını istediğiniz herhangi bir yere indirin.
 2. `chmod +x SimpleClicker-x86_64.AppImage` ile dosyayı çalıştırılabilir yapın.
 3. Çalıştırın.
+- NOT: Uygulamanın çalışabilmesi için sisteminizde gerekli kütüphanelerin olması ve bazı sistem kütüphanelerinin güncel olması gerekir.
+(Eksik kütüphaneler uygulamayı konsoldan çalıştırdığınızda çıktıda gösterilir)
+(glibc >= 2.34 için Ubuntu >=22.04, Debian >=12, Fedora >=35, Linux Mint >=21 ve çoğu modern Arch tabanlı dağıtımları (CachyOS, Garuda Linux, SteamOS, EndeavourOS, Manjaro Linux vb.) gerekir)
 
 ## Yardım
 - [Buraya tıklayarak detaylı yardım alabilirsiniz](./assets/docs/HELP.tr.md)
