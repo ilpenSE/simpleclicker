@@ -32,7 +32,7 @@
 - `Click Interval` determines how much time will be between clicks. This must be greater than 0.
 - `Hold Time` determines how long a mouse button is held down
 - `Click Options` determines detail about mouse clicks.
-- `Mouse Button` is the mouse button to click. You can choose Left, Right and Middle.
+- `Mouse Button` is the mouse button to click. You can choose Left, Right, Middle, Back (side) and Forward (side).
 - `Click Mode` decides to press then release or holding the mouse.
 - `Repeat` determines how many times that click repeats. This must be greater than 0. Limit is 1 million.
 - When `Repeat Until Stopped` is selected, it continues clicking until you press hotkey to stop it.

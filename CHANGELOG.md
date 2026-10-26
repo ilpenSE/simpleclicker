@@ -1,5 +1,6 @@
 # 1.2
 
+- Added new mouse buttons: side button 4 (back) and 5 (forward)
 - Added setting "leftPanelWidth" to save latest left/right panel orientation
 
 # 1.1.3

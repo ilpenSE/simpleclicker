@@ -32,7 +32,7 @@
 - `Intervalle de clic` détermine le temps écoulé entre les clics. Cette valeur doit être supérieure à 0.
 - `Durée de maintien` détermine combien de temps un bouton de la souris reste enfoncé. Cette valeur doit être supérieure à 0.
 - `Options de clic` détermine les détails des clics de souris.
-- `Bouton de la souris` est le bouton de souris utilisé pour cliquer. Vous pouvez choisir Gauche, Droite et Milieu.
+- `Bouton de la souris` est le bouton de souris utilisé pour cliquer. Vous pouvez choisir Gauche, Droite, Milieu, Précédent (latéral) et Suivant (latéral).
 - `Mode de clic` détermine s'il faut appuyer puis relâcher, ou maintenir le bouton de la souris enfoncé.
 - `Répéter` détermine combien de fois le clic est répété. Cette valeur doit être supérieure à 0. La limite est de 1 million.
 - Lorsque `Répéter jusqu'à l'arrêt` est sélectionné, les clics continuent jusqu'à ce que vous appuyiez sur le raccourci pour les arrêter.

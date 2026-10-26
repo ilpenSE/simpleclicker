@@ -110,16 +110,6 @@
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QLabel" name="infoLabel">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="text">
-           <string>v%1 by ilpeN</string>
-          </property>
-         </widget>
-        </item>
        </layout>
       </widget>
 
@@ -329,6 +319,16 @@
                <item>
                 <property name="text">
                  <string>Middle</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Side Button 4 (Back)</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Side Button 5 (Forward)</string>
                 </property>
                </item>
               </widget>
@@ -580,6 +580,18 @@
       </widget>
      </widget>
     </item>
+
+    <item>
+      <widget class="QLabel" name="infoLabel">
+        <property name="enabled">
+          <bool>false</bool>
+        </property>
+        <property name="text">
+          <string>Simple Clicker %1 by ilpeN</string>
+        </property>
+      </widget>
+    </item>
+
    </layout>
   </widget>
  </widget>

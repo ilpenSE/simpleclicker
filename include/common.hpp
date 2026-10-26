@@ -99,7 +99,7 @@ enum class Theme : int { Dark = 0, Light, Count };
 enum class Language : int { English = 0, Turkish, German, French, Count };
 
 enum class MouseButton : int {
-  Left = 0, Right, Middle, Count,
+  Left = 0, Right, Middle, Button4, Button5, Count,
 };
 
 enum class ClickMode : int {
@@ -188,6 +188,8 @@ constexpr const char *to_cstr(MouseButton msbtn) {
   case MouseButton::Left: return "left";
   case MouseButton::Right: return "right";
   case MouseButton::Middle: return "middle";
+  case MouseButton::Button4: return "button4";
+  case MouseButton::Button5: return "button5";
   default: return nullptr;
   }
 }
@@ -196,6 +198,8 @@ constexpr MouseButton to_mouse_button(std::string_view str) {
   if (str == "left") return MouseButton::Left;
   if (str == "right") return MouseButton::Right;
   if (str == "middle") return MouseButton::Middle;
+  if (str == "button4") return MouseButton::Button4;
+  if (str == "button5") return MouseButton::Button5;
   return MouseButton::Left;
 }
 
@@ -203,6 +207,8 @@ inline MouseButton to_mouse_button(const QString& qstr) {
   if (qstr == "left") return MouseButton::Left;
   if (qstr == "right") return MouseButton::Right;
   if (qstr == "middle") return MouseButton::Middle;
+  if (qstr == "button4") return MouseButton::Button4;
+  if (qstr == "button5") return MouseButton::Button5;
   return MouseButton::Left;
 }
 

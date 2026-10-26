@@ -32,7 +32,7 @@
 - `Klickintervall` legt fest, wie viel Zeit zwischen den Klicks vergeht. Der Wert muss größer als 0 sein.
 - `Haltedauer` legt fest, wie lange eine Maustaste gedrückt gehalten wird. Dieser Wert muss größer als 0 sein.
 - `Klickoptionen` legt die Details der Mausklicks fest.
-- `Maustaste` ist die Maustaste, die geklickt wird. Du kannst Links, Rechts und Mitte wählen.
+- `Maustaste` ist die Maustaste, die geklickt wird. Du kannst Links, Rechts, Mitte, Vor (Seiten) und Zurück (Seiten) wählen.
 - `Klickmodus` legt fest, ob die Maustaste gedrückt und wieder losgelassen oder gehalten wird.
 - `Wiederholen` legt fest, wie oft der Klick wiederholt wird. Der Wert muss größer als 0 sein. Das Limit liegt bei 1 Million.
 - Wenn `Wiederholen, bis gestoppt wird` ausgewählt ist, wird so lange geklickt, bis du das Tastenkürzel zum Stoppen drückst.

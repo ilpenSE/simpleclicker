@@ -56,8 +56,8 @@
     <translation>'%1' ön ayarı başarıyla silindi.</translation>
   </message>
   <message>
-    <source>v%1 by ilpeN</source>
-    <translation>v%1 ilpeN tarafından</translation>
+    <source>Simple Clicker %1 by ilpeN</source>
+    <translation> ilpeN tarafından Simple Clicker %1</translation>
   </message>
   <message>
     <source>Start/Stop hotkey couldn't be registered please restart or reinstall the app</source>
@@ -131,6 +131,14 @@
   <message>
     <source>Middle</source>
     <translation>Orta</translation>
+  </message>
+  <message>
+    <source>Side Button 4 (Back)</source>
+    <translation>Yan Düğme 4 (Geri)</translation>
+  </message>
+  <message>
+    <source>Side Button 5 (Forward)</source>
+    <translation>Yan Düğme 5 (İleri)</translation>
   </message>
   <message>
     <source>Click Mode</source>

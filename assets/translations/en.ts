@@ -56,8 +56,8 @@
     <translation>Removed preset '%1' successfully.</translation>
   </message>
   <message>
-    <source>v%1 by ilpeN</source>
-    <translation>v%1 by ilpeN</translation>
+    <source>Simple Clicker %1 by ilpeN</source>
+    <translation>Simple Clicker %1 by ilpeN</translation>
   </message>
   <message>
     <source>Start/Stop hotkey couldn't be registered please restart or reinstall the app</source>
@@ -131,6 +131,14 @@
   <message>
     <source>Middle</source>
     <translation>Middle</translation>
+  </message>
+  <message>
+    <source>Side Button 4 (Back)</source>
+    <translation>Side Button 4 (Back)</translation>
+  </message>
+  <message>
+    <source>Side Button 5 (Forward)</source>
+    <translation>Side Button 5 (Forward)</translation>
   </message>
   <message>
     <source>Click Mode</source>

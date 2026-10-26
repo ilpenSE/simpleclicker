@@ -56,8 +56,8 @@
     <translation>Préréglage '%1' supprimé.</translation>
   </message>
   <message>
-    <source>v%1 by ilpeN</source>
-    <translation>v%1 par ilpeN</translation>
+    <source>Simple Clicker %1 by ilpeN</source>
+    <translation>Simple Clicker %1 par ilpeN</translation>
   </message>
   <message>
     <source>Start/Stop hotkey couldn't be registered please restart or reinstall the app</source>
@@ -131,6 +131,14 @@
   <message>
     <source>Middle</source>
     <translation>Milieu</translation>
+  </message>
+  <message>
+    <source>Side Button 4 (Back)</source>
+    <translation>Bouton latéral 4 (Précédent)</translation>
+  </message>
+  <message>
+    <source>Side Button 5 (Forward)</source>
+    <translation>Bouton latéral 5 (Suivant)</translation>
   </message>
   <message>
     <source>Click Mode</source>

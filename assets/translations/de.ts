@@ -56,8 +56,8 @@
     <translation>Voreinstellung '%1' entfernt.</translation>
   </message>
   <message>
-    <source>v%1 by ilpeN</source>
-    <translation>v%1 von ilpeN</translation>
+    <source>Simple Clicker v%1 by ilpeN</source>
+    <translation>Simple Clicker %1 von ilpeN</translation>
   </message>
   <message>
     <source>Start/Stop hotkey couldn't be registered please restart or reinstall the app</source>
@@ -131,6 +131,14 @@
   <message>
     <source>Middle</source>
     <translation>Mitte</translation>
+  </message>
+  <message>
+    <source>Side Button 4 (Back)</source>
+    <translation>Seitentaste 4 (Zurück)</translation>
+  </message>
+  <message>
+    <source>Side Button 5 (Forward)</source>
+    <translation>Seitentaste 5 (Vor)</translation>
   </message>
   <message>
     <source>Click Mode</source>
