@@ -14,7 +14,8 @@ extern Logger *lg;
 extern LanguageManager *langman;
 extern HotkeyManager *hotkeyman;
 
-SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent) {
+SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent)
+{
   setWindowTitle(tr("Settings"));
   setModal(true);
   setMinimumWidth(360);
@@ -31,6 +32,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent) {
   auto layout = new QFormLayout(formContainer);
   layout->setContentsMargins(16, 16, 16, 16);
 
+  // Language
   m_languageCombo = new QComboBox(this);
   m_languageCombo->addItem("English", static_cast<int>(Language::English));
   m_languageCombo->addItem("Türkçe", static_cast<int>(Language::Turkish));
@@ -38,13 +40,16 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent) {
   m_languageCombo->addItem("Français", static_cast<int>(Language::French));
   layout->addRow(tr("Language"), m_languageCombo);
 
+  // Theme
   m_themeCombo = new QComboBox(this);
   m_themeCombo->addItem(tr("Dark"), static_cast<int>(Theme::Dark));
   m_themeCombo->addItem(tr("Light"), static_cast<int>(Theme::Light));
   layout->addRow(tr("Theme"), m_themeCombo);
 
+  // Hotkey
   m_hotkeyEdit = new QKeySequenceEdit(this);
   layout->addRow(tr("Start/Stop Hotkey"), m_hotkeyEdit);
+
   outerLayout->addWidget(formContainer);
 
   // Constraint hotkey edit
@@ -91,13 +96,11 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent) {
 
   // Load language
   m_currentLang = settingsman->get<setting::language>();
-  int idx = m_languageCombo->findData(static_cast<int>(m_currentLang));
-  if (idx >= 0) m_languageCombo->setCurrentIndex(idx);
+  m_languageCombo->setCurrentIndex(static_cast<int>(m_currentLang));
 
   // Load theme
   m_currentTheme = settingsman->get<setting::theme>();
-  idx = m_themeCombo->findData(static_cast<int>(m_currentTheme));
-  if (idx >= 0) m_themeCombo->setCurrentIndex(idx);
+  m_themeCombo->setCurrentIndex(static_cast<int>(m_currentTheme));
 
   // Load hotkey
   m_currentHotkey = settingsman->get<setting::keybind>();
@@ -113,7 +116,7 @@ void SettingsDialog::onSave() {
   if (selectedHotkey != m_currentHotkey) {
     if (selectedHotkey == SAVE_CHANGES_KEYBIND ||
         selectedHotkey == ABORT_CHANGES_KEYBIND) {
-      m_notificationBar->error(QString(tr("%1 is reserved for program, please try something else")).arg(selectedHotkey.toString()));
+      m_notificationBar->error(tr("%1 is reserved for program, please try something else").arg(selectedHotkey.toString()));
       lg->error("Cannot change hotkey ({}) because it's reserved for program", selectedHotkey.toString());
       m_hotkeyEdit->setKeySequence(m_currentHotkey.toKeySequence());
       return;
@@ -127,7 +130,7 @@ void SettingsDialog::onSave() {
   }
 
   // Language
-  Language selectedLanguage = static_cast<Language>(m_languageCombo->currentData().toInt());
+  Language selectedLanguage = static_cast<Language>(m_languageCombo->currentIndex());
   if (selectedLanguage != m_currentLang) {
     madeChanges = true;
     langman->set(selectedLanguage);
@@ -135,7 +138,7 @@ void SettingsDialog::onSave() {
   }
 
   // Theme
-  Theme selectedTheme = static_cast<Theme>(m_themeCombo->currentData().toInt());
+  Theme selectedTheme = static_cast<Theme>(m_themeCombo->currentIndex());
   if (selectedTheme != m_currentTheme) {
     madeChanges = true;
     thememan->setTheme(selectedTheme);

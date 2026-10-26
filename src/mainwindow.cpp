@@ -93,6 +93,10 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
     addPresetItem(*ui->presetsList, name, cfg);
   }
 
+  if (currentPresetWidget) {
+    currentClickIntervalMs = currentPresetWidget->config.interval;
+    currentHoldTimeMs      = currentPresetWidget->config.holdTime;
+  }
   applySettings();
 
   // Bind Save keybind
@@ -279,6 +283,7 @@ void MainWindow::startClicking() {
 
   ui->startButton->setEnabled(false);
   ui->stopButton->setEnabled(true);
+  this->setWindowTitle(QString("Simple Clicker (%1)").arg(tr("RUNNING")));
   clickengine->start();
   lg->info("Clicking started");
 };
@@ -290,6 +295,7 @@ void MainWindow::stopClicking() {
 
   ui->presetsList->setEnabled(true);
   ui->addPresetBtn->setEnabled(true);
+  this->setWindowTitle("Simple Clicker");
   clickengine->stop();
   lg->info("Clicking stopped");
 };

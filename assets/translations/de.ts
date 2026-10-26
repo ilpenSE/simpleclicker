@@ -4,6 +4,10 @@
 <context>
   <name>MainWindow</name>
   <message>
+    <source>RUNNING</source>
+    <translation>LÄUFT</translation>
+  </message>
+  <message>
     <source>Presets</source>
     <translation>Voreinstellungen</translation>
   </message>

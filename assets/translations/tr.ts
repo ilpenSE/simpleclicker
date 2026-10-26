@@ -4,6 +4,10 @@
 <context>
   <name>MainWindow</name>
   <message>
+    <source>RUNNING</source>
+    <translation>ÇALIŞIYOR</translation>
+  </message>
+  <message>
     <source>Presets</source>
     <translation>Ön Ayarlar</translation>
   </message>

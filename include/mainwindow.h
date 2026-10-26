@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QListWidget>
+#include "common.hpp"
 #include "notificationbar.hpp"
 #include "presets.hpp"
 #include "presetitemwidget.hpp"

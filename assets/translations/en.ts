@@ -4,6 +4,10 @@
 <context>
   <name>MainWindow</name>
   <message>
+    <source>RUNNING</source>
+    <translation>RUNNING</translation>
+  </message>
+  <message>
     <source>Presets</source>
     <translation>Presets</translation>
   </message>
