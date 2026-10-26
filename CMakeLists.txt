@@ -59,6 +59,10 @@ set_target_properties(SimpleClicker PROPERTIES
   AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}
 )
 
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+  target_link_options(SimpleClicker PRIVATE -static-libstdc++ -static-libgcc)
+endif()
+
 if(ENABLE_SANITIZERS AND (CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU"))
   target_compile_options(SimpleClicker PRIVATE
     -fsanitize=address,undefined
