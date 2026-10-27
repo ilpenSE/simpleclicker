@@ -76,21 +76,21 @@ namespace {
 static void set_mouse_button_win32(INPUT &input, MouseButton button, bool press) {
   switch (button) {
   case MouseButton::Button4: {
-    input.mi.dwFlags = isPress ? MOUSEEVENTF_XDOWN : MOUSEEVENTF_XUP;
+    input.mi.dwFlags = press ? MOUSEEVENTF_XDOWN : MOUSEEVENTF_XUP;
     input.mi.mouseData = XBUTTON1;
   } break;
   case MouseButton::Button5: {
-    input.mi.dwFlags = isPress ? MOUSEEVENTF_XDOWN : MOUSEEVENTF_XUP;
+    input.mi.dwFlags = press ? MOUSEEVENTF_XDOWN : MOUSEEVENTF_XUP;
     input.mi.mouseData = XBUTTON2;
   } break;
   case MouseButton::Right: {
-    input.mi.dwFlags = isPress ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_RIGHTUP;
+    input.mi.dwFlags = press ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_RIGHTUP;
   } break;
   case MouseButton::Middle: {
-    input.mi.dwFlags = isPress ? MOUSEEVENTF_MIDDLEDOWN : MOUSEEVENTF_MIDDLEUP;
+    input.mi.dwFlags = press ? MOUSEEVENTF_MIDDLEDOWN : MOUSEEVENTF_MIDDLEUP;
   } break;
   default: {
-    input.mi.dwFlags = isPress ? MOUSEEVENTF_LEFTDOWN : MOUSEEVENTF_LEFTUP;
+    input.mi.dwFlags = press ? MOUSEEVENTF_LEFTDOWN : MOUSEEVENTF_LEFTUP;
   } break;
   }
   input.mi.dwFlags |= MOUSEEVENTF_ABSOLUTE;
