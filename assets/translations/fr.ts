@@ -87,6 +87,30 @@
     <source>Are you sure to remove this preset?</source>
     <translation>Voulez-vous vraiment supprimer ce préréglage ?</translation>
   </message>
+  <message>
+    <source>Import a preset</source>
+    <translation>Importer un préréglage</translation>
+  </message>
+  <message>
+    <source>Export active preset</source>
+    <translation>Exporter le préréglage actif</translation>
+  </message>
+  <message>
+    <source>Code of preset named '%1' copied to clipboard!</source>
+    <translation>Le code du préréglage nommé « %1 » a été copié dans le presse-papiers !</translation>
+  </message>
+  <message>
+    <source>Preset named '%1' has been imported successfully.</source>
+    <translation>Le préréglage nommé « %1 » a été importé avec succès.</translation>
+  </message>
+  <message>
+    <source>Invalid preset code.</source>
+    <translation>Code de préréglage non valide.</translation>
+  </message>
+  <message>
+    <source>Preset code:</source>
+    <translation>Code prédéfini:</translation>
+  </message>
 
   <!-- General time units -->
   <message>
@@ -305,7 +329,14 @@
     <source>Cancel</source>
     <translation>Annuler</translation>
   </message>
-
+  <message>
+    <source>Select</source>
+    <translation>Sélectionner</translation>
+  </message>
+  <message>
+    <source>Export</source>
+    <translation>Exporter</translation>
+  </message>
 </context>
 
 <context>

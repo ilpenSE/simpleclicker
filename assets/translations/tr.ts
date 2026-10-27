@@ -87,6 +87,30 @@
     <source>Are you sure to remove this preset?</source>
     <translation>Bu ön ayarı silmek istediğinizden emin misiniz?</translation>
   </message>
+  <message>
+    <source>Import a preset</source>
+    <translation>Bir ön ayar içe aktar</translation>
+  </message>
+  <message>
+    <source>Export active preset</source>
+    <translation>Aktif ön ayarı dışa aktar</translation>
+  </message>
+  <message>
+    <source>Code of preset named '%1' copied to clipboard!</source>
+    <translation>'%1' isimli ön ayarın kodu panoya kopyalandı!</translation>
+  </message>
+  <message>
+    <source>Preset named '%1' has been imported successfully.</source>
+    <translation>'%1' isimli ön ayar başarıyla içe aktarıldı.</translation>
+  </message>
+  <message>
+    <source>Invalid preset code.</source>
+    <translation>Geçersiz ön ayar kodu.</translation>
+  </message>
+  <message>
+    <source>Preset code:</source>
+    <translation>Ön ayar kodu:</translation>
+  </message>
 
   <!-- General time units -->
   <message>
@@ -259,6 +283,14 @@
   <message>
     <source>Cancel</source>
     <translation>İptal Et</translation>
+  </message>
+  <message>
+    <source>Select</source>
+    <translation>Seç</translation>
+  </message>
+  <message>
+    <source>Export</source>
+    <translation>Dışa Aktar</translation>
   </message>
 
 </context>

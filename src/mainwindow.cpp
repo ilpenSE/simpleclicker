@@ -16,6 +16,9 @@
 #include "click.hpp"
 #include "locationpickeroverlay.hpp"
 #include "update.hpp"
+#include <QInputDialog>
+#include "preset_code.hpp"
+#include <QClipboard>
 
 extern Logger *lg;
 extern PresetManager *presetsman;
@@ -90,7 +93,7 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
 
   // Add presets to the list
   for (const auto& [name, cfg] : presetsman->presets.asKeyValueRange()) {
-    addPresetItem(*ui->presetsList, name, cfg);
+    addPresetItem(ui->presetsList, name, cfg);
   }
 
   if (currentPresetWidget) {
@@ -151,7 +154,7 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
   makeDynamicIconButton(ui->addPresetBtn, "add.svg");
   connect(ui->addPresetBtn, &QPushButton::clicked, this, [this](){
     QString newPresetName = generateUniquePresetName();
-    QListWidgetItem *newItem = addPresetItem(*ui->presetsList, newPresetName, {});
+    QListWidgetItem *newItem = addPresetItem(ui->presetsList, newPresetName, {});
     setActivePreset(newItem);
     PresetItemWidget *newItemWidget = qobject_cast<PresetItemWidget*>(ui->presetsList->itemWidget(newItem));
     newItemWidget->enterEditMode();
@@ -162,12 +165,39 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
   // Set up import button
   makeDynamicIconButton(ui->importBtn, "import.svg");
   connect(ui->importBtn, &QPushButton::clicked, this, [this](){
-    lg->info("TODO: import a preset");
+    bool ok = false;
+    QString code = QInputDialog::getText(this,
+                                         tr("Import a preset"),
+                                         tr("Preset code:"),
+                                         QLineEdit::Normal,
+                                         QString(),
+                                         &ok).trimmed();
+
+    if (ok && !code.isEmpty()) {
+      auto opt = preset_code_deserialize(code);
+      // SC1-AQKIJ9CGAwGQB5ABDcO2biBheWFyYWJjZGU
+      if (!opt.has_value()) {
+        m_notificationBar->error(tr("Invalid preset code."));
+        return;
+      }
+      std::pair<QString, PresetConfig> parsed_preset = *opt;
+
+      QString finalName = parsed_preset.first;
+      for (int n = 2; presetsman->presets.contains(finalName); ++n)
+        finalName = QString("%1 (%2)").arg(parsed_preset.first).arg(n);
+
+      addPresetItem(ui->presetsList, finalName, parsed_preset.second);
+      presetsman->presets[finalName] = parsed_preset.second;
+      m_notificationBar->success(tr("Preset named '%1' has been imported successfully.").arg(finalName));
+    }
   });
 
   makeDynamicIconButton(ui->exportBtn, "export.svg");
   connect(ui->exportBtn, &QPushButton::clicked, this, [this](){
-    lg->info("TODO: export all presets");
+    if (!currentPresetWidget) return;
+    QString code = preset_code_serialize(currentPresetWidget->presetName(), currentPresetWidget->config);
+    QGuiApplication::clipboard()->setText(code);
+    m_notificationBar->success(tr("Code of preset named '%1' copied to clipboard!").arg(currentPresetWidget->presetName()));
   });
 
   makeDynamicIconLabel(ui->ciHelpLabel, "help.svg");
@@ -343,19 +373,20 @@ void MainWindow::setActivePreset(QListWidgetItem *item) {
   lg->info("Setting active preset to '{}'", itemWidget->presetName());
 }
 
-QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& presetName, const PresetConfig& config) {
-  PresetItemWidget *itemWidget = new PresetItemWidget(presetName, config, &list);
+QListWidgetItem *MainWindow::addPresetItem(QListWidget *list, const QString& presetName, const PresetConfig& config)
+{
+  PresetItemWidget *itemWidget = new PresetItemWidget(presetName, config, list);
   QListWidgetItem *item = new QListWidgetItem();
   item->setSizeHint(itemWidget->sizeHint());
-  list.addItem(item);
-  list.setItemWidget(item, itemWidget);
+  list->addItem(item);
+  list->setItemWidget(item, itemWidget);
 
   if (!currentPresetWidget && presetName == m_currentPreset) {
     setActivePreset(item);
   }
 
   // Delete an item from preset
-  connect(itemWidget, &PresetItemWidget::deleteRequested, this, [this, &list, item, itemWidget]() {
+  connect(itemWidget, &PresetItemWidget::deleteRequested, this, [this, list, item, itemWidget]() {
     if (!itemWidget->isEnabled()) return;
 
     if (QMessageBox::question(this, "Simple Clicker", tr("Are you sure to remove this preset?"),
@@ -365,15 +396,15 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
 
     lg->info("Removing preset: '{}'", itemWidget->presetName());
     presetsman->presets.remove(itemWidget->presetName());
-    int idx = list.row(item);
+    int idx = list->row(item);
     if (currentPresetWidget == itemWidget) {
       // if current's gonna be deleted, set active preset to something else
-      setActivePreset(idx <= 0 ? nullptr : list.item(idx - 1));
+      setActivePreset(idx <= 0 ? nullptr : list->item(idx - 1));
     }
     m_notificationBar->success(QString(tr("Removed preset '%1' successfully.")).arg(itemWidget->presetName()));
 
-    list.removeItemWidget(item);
-    delete list.takeItem(idx);
+    list->removeItemWidget(item);
+    delete list->takeItem(idx);
   });
 
   // Rename the preset name
@@ -412,10 +443,18 @@ QListWidgetItem* MainWindow::addPresetItem(QListWidget& list, const QString& pre
     m_notificationBar->success(QString(tr("Set active preset to %1")).arg(itemWidget->presetName()));
   });
 
+  // Export
+  connect(itemWidget, &PresetItemWidget::exportRequested, this, [this, itemWidget]{
+    QString code = preset_code_serialize(itemWidget->presetName(), itemWidget->config);
+    QGuiApplication::clipboard()->setText(code);
+    m_notificationBar->success(tr("Code of preset named '%1' copied to clipboard!").arg(itemWidget->presetName()));
+  });
+
   return item;
 }
 
-void MainWindow::savePreset(PresetItemWidget *itemWidget) {
+void MainWindow::savePreset(PresetItemWidget *itemWidget)
+{
   if (!itemWidget) return;
   if (!itemWidget->isEnabled() || !itemWidget->isUnsaved()) return;
   auto pname = itemWidget->presetName();
@@ -444,7 +483,8 @@ void MainWindow::savePreset(PresetItemWidget *itemWidget) {
   m_notificationBar->success(tr("Preset %1 has been saved successfully!").arg(pname));
 }
 
-void MainWindow::_changePresetConfigUi(bool is_locked) {
+void MainWindow::_changePresetConfigUi(bool is_locked)
+{
   for (auto it : {ui->clickOptionsBox, ui->clickIntervalBox, ui->holdTimeBox, ui->repeatBox, ui->positionBox}) {
     it->setEnabled(!is_locked);
   }
@@ -452,7 +492,8 @@ void MainWindow::_changePresetConfigUi(bool is_locked) {
   ui->stopButton->setEnabled(!is_locked && clickengine->running);
 }
 
-void MainWindow::applySettings() {
+void MainWindow::applySettings()
+{
   auto kbd = settingsman->get<setting::keybind>().toString();
   ui->startButton->setText(QString(tr("Start") + " (%1)").arg(kbd));
   ui->stopButton->setText(QString(tr("Stop") + " (%1)").arg(kbd));

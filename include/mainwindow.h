@@ -38,7 +38,7 @@ private:
 
   void applySettings();
   void applyPreset(const PresetConfig& config);
-  QListWidgetItem* addPresetItem(QListWidget& list, const QString& presetName, const PresetConfig& config);
+  QListWidgetItem* addPresetItem(QListWidget *list, const QString& presetName, const PresetConfig& config);
   void setActivePreset(QListWidgetItem *item);
 
   void blockPresetConfigUi() { _changePresetConfigUi(true); }

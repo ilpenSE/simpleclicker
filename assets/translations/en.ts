@@ -87,6 +87,30 @@
     <source>Are you sure to remove this preset?</source>
     <translation>Are you sure to remove this preset?</translation>
   </message>
+  <message>
+    <source>Import a preset</source>
+    <translation>Import a preset</translation>
+  </message>
+  <message>
+    <source>Export active preset</source>
+    <translation>Export active preset</translation>
+  </message>
+  <message>
+    <source>Code of preset named '%1' copied to clipboard!</source>
+    <translation>Code of preset named '%1' copied to clipboard!</translation>
+  </message>
+  <message>
+    <source>Preset named '%1' has been imported successfully.</source>
+    <translation>Preset named '%1' has been imported successfully.</translation>
+  </message>
+  <message>
+    <source>Invalid preset code.</source>
+    <translation>Invalid preset code.</translation>
+  </message>
+  <message>
+    <source>Preset code:</source>
+    <translation>Preset code:</translation>
+  </message>
 
   <!-- General time units -->
   <message>
@@ -304,6 +328,14 @@
   <message>
     <source>Cancel</source>
     <translation>Cancel</translation>
+  </message>
+  <message>
+    <source>Select</source>
+    <translation>Select</translation>
+  </message>
+  <message>
+    <source>Export</source>
+    <translation>Export</translation>
   </message>
 
 </context>

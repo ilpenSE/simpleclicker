@@ -87,6 +87,30 @@
     <source>Are you sure to remove this preset?</source>
     <translation>Möchten Sie diese Voreinstellung wirklich entfernen?</translation>
   </message>
+  <message>
+    <source>Import a preset</source>
+    <translation>Voreinstellung importieren</translation>
+  </message>
+  <message>
+    <source>Export active preset</source>
+    <translation>Aktives Preset exportieren</translation>
+  </message>
+  <message>
+    <source>Code of preset named '%1' copied to clipboard!</source>
+    <translation>Code des Presets „%1“ in die Zwischenablage kopiert!</translation>
+  </message>
+  <message>
+    <source>Preset named '%1' has been imported successfully.</source>
+    <translation>Vorgabe mit dem Namen „%1“ wurde erfolgreich importiert.</translation>
+  </message>
+  <message>
+    <source>Invalid preset code.</source>
+    <translation>Ungültiger Voreinstellungscode.</translation>
+  </message>
+  <message>
+    <source>Preset code:</source>
+    <translation>Voreingestellter Code:</translation>
+  </message>
 
   <!-- General time units -->
   <message>
@@ -303,6 +327,14 @@
   <message>
     <source>Cancel</source>
     <translation>Abbrechen</translation>
+  </message>
+  <message>
+    <source>Select</source>
+    <translation>Auswählen</translation>
+  </message>
+  <message>
+    <source>Export</source>
+    <translation>Exportieren</translation>
   </message>
 
 </context>
