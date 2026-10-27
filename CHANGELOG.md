@@ -1,3 +1,11 @@
+# 1.2
+
+- Title is being updated when clicker is started
+- Added new mouse buttons: side button 4 (back) and 5 (forward)
+- Added setting "leftPanelWidth" to save latest left/right panel orientation
+- Fixed weird click interval/hold time unit and spinbox inconsistencies/bugs
+- Fixed critical bug where if you don't have config folder in home/appdata path, multi-instance detector gives false-positive and settings and presets don't work
+
 # 1.1.3
 
 - Fixed minor but critical bug in auto-updater

@@ -1,6 +1,7 @@
 #include "presetitemwidget.hpp"
 #include <QHBoxLayout>
 #include <QPainter>
+#include <QMenu>
 #include "common.hpp"
 #include "theme.hpp"
 #include "language.hpp"
@@ -80,6 +81,41 @@ void PresetItemWidget::retranslate() {
     m_saveButton->setToolTip(QString(tr("Save") + " (%1)").arg(SAVE_CHANGES_KEYBIND.toString()));
     m_cancelButton->setToolTip(QString(tr("Cancel") + " (%1)").arg(ABORT_CHANGES_KEYBIND.toString()));
   }
+}
+
+void PresetItemWidget::contextMenuEvent(QContextMenuEvent *event)
+{
+  if (is_set(m_state, PresetItemState::Renaming)) {
+    QWidget::contextMenuEvent(event);
+    return;
+  }
+
+  QMenu menu(this);
+
+  // Select
+  if (!m_active) {
+    menu.addAction(tr("Select"), this, [this]{ emit doubleClicked(); });
+    menu.addSeparator();
+  }
+
+  // Save/Cancel
+  const bool unsaved = is_set(m_state, PresetItemState::Unsaved);
+  if (unsaved) {
+    menu.addAction(tr("Save"), SAVE_CHANGES_KEYBIND.toKeySequence(),
+                   this, [this]{ emit saveRequested(); });
+    menu.addAction(tr("Cancel"), ABORT_CHANGES_KEYBIND.toKeySequence(),
+                   this, [this]{ emit cancelRequested(); });
+    menu.addSeparator();
+  }
+
+  // Rename, Delete / Export
+  menu.addAction(tr("Rename"), this, &PresetItemWidget::onEditClicked);
+  menu.addAction(tr("Delete"), this, [this]{ emit deleteRequested(); });
+  menu.addSeparator();
+  menu.addAction(tr("Export"), this, [this]{ emit exportRequested(); });
+
+  menu.exec(event->globalPos());
+  event->accept();
 }
 
 void PresetItemWidget::enterEditMode() {

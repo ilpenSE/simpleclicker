@@ -4,6 +4,10 @@
 <context>
   <name>MainWindow</name>
   <message>
+    <source>RUNNING</source>
+    <translation>ÇALIŞIYOR</translation>
+  </message>
+  <message>
     <source>Presets</source>
     <translation>Ön Ayarlar</translation>
   </message>
@@ -56,8 +60,8 @@
     <translation>'%1' ön ayarı başarıyla silindi.</translation>
   </message>
   <message>
-    <source>v%1 by ilpeN</source>
-    <translation>v%1 ilpeN tarafından</translation>
+    <source>Simple Clicker %1 by ilpeN</source>
+    <translation> ilpeN tarafından Simple Clicker %1</translation>
   </message>
   <message>
     <source>Start/Stop hotkey couldn't be registered please restart or reinstall the app</source>
@@ -78,6 +82,34 @@
   <message>
     <source>Y dimension must be a positive value!</source>
     <translation>Y boyutu pozitif bir değer olmalı!</translation>
+  </message>
+  <message>
+    <source>Are you sure to remove this preset?</source>
+    <translation>Bu ön ayarı silmek istediğinizden emin misiniz?</translation>
+  </message>
+  <message>
+    <source>Import a preset</source>
+    <translation>Bir ön ayar içe aktar</translation>
+  </message>
+  <message>
+    <source>Export active preset</source>
+    <translation>Aktif ön ayarı dışa aktar</translation>
+  </message>
+  <message>
+    <source>Code of preset named '%1' copied to clipboard!</source>
+    <translation>'%1' isimli ön ayarın kodu panoya kopyalandı!</translation>
+  </message>
+  <message>
+    <source>Preset named '%1' has been imported successfully.</source>
+    <translation>'%1' isimli ön ayar başarıyla içe aktarıldı.</translation>
+  </message>
+  <message>
+    <source>Invalid preset code.</source>
+    <translation>Geçersiz ön ayar kodu.</translation>
+  </message>
+  <message>
+    <source>Preset code:</source>
+    <translation>Ön ayar kodu:</translation>
   </message>
 
   <!-- General time units -->
@@ -131,6 +163,14 @@
   <message>
     <source>Middle</source>
     <translation>Orta</translation>
+  </message>
+  <message>
+    <source>Side Button 4 (Back)</source>
+    <translation>Yan Düğme 4 (Geri)</translation>
+  </message>
+  <message>
+    <source>Side Button 5 (Forward)</source>
+    <translation>Yan Düğme 5 (İleri)</translation>
   </message>
   <message>
     <source>Click Mode</source>
@@ -243,6 +283,14 @@
   <message>
     <source>Cancel</source>
     <translation>İptal Et</translation>
+  </message>
+  <message>
+    <source>Select</source>
+    <translation>Seç</translation>
+  </message>
+  <message>
+    <source>Export</source>
+    <translation>Dışa Aktar</translation>
   </message>
 
 </context>

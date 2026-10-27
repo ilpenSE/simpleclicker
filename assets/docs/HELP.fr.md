@@ -27,12 +27,21 @@
 - Pour renommer à nouveau un préréglage, passez d'abord la souris dessus : une icône de crayon apparaît. Cliquez dessus, un champ de saisie s'affiche, saisissez le nouveau nom souhaité. Appuyez ensuite sur `ENTRÉE` ou cliquez sur le bouton d'enregistrement pour valider le renommage, OU appuyez sur `ÉCHAP` ou cliquez sur le bouton d'annulation pour l'annuler.
 - Pendant un renommage, vous pouvez toujours modifier les paramètres du préréglage. Mais lorsque vous validez le renommage, le préréglage est également enregistré. Il en va de même pour l'annulation du renommage (les modifications sont annulées).
 
+### Importation/exportation de préréglages
+- Appuyez sur le bouton d'exportation (en forme d'icône de téléversement) à droite du bouton d'importation.
+- Le code du préréglage actif sera copié dans le presse-papiers. (Uniquement si un préréglage est actif, sinon rien ne sera copié.)
+- Vous pouvez aussi faire un clic droit sur le bouton d'un préréglage et cliquer sur « Exporter » pour faire la même chose.
+- Le code contient le nom et la configuration du préréglage.
+- Appuyez sur le bouton d'importation (en forme d'icône de téléchargement) à droite du titre « Préréglages ».
+- Une boîte de dialogue s'ouvre et vous pouvez y coller le code copié. S'il est valide, il doit commencer par « SC1- » (le numéro peut changer avec les mises à jour).
+- Le nom du préréglage sera automatiquement modifié s'il entre en collision avec celui d'un autre préréglage.
+
 ## Paramètres du préréglage
 - Vous pouvez modifier les paramètres dans l'interface située à droite des préréglages.
 - `Intervalle de clic` détermine le temps écoulé entre les clics. Cette valeur doit être supérieure à 0.
 - `Durée de maintien` détermine combien de temps un bouton de la souris reste enfoncé. Cette valeur doit être supérieure à 0.
 - `Options de clic` détermine les détails des clics de souris.
-- `Bouton de la souris` est le bouton de souris utilisé pour cliquer. Vous pouvez choisir Gauche, Droite et Milieu.
+- `Bouton de la souris` est le bouton de souris utilisé pour cliquer. Vous pouvez choisir Gauche, Droite, Milieu, Précédent (latéral) et Suivant (latéral).
 - `Mode de clic` détermine s'il faut appuyer puis relâcher, ou maintenir le bouton de la souris enfoncé.
 - `Répéter` détermine combien de fois le clic est répété. Cette valeur doit être supérieure à 0. La limite est de 1 million.
 - Lorsque `Répéter jusqu'à l'arrêt` est sélectionné, les clics continuent jusqu'à ce que vous appuyiez sur le raccourci pour les arrêter.

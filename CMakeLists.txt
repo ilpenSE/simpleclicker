@@ -28,6 +28,7 @@ qt_add_executable(SimpleClicker
   src/logger.cpp
   src/presets.cpp
   src/settings.cpp
+  src/preset_code.cpp
   src/hotkey.cpp                include/hotkey.hpp
   src/update.cpp                include/update.hpp
   src/click.cpp                 include/click.hpp

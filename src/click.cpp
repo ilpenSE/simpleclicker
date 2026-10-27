@@ -73,12 +73,27 @@ void ClickEngine::stop() {
 #include <windows.h>
 
 namespace {
-static DWORD to_win32(MouseButton button, bool isPress) {
+static void set_mouse_button_win32(INPUT &input, MouseButton button, bool press) {
   switch (button) {
-  case MouseButton::Right: return isPress ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_RIGHTUP;
-  case MouseButton::Middle: return isPress ? MOUSEEVENTF_MIDDLEDOWN : MOUSEEVENTF_MIDDLEUP;
-  default: return isPress ? MOUSEEVENTF_LEFTDOWN : MOUSEEVENTF_LEFTUP;
+  case MouseButton::Button4: {
+    input.mi.dwFlags = isPress ? MOUSEEVENTF_XDOWN : MOUSEEVENTF_XUP;
+    input.mi.mouseData = XBUTTON1;
+  } break;
+  case MouseButton::Button5: {
+    input.mi.dwFlags = isPress ? MOUSEEVENTF_XDOWN : MOUSEEVENTF_XUP;
+    input.mi.mouseData = XBUTTON2;
+  } break;
+  case MouseButton::Right: {
+    input.mi.dwFlags = isPress ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_RIGHTUP;
+  } break;
+  case MouseButton::Middle: {
+    input.mi.dwFlags = isPress ? MOUSEEVENTF_MIDDLEDOWN : MOUSEEVENTF_MIDDLEUP;
+  } break;
+  default: {
+    input.mi.dwFlags = isPress ? MOUSEEVENTF_LEFTDOWN : MOUSEEVENTF_LEFTUP;
+  } break;
   }
+  input.mi.dwFlags |= MOUSEEVENTF_ABSOLUTE;
 }
 
 } // namespace
@@ -89,13 +104,13 @@ void ClickEngine::nativeMouseHover(Location loc) const {
 
 void ClickEngine::nativeMousePress(MouseButton mouseButton, Location loc) const {
   INPUT input{.type=INPUT_MOUSE, .mi={loc.x, loc.y}};
-  input.mi.dwFlags = to_win32(mouseButton, true) | MOUSEEVENTF_ABSOLUTE;
+  set_mouse_button_win32(input, mouseButton, true);
   SendInput(1, &input, sizeof(input));
 }
 
 void ClickEngine::nativeMouseRelease(MouseButton mouseButton, Location loc) const {
   INPUT input{.type=INPUT_MOUSE, .mi={loc.x, loc.y}};
-  input.mi.dwFlags = to_win32(mouseButton, false) | MOUSEEVENTF_ABSOLUTE;
+  set_mouse_button_win32(input, mouseButton, false);
   SendInput(1, &input, sizeof(input));
 }
 
@@ -106,6 +121,8 @@ void ClickEngine::nativeMouseRelease(MouseButton mouseButton, Location loc) cons
 namespace {
 int to_xcb(MouseButton mouseButton) {
   switch (mouseButton) {
+  case MouseButton::Button4: return 8;
+  case MouseButton::Button5: return 9;
   case MouseButton::Right: return 3;
   case MouseButton::Middle: return 2;
   default: return 1;

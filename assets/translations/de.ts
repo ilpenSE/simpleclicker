@@ -4,6 +4,10 @@
 <context>
   <name>MainWindow</name>
   <message>
+    <source>RUNNING</source>
+    <translation>LÄUFT</translation>
+  </message>
+  <message>
     <source>Presets</source>
     <translation>Voreinstellungen</translation>
   </message>
@@ -56,8 +60,8 @@
     <translation>Voreinstellung '%1' entfernt.</translation>
   </message>
   <message>
-    <source>v%1 by ilpeN</source>
-    <translation>v%1 von ilpeN</translation>
+    <source>Simple Clicker v%1 by ilpeN</source>
+    <translation>Simple Clicker %1 von ilpeN</translation>
   </message>
   <message>
     <source>Start/Stop hotkey couldn't be registered please restart or reinstall the app</source>
@@ -78,6 +82,34 @@
   <message>
     <source>Y dimension must be a positive value!</source>
     <translation>Die Y-Dimension muss ein positiver Wert sein!</translation>
+  </message>
+  <message>
+    <source>Are you sure to remove this preset?</source>
+    <translation>Möchten Sie diese Voreinstellung wirklich entfernen?</translation>
+  </message>
+  <message>
+    <source>Import a preset</source>
+    <translation>Voreinstellung importieren</translation>
+  </message>
+  <message>
+    <source>Export active preset</source>
+    <translation>Aktives Preset exportieren</translation>
+  </message>
+  <message>
+    <source>Code of preset named '%1' copied to clipboard!</source>
+    <translation>Code des Presets „%1“ in die Zwischenablage kopiert!</translation>
+  </message>
+  <message>
+    <source>Preset named '%1' has been imported successfully.</source>
+    <translation>Vorgabe mit dem Namen „%1“ wurde erfolgreich importiert.</translation>
+  </message>
+  <message>
+    <source>Invalid preset code.</source>
+    <translation>Ungültiger Voreinstellungscode.</translation>
+  </message>
+  <message>
+    <source>Preset code:</source>
+    <translation>Voreingestellter Code:</translation>
   </message>
 
   <!-- General time units -->
@@ -131,6 +163,14 @@
   <message>
     <source>Middle</source>
     <translation>Mitte</translation>
+  </message>
+  <message>
+    <source>Side Button 4 (Back)</source>
+    <translation>Seitentaste 4 (Zurück)</translation>
+  </message>
+  <message>
+    <source>Side Button 5 (Forward)</source>
+    <translation>Seitentaste 5 (Vor)</translation>
   </message>
   <message>
     <source>Click Mode</source>
@@ -287,6 +327,14 @@
   <message>
     <source>Cancel</source>
     <translation>Abbrechen</translation>
+  </message>
+  <message>
+    <source>Select</source>
+    <translation>Auswählen</translation>
+  </message>
+  <message>
+    <source>Export</source>
+    <translation>Exportieren</translation>
   </message>
 
 </context>

@@ -10,6 +10,7 @@
   X(keybind, Hotkey, Hotkey::from("F6")) \
   X(theme, Theme, Theme::Dark) \
   X(firstRun, bool, true) \
+  X(leftPanelWidth, int, 254) \
   X(version, Version, APP_VERSION)
 
 namespace setting {

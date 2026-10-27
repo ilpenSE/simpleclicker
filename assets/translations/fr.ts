@@ -4,6 +4,10 @@
 <context>
   <name>MainWindow</name>
   <message>
+    <source>RUNNING</source>
+    <translation>EN COURS</translation>
+  </message>
+  <message>
     <source>Presets</source>
     <translation>Préréglages</translation>
   </message>
@@ -56,8 +60,8 @@
     <translation>Préréglage '%1' supprimé.</translation>
   </message>
   <message>
-    <source>v%1 by ilpeN</source>
-    <translation>v%1 par ilpeN</translation>
+    <source>Simple Clicker %1 by ilpeN</source>
+    <translation>Simple Clicker %1 par ilpeN</translation>
   </message>
   <message>
     <source>Start/Stop hotkey couldn't be registered please restart or reinstall the app</source>
@@ -78,6 +82,34 @@
   <message>
     <source>Y dimension must be a positive value!</source>
     <translation>La dimension Y doit être une valeur positive !</translation>
+  </message>
+  <message>
+    <source>Are you sure to remove this preset?</source>
+    <translation>Voulez-vous vraiment supprimer ce préréglage ?</translation>
+  </message>
+  <message>
+    <source>Import a preset</source>
+    <translation>Importer un préréglage</translation>
+  </message>
+  <message>
+    <source>Export active preset</source>
+    <translation>Exporter le préréglage actif</translation>
+  </message>
+  <message>
+    <source>Code of preset named '%1' copied to clipboard!</source>
+    <translation>Le code du préréglage nommé « %1 » a été copié dans le presse-papiers !</translation>
+  </message>
+  <message>
+    <source>Preset named '%1' has been imported successfully.</source>
+    <translation>Le préréglage nommé « %1 » a été importé avec succès.</translation>
+  </message>
+  <message>
+    <source>Invalid preset code.</source>
+    <translation>Code de préréglage non valide.</translation>
+  </message>
+  <message>
+    <source>Preset code:</source>
+    <translation>Code prédéfini:</translation>
   </message>
 
   <!-- General time units -->
@@ -131,6 +163,14 @@
   <message>
     <source>Middle</source>
     <translation>Milieu</translation>
+  </message>
+  <message>
+    <source>Side Button 4 (Back)</source>
+    <translation>Bouton latéral 4 (Précédent)</translation>
+  </message>
+  <message>
+    <source>Side Button 5 (Forward)</source>
+    <translation>Bouton latéral 5 (Suivant)</translation>
   </message>
   <message>
     <source>Click Mode</source>
@@ -289,7 +329,14 @@
     <source>Cancel</source>
     <translation>Annuler</translation>
   </message>
-
+  <message>
+    <source>Select</source>
+    <translation>Sélectionner</translation>
+  </message>
+  <message>
+    <source>Export</source>
+    <translation>Exporter</translation>
+  </message>
 </context>
 
 <context>

@@ -8,6 +8,7 @@
 #include <cstdint>
 #include "presets.hpp"
 #include <QMouseEvent>
+#include <QContextMenuEvent>
 
 enum class PresetItemState : uint8_t {
   None = 0,
@@ -70,6 +71,7 @@ public:
 
 signals:
   void renameRequested(const QString &newName);
+  void exportRequested();
   void deleteRequested();
   void saveRequested();
   void cancelRequested();
@@ -87,6 +89,7 @@ protected:
   bool eventFilter(QObject *watched, QEvent *event) override;
   void mouseDoubleClickEvent(QMouseEvent *event) override;
   void paintEvent(QPaintEvent *event) override;
+  void contextMenuEvent(QContextMenuEvent *event) override;
 
 private:
   void commitRename();
