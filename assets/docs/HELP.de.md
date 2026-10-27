@@ -27,6 +27,15 @@
 - Um eine Voreinstellung erneut umzubenennen, bewege zuerst die Maus über sie, dann erscheint ein Stift-Symbol. Klicke darauf, es wird ein Texteingabefeld angezeigt, in das du den gewünschten neuen Namen eingibst. Drücke dann `ENTER` oder klicke auf die Speichern-Schaltfläche, um das Umbenennen zu übernehmen, ODER drücke `ESC` oder klicke auf die Abbrechen-Schaltfläche, um das Umbenennen abzubrechen.
 - Während des Umbenennens kannst du weiterhin die Einstellungen der Voreinstellung ändern. Wenn du das Umbenennen jedoch übernimmst, wird die Voreinstellung ebenfalls gespeichert. Dasselbe gilt für das Abbrechen des Umbenennens (verwirft die Änderungen).
 
+### Voreinstellungen importieren/exportieren
+- Klicken Sie auf die Export-Schaltfläche (Symbol in Form eines Uploads) rechts neben der Import-Schaltfläche.
+- Dadurch wird der Code der aktiven Voreinstellung in die Zwischenablage kopiert. (Nur wenn eine Voreinstellung aktiv ist, andernfalls wird nichts kopiert.)
+- Sie können auch mit der rechten Maustaste auf die Schaltfläche einer Voreinstellung klicken und „Exportieren“ wählen, um dasselbe zu tun.
+- Der Code enthält den Namen und die Konfiguration der Voreinstellung.
+- Klicken Sie auf die Import-Schaltfläche (Symbol in Form eines Downloads) rechts neben dem Titel „Voreinstellungen“.
+- Es öffnet sich ein Dialog, in den Sie den kopierten Code einfügen können. Ein gültiger Code beginnt mit „SC1-“ (die Zahl kann sich durch Updates ändern).
+- Der Name der Voreinstellung wird automatisch geändert, wenn er mit einer bereits vorhandenen Voreinstellung kollidiert.
+
 ## Einstellungen der Voreinstellung
 - Du kannst die Einstellungen in der Oberfläche rechts neben den Voreinstellungen ändern.
 - `Klickintervall` legt fest, wie viel Zeit zwischen den Klicks vergeht. Der Wert muss größer als 0 sein.

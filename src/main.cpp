@@ -29,8 +29,22 @@ UpdateManager *updateman;
 X11 *x11inst;
 QLockFile *g_lockFile;
 
+static std::pair<QString, QDir> ensure_appdata()
+{
+  QString appdata_path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+  QDir appdata_dir(appdata_path);
+
+  // Create application data folder
+  if (!appdata_dir.mkpath(".")) {
+    panic("Couldn't make directory: {}", appdata_path);
+  }
+
+  return std::make_pair(appdata_path, appdata_dir);
+}
+
 // Check if any instance of program is running
-bool is_instance_running() {
+static bool is_instance_running()
+{
   QString lockPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/simpleclicker.lock";
   g_lockFile = new QLockFile(lockPath);
 
@@ -74,6 +88,8 @@ int main(int argc, char *argv[])
   QCoreApplication::setOrganizationName("");
   QCoreApplication::setApplicationName("SimpleClicker");
 
+  auto [appdata_path, appdata_dir] = ensure_appdata();
+
   if (is_instance_running()) {
     panic("An instance of program is already running!");
   }
@@ -81,14 +97,6 @@ int main(int argc, char *argv[])
 #ifdef __linux__
   x11inst = &X11::instance();
 #endif
-
-  QString appdata_path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-  QDir appdata_dir(appdata_path);
-
-  // Create application data folder
-  if (!appdata_dir.mkpath(".")) {
-    panic("Couldn't make directory: {}", appdata_path);
-  }
 
   // Create logs folder in appdata folder
   QDir logs_dir(appdata_dir);

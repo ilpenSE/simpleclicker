@@ -13,8 +13,11 @@ extern Logger *lg;
 PresetManager::PresetManager(const QString& file_path) : m_filePath(file_path)
 {}
 
-bool PresetManager::load() {
+bool PresetManager::load()
+{
   QFile file(m_filePath);
+  if (!file.exists()) return true;
+
   if (!file.open(QIODevice::ReadOnly)) {
     panic("Failed to read presets file: {}", file.errorString());
   }
@@ -63,7 +66,8 @@ PRESET_FIELDS
   return true;
 }
 
-void PresetManager::save() {
+void PresetManager::save()
+{
   QJsonObject obj{};
   for (const auto& [presetName, config] : presets.asKeyValueRange()) {
     obj[presetName] = QJsonObject{

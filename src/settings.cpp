@@ -11,8 +11,11 @@ extern Logger *lg;
 SettingsManager::SettingsManager(const QString& file_path) : m_filePath(file_path)
 {}
 
-bool SettingsManager::load() {
+bool SettingsManager::load()
+{
   QFile file(m_filePath);
+  if (!file.exists()) return true;
+
   if (!file.open(QIODevice::ReadOnly)) {
     panic("Failed to open settings file: {}", file.errorString());
   }
@@ -43,7 +46,8 @@ bool SettingsManager::load() {
   return true;
 }
 
-void SettingsManager::save() {
+void SettingsManager::save()
+{
   QSaveFile file(m_filePath);
   if (!file.open(QIODevice::WriteOnly)) {
     panic("Failed to open settings file: {}", file.errorString());

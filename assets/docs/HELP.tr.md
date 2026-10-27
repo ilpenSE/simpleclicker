@@ -22,6 +22,15 @@
 - `Ctrl+S` veya kaydet butonuna basarak değişiklikleri kaydedebilirsiniz.
 - `Ctrl+K` veya iptal butonuna basarak değişiklikleri iptal edebilirsiniz. (Değişiklikleri geri alır)
 
+### Ön Ayar İçe/Dışa Aktarma
+- İçe aktarma butonun sağındaki dışa aktarma butonuna basın.
+- Bu aktif ön ayarın kodunu panoya kopyalar. (Eğer herhangi bir ön ayar aktifse, değilse hiçbir şey kopyalamaz)
+- Ön ayarın butonuna sağ tıklayıp 'Dışa Aktar' butonuna basarak aynı şeyi yapabilirsiniz.
+- Kod ön ayarın ismini ve ayarlarını içerir.
+- 'Ön Ayarlar' başlığının sağındaki içe aktar butonuna basın.
+- Bir diyalog açılacak ve kopyaladığınız kodu buraya yapıştırabilirsiniz. Kod geçerliyse "SC1-" ile başlamalı. (sayı güncellemelere göre değişebilir)
+- İçe aktarılan ön ayar, var olan ön ayarlarla isim çakışması olursa otomatik olarak yeniden adlandırılır.
+
 ### Ön Ayar Yönetimi
 - Bir ön ayarı silmek için önce fareyi o özel ön ayarın butonuna getirdikten sonra bir çöp kutusu butonu çıkmalı. Ona basarak ön ayarı silebilirsiniz.
 - Bir ön ayarı yeniden adlandırmak için yine fareyi o özel ön ayara getirdikten sonra bir kalem butonu çıkmalı. Ona basınca bir yazı girdi kutusu çıkmalı. Oraya istediğiniz yeni ismi yazdıktan sonra `ENTER`a veya kaydet butonuna basarak isimlendirmeyi kaydedebilirsiniz. Ya da `ESC` veya iptal butonuna basarak isilendirmeyi iptal edebilirsiniz.

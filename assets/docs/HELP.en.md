@@ -27,6 +27,15 @@
 - Rename a preset again by first hovering mouse to that preset then a pencil icon should appear. Click it and a text input box should be visible, type your new preset name you like. Then press `ENTER` or click save icon button to commit that rename OR press `ESC` or click cancel icon button to cancel rename
 - When you doing rename, you can still change preset's settings. But when you wanna commit rename, it saves that preset as well. And the same thing applied for canceling rename (cancels changes)
 
+### Preset Importing/Exporting
+- Press the export button (shaped like upload icon) right to the import button.
+- This will copies the code of active preset to the clipboard. (If any preset is active, otherwise it won't copy anything)
+- You can right click preset button and click 'Export' to do same thing.
+- Code contains preset's name and configuration.
+- Press the import button (shaped like download icon) right to the 'Presets' title.
+- A dialog will open and you can paste the code you copied. If it's valid, it should start with "SC1-" (the number may change due to updates)
+- It'll automatically rename preset's name if it collides with other presets you have.
+
 ## Preset Settings
 - You can change settings in interface that's right to the presets.
 - `Click Interval` determines how much time will be between clicks. This must be greater than 0.

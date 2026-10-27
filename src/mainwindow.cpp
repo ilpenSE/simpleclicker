@@ -175,7 +175,6 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
 
     if (ok && !code.isEmpty()) {
       auto opt = preset_code_deserialize(code);
-      // SC1-AQKIJ9CGAwGQB5ABDcO2biBheWFyYWJjZGU
       if (!opt.has_value()) {
         m_notificationBar->error(tr("Invalid preset code."));
         return;
@@ -323,6 +322,8 @@ void MainWindow::startClicking() {
   blockPresetConfigUi();
   ui->presetsList->setEnabled(false);
   ui->addPresetBtn->setEnabled(false);
+  ui->importBtn->setEnabled(false);
+  ui->exportBtn->setEnabled(false);
 
   ui->startButton->setEnabled(false);
   ui->stopButton->setEnabled(true);
@@ -338,6 +339,8 @@ void MainWindow::stopClicking() {
 
   ui->presetsList->setEnabled(true);
   ui->addPresetBtn->setEnabled(true);
+  ui->importBtn->setEnabled(true);
+  ui->exportBtn->setEnabled(true);
   this->setWindowTitle("Simple Clicker");
   clickengine->stop();
   lg->info("Clicking stopped");
