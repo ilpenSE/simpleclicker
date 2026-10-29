@@ -16,9 +16,9 @@
 - Tout est stocké sur votre propre machine, dans le dossier `AppData` ou `~/.local/share/`
 - Vous pouvez signaler les erreurs rencontrées ou vos idées d'amélioration via les issues GitHub si vous le souhaitez
 
-<img width="701" height="669" alt="main_fr_linux" src="https://github.com/user-attachments/assets/dd7caf28-c2e3-4abc-9263-d884f9f296be" />
+![French Dark](./screenshots/fr_dark.png)
 
-<img width="701" height="667" alt="main_fr_linux_light" src="https://github.com/user-attachments/assets/bdaea4a1-d22e-4a12-911b-a601fef331f4" />
+![French Light](./screenshots/fr_light.png)
 
 ## Guide d'installation pour Windows
 
