@@ -96,7 +96,7 @@ QMap<QString, QColor> ThemeManager::lightColors = {
     {"notification-error-highlight", "#e57a77"},
 };
 
-ThemeManager::ThemeManager(const char *ssName, Theme initTheme, QObject *parent) : m_theme(initTheme), QObject(parent) {
+ThemeManager::ThemeManager(const char *ssName, Theme initTheme, QObject *parent) : QObject(parent), m_theme(initTheme) {
   QFile ss(ssName);
   if (!ss.open(QIODevice::ReadOnly)) {
     panic("Could not open resource file: {}", ssName);

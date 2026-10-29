@@ -182,31 +182,38 @@ void UpdateManager::install() {
 #else // Linux
   // Get some information on environment
   const auto appImagePath = std::getenv("APPIMAGE"); // AppImage file's path
+  if (!appImagePath || !(*appImagePath)) {
+    emit downloadFailed("Failed to locate .AppImage file");
+    return;
+  }
+
   const auto homePath = std::getenv("HOME");
   if (!homePath || !(*homePath)) {
     emit downloadFailed("Failed to get 'HOME' env variable, please set it before you ran program or you may be using some weird environment");
     return;
   }
 
-  auto backupPath = std::string(homePath) + "/" + ASSET_NAME + ".bak";
+  auto backupPath = QString(homePath) + "/" + ASSET_NAME + ".bak";
   lg->info("Detected AppImage path = {}", appImagePath);
   lg->info("Backup path = {}", backupPath);
 
-  if (!appImagePath || !(*appImagePath)) {
-    emit downloadFailed("Failed to locate .AppImage file");
-    return;
-  }
-
   // Update .AppImage files
-  if (std::rename(appImagePath, backupPath.c_str()) != 0) {
-    lg->error("Rename '{}' -> '{}' failed: {}", appImagePath, backupPath, strerror(errno));
-    emit downloadFailed(QString("Rename '%1' -> '%2' failed: %3").arg(appImagePath).arg(backupPath).arg(strerror(errno)));
+  // Remove file in backupPath before because stinky QFile::rename could not overwrite file in destination path.
+  if (!QFile::remove(backupPath)) {
+    lg->error("Removal of '{}' failed!", backupPath);
+    emit downloadFailed(QString("Removal of '%1' failed").arg(backupPath));
     return;
   }
 
-  if (std::rename(m_setupFilePath.toUtf8().constData(), appImagePath) != 0) {
-    lg->error("Rename '{}' -> '{}' failed: {}", m_setupFilePath, appImagePath, strerror(errno));
-    emit downloadFailed(QString("Rename '%1' -> '%2' failed: %3").arg(m_setupFilePath).arg(appImagePath).arg(strerror(errno)));
+  if (!QFile::rename(appImagePath, backupPath)) {
+    lg->error("Rename '{}' -> '{}' failed!", appImagePath, backupPath);
+    emit downloadFailed(QString("Rename '%1' -> '%2' failed").arg(appImagePath).arg(backupPath));
+    return;
+  }
+
+  if (!QFile::rename(m_setupFilePath, appImagePath)) {
+    lg->error("Rename '{}' -> '{}' failed!", m_setupFilePath, appImagePath);
+    emit downloadFailed(QString("Rename '%1' -> '%2' failed").arg(m_setupFilePath).arg(appImagePath));
     return;
   }
 

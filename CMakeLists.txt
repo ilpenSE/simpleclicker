@@ -75,6 +75,12 @@ if(ENABLE_SANITIZERS AND (CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU"))
   )
 endif()
 
+if(MSVC)
+  target_compile_options(SimpleClicker PRIVATE /W4)
+else()
+  target_compile_options(SimpleClicker PRIVATE -Wall -Wextra -Wno-missing-field-initializers -Wno-unused-function)
+endif()
+
 if(WIN32)
   target_link_libraries(SimpleClicker PRIVATE user32)
 else()

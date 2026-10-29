@@ -43,7 +43,6 @@ private:
   void nativeMouseHover(Location location) const;
 
   Location getEffectiveLocation() const {
-    Location loc;
     if (m_preset.currentLocation) {
       QPoint p = QCursor::pos();
       return {.x = p.x(), .y = p.y()};

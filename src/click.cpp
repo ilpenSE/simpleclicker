@@ -9,7 +9,7 @@ constexpr auto CLICK_DELAY_MS = 1;
 }
 
 ClickEngine::ClickEngine(PresetConfig config, QObject *parent)
-    : m_preset(config), m_reps(m_preset.repeat), QObject(parent)
+    : QObject(parent), m_preset(config), m_reps(m_preset.repeat)
 {
   connect(&m_timer, &QTimer::timeout, this, &ClickEngine::click);
   m_timer.setSingleShot(true);

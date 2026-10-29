@@ -29,7 +29,7 @@ QPushButton *makeIconButton(const QString& symbol, int size, QWidget *parent) {
 } // namespace
 
 PresetItemWidget::PresetItemWidget(const QString &presetName, const PresetConfig &config, QWidget *parent)
-    : config(config), QWidget(parent), m_presetName(presetName)
+    : QWidget(parent), config(config), m_presetName(presetName)
 {
   auto layout = new QHBoxLayout(this);
   layout->setContentsMargins(8, 8, 8, 8);

@@ -7,8 +7,8 @@
 
 - İstediğiniz kadar ön ayarınız olabilir.
 - Her ön ayarın kendi bir çeşit "ayar paketi" vardır.
-- Biri bir çeşit iş için veya bir diğerini başka bir iş için kullanabilirsiniz.
-- Sol menüden ön ayar ismine çift tıklayarak ona geçebilirsiniz.
+- Her ön ayarı belirli bir amaç uğruna kullanabilirsiniz.
+- Sol menüden ön ayar ismine çift tıklayarak o ön ayara geçebilirsiniz.
 
 ### Ön Ayar Oluşturma
 - Pencerenin sol üstünde bulunan `Ön Ayarlar` başlığının sağındaki `+` tuşuna basarak yeni bir ön ayar oluşturabilirsiniz.

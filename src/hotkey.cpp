@@ -177,6 +177,7 @@ bool HotkeyManager::unregisterHotkey() {
 }
 
 bool HotkeyManager::nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result) {
+  (void)result;
   if (eventType != "xcb_generic_event_t") return false;
   if (!m_registered) return false;
 

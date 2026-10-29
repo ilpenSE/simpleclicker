@@ -26,7 +26,7 @@ private:
   QTranslator m_translator{};
   QTranslator m_qtTranslator{};
   LanguageManager(Language initialLanguage, QObject *parent = nullptr)
-      : m_lang(initialLanguage), QObject(parent) {
+      : QObject(parent), m_lang(initialLanguage) {
     set(initialLanguage, true);
   }
   ~LanguageManager() {}

@@ -276,7 +276,7 @@ struct Version {
   }
 };
 
-constexpr Version APP_VERSION = Version::from("1.2.0");
+constexpr Version APP_VERSION = Version::from("1.2.1");
 
 template <typename T>
 T fromJsonValue(const QJsonValue& jv, const T& def = T{}) {

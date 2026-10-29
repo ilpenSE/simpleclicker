@@ -55,7 +55,7 @@ constexpr std::pair<double, Unit> getEffectiveUnitFromMs(int ms) {
 } // namespace
 
 MainWindow::MainWindow(QString initPreset, QWidget *parent)
-  : QMainWindow(parent) , m_currentPreset(initPreset), ui(new Ui::MainWindow)
+  : QMainWindow(parent), ui(new Ui::MainWindow), m_currentPreset(initPreset)
 {
   ui->setupUi(this);
   m_notificationBar = new NotificationBar(this);
@@ -222,7 +222,7 @@ MainWindow::MainWindow(QString initPreset, QWidget *parent)
       lg->info("Settings changed and applied.");
       m_notificationBar->success(tr("Settings has been applied successfully!"));
     });
-    int dres = dlg.exec();
+    dlg.exec();
     hotkeyman->set(settingsman->get<setting::keybind>());
   });
 
