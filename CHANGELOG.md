@@ -1,3 +1,8 @@
+# 1.2.1
+
+- Fixed auto updater bug in Linux where it failes because appimage and `/tmp` on different partitions
+- Fixed some really unimportant warnings in code.
+
 # 1.2
 
 - Title is being updated when clicker is started
