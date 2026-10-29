@@ -13,7 +13,7 @@
 
 [Dieses Dokument auf Deutsch](./README.de.md)
 
-- Everything is stored on your own machine and in `AppData` or `~/.local/share/` folder
+- Everything is stored on your own machine and in `C:\Users\<your_name>\AppData\Roaming` or `~/.local/share/` folder
 - You can report errors you have crossed or ideas of yours to enhance application via GitHub issues if you want
 
 ![English Dark](./screenshots/en_dark.png)
@@ -33,7 +33,7 @@
 3. Run it.
 - NOTE: In order to program to function, necessary libraries need to be installed and some system libraries need to be up to date.
 (Missing libraries should be shown at output when you run app through console)
-(Ubuntu >=22.04, Debian >=12, Fedora >=35, Linux Mint >=21 and most modern Arch-based distros (CachyOS, Garuda Linux, SteamOS, EndeavourOS, Manjaro Linux vb.) is needed for glibc >= 2.34)
+(Ubuntu >=22.04, Debian >=12, Fedora >=35, Linux Mint >=21 and most modern Arch-based distros (CachyOS, Garuda Linux, SteamOS, EndeavourOS, Manjaro Linux vb.) is needed for glibc >= 2.35)
 
 ## Help
 - [Click here for detailed help](./assets/docs/HELP.en.md)

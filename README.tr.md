@@ -13,7 +13,7 @@
 
 [Dieses Dokument auf Deutsch](./README.de.md)
 
-- Her şey kendi makinenizde, `AppData` veya `~/.local/share` klasörlerinde tutulur
+- Her şey kendi makinenizde, `C:\Users\<your_name>\AppData\Roaming` veya `~/.local/share` klasörlerinde tutulur
 - Karşılaştığınız hataları uygulamayı geliştirmek için fikirlerinizi dilerseniz GitHub issues üzerinden aktarabilirsiniz
 
 ![Turkish Dark](./screenshots/tr_dark.png)
@@ -33,7 +33,7 @@
 3. Çalıştırın.
 - NOT: Uygulamanın çalışabilmesi için sisteminizde gerekli kütüphanelerin olması ve bazı sistem kütüphanelerinin güncel olması gerekir.
 (Eksik kütüphaneler uygulamayı konsoldan çalıştırdığınızda çıktıda gösterilir)
-(glibc >= 2.34 için Ubuntu >=22.04, Debian >=12, Fedora >=35, Linux Mint >=21 ve çoğu modern Arch tabanlı dağıtımları (CachyOS, Garuda Linux, SteamOS, EndeavourOS, Manjaro Linux vb.) gerekir)
+(glibc >= 2.35 için Ubuntu >=22.04, Debian >=12, Fedora >=35, Linux Mint >=21 ve çoğu modern Arch tabanlı dağıtımları (CachyOS, Garuda Linux, SteamOS, EndeavourOS, Manjaro Linux vb.) gerekir)
 
 ## Yardım
 - [Buraya tıklayarak detaylı yardım alabilirsiniz](./assets/docs/HELP.tr.md)

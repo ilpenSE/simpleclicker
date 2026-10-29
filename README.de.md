@@ -13,7 +13,7 @@
 
 [Ce document en français](./README.fr.md)
 
-- Alles wird auf deinem eigenen Rechner im Ordner `AppData` bzw. `~/.local/share/` gespeichert
+- Alles wird auf deinem eigenen Rechner im Ordner `C:\Users\<your_name>\AppData\Roaming` bzw. `~/.local/share/` gespeichert
 - Aufgetretene Fehler oder eigene Verbesserungsvorschläge kannst du gerne über GitHub Issues melden
 
 ![German Dark](./screenshots/de_dark.png)
@@ -33,7 +33,7 @@
 3. Starte die Anwendung.
 - HINWEIS: Damit das Programm funktioniert, müssen die erforderlichen Bibliotheken installiert und einige Systembibliotheken auf dem neuesten Stand sein.
 (Fehlende Bibliotheken werden in der Ausgabe angezeigt, wenn Sie die Anwendung über die Konsole starten.)
-(Da glibc >= 2.34 benötigt wird, sind Ubuntu >= 22.04, Debian >= 12, Fedora >= 35, Linux Mint >= 21 und die meisten modernen Arch-basierten Distributionen (CachyOS, Garuda Linux, SteamOS, EndeavourOS, Manjaro Linux usw.) erforderlich.)
+(Da glibc >= 2.35 benötigt wird, sind Ubuntu >= 22.04, Debian >= 12, Fedora >= 35, Linux Mint >= 21 und die meisten modernen Arch-basierten Distributionen (CachyOS, Garuda Linux, SteamOS, EndeavourOS, Manjaro Linux usw.) erforderlich.)
 
 ## Hilfe
 - [Hier klicken für ausführliche Hilfe](./assets/docs/HELP.de.md)
